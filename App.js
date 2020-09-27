@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+//import { StyleSheet, Text } from "react-native";
 import "react-native-gesture-handler";
 import LoginScreen from "./src/Login.js";
 import ReportingScreen from "./src/Screens/Reporting.js";
