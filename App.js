@@ -2,9 +2,14 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 //import { StyleSheet, Text } from "react-native";
 import "react-native-gesture-handler";
+
+//SCREENS START
 import LoginScreen from "./src/Login.js";
+import SignupScreen from "./src/Screens/Signup.js";
 import ReportingScreen from "./src/Screens/ReportingRainIntensity.js";
 import ReportingFLScreen from "./src/Screens/ReportingFloodLevel.js";
+//SCREENS END
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -24,6 +29,7 @@ export default function App() {
           name="Reporting - Flood Level"
           component={ReportingFLScreen}
         />
+        <Stack.Screen name="Signup" component={SignupScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { RadioButton } from "react-native-paper";
 
-const Login = (props) => {
+const ReportingRainIntensity = (props) => {
   const [checked, setChecked] = React.useState("first");
   return (
     <View style={styles.backgroundContainer}>
@@ -203,4 +203,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default ReportingRainIntensity;

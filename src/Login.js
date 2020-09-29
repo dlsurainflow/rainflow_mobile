@@ -75,7 +75,9 @@ const Login = (props) => {
             <Text style={{ color: "white", paddingTop: 15 }}>
               Don't have an account?{" "}
             </Text>
-            <TouchableOpacity onPress={() => console.log(textInputHandler)}>
+            <TouchableOpacity
+              onPress={() => props.navigation.navigate("Signup")}
+            >
               <Text style={{ color: "dodgerblue", paddingTop: 15 }}>
                 Register now!
               </Text>
