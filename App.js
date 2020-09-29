@@ -3,7 +3,8 @@ import React from "react";
 //import { StyleSheet, Text } from "react-native";
 import "react-native-gesture-handler";
 import LoginScreen from "./src/Login.js";
-import ReportingScreen from "./src/Screens/Reporting.js";
+import ReportingScreen from "./src/Screens/ReportingRainIntensity.js";
+import ReportingFLScreen from "./src/Screens/ReportingFloodLevel.js";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -15,7 +16,14 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Reporting" component={ReportingScreen} />
+        <Stack.Screen
+          name="Reporting - Rain Intensity"
+          component={ReportingScreen}
+        />
+        <Stack.Screen
+          name="Reporting - Flood Level"
+          component={ReportingFLScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

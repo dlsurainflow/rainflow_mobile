@@ -61,7 +61,9 @@ const Login = (props) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => loginHandler()}
+            onPress={() =>
+              props.navigation.navigate("Reporting - Rain Intensity")
+            }
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
