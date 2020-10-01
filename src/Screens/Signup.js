@@ -6,7 +6,7 @@ import { StyleSheet, View } from "react-native";
 const Signup = (props) => {
   return <View></View>;
 };
-
+/*
 const styles = StyleSheet.create({
   backgroundContainer: {
     flex: 1,
@@ -77,5 +77,5 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
 });
-
+*/
 export default Signup;
