@@ -1,24 +1,10 @@
-import React, { Component, useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+//import React, { Component, useState, useEffect } from "react";
+import { StyleSheet, View } from "react-native";
 
-import { WebView } from "react-native-webview";
+//import { WebView } from "react-native-webview";
 
 const Signup = (props) => {
-  return (
-    <WebView
-      source={{
-        uri: "https://rainflow.live",
-      }}
-      style={{ marginBottom: 0 }}
-    />
-  );
+  return <View></View>;
 };
 
 const styles = StyleSheet.create({

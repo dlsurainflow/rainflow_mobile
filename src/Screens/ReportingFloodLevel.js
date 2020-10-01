@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+//import React, { useState } from "react";
 import {
   StyleSheet,
   View,
   Text,
-  TextInput,
+  //TextInput,
   TouchableOpacity,
-  Image,
+  //Image,
 } from "react-native";
 import { RadioButton } from "react-native-paper";
 

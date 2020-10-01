@@ -19,7 +19,7 @@ const Login = (props) => {
   const passwordHandler = (e) => {
     setPassword(e);
   };
-
+  /*
   const loginHandler = () => {
     console.log(email);
     console.log(password);
@@ -34,7 +34,7 @@ const Login = (props) => {
       }),
     }).then((response) => response.json().then((JSON) => console.log(JSON)));
   };
-
+  */
   return (
     <View style={styles.backgroundContainer}>
       <View style={styles.contentContainer}>
