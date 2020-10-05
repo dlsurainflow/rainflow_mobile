@@ -90,7 +90,7 @@ const ReportingRainIntensity = (props) => {
         <View style={styles.buttonCancelContainer}>
           <TouchableOpacity
             style={styles.buttonCancel}
-            onPress={() => props.navigation.navigate("Login")}
+            onPress={() => console.log('CANCEL')}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}

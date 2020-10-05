@@ -78,7 +78,7 @@ const RreportingFloodLevel = (props) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.navigation.navigate("Login")}
+            onPress={() => props.navigation.navigate("Reporting - Rain Intensity")}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
@@ -90,7 +90,7 @@ const RreportingFloodLevel = (props) => {
         <View style={styles.buttonCancelContainer}>
           <TouchableOpacity
             style={styles.buttonCancel}
-            onPress={() => props.navigation.navigate("Login")}
+            onPress={() => console.log('CANCEL')}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}

@@ -62,7 +62,7 @@ const Login = (props) => {
           <TouchableOpacity
             style={styles.button}
             onPress={() =>
-              props.navigation.navigate("Reporting - Rain Intensity")
+              props.navigation.navigate("HomeMap")
             }
           >
             <Text
