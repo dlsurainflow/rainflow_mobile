@@ -24,7 +24,7 @@ export default function App() {
 
   const ReportComp = (props) => (
     <>
-      <Stack.Navigator initialRouteName="Reporting - Rain Intensity">
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Reporting - Rain Intensity">
         <Stack.Screen
           name="Reporting - Rain Intensity"
           component={ReportingScreen}
@@ -40,7 +40,7 @@ export default function App() {
   );
   const MapComp = (props) => (
     <>
-      <Stack.Navigator initialRouteName="HomeMap">
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="HomeMap">
         <Stack.Screen
           name="HomeMap"
           component={HomeMap}
@@ -53,7 +53,7 @@ export default function App() {
 
   const ProfileComp = (props) => (
     <>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Login">
         <Stack.Screen
           name="Login"
           component={LoginScreen}
@@ -76,7 +76,7 @@ export default function App() {
   const SignupComp = (props) => (
 
     <>
-      <Stack.Navigator initialRouteName="Signup">
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Signup">
         <Stack.Screen
           name="Signup"
           component={SignupScreen}
@@ -93,44 +93,52 @@ export default function App() {
         initialRouteName="HomeMap"
         backBehavior="none"
         barStyle={{ backgroundColor: "#fff" }}
-        activeColor="#fff"  
-        // inactiveColor="purple"
+        activeColor="#f0edf6" 
         shifting
       >
-        <bottomTab.Screen
-          name="HomeMap"
-          children={MapComp}
-          options={{
-            tabBarColor: '#00AC49',
-            tabBarLabel: "Map",
-            tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons name="cart-plus" color="#ffff" size={26} />
-            ),
-          }}
-        />
-       
-        <bottomTab.Screen
+
+<bottomTab.Screen
           name="Reporting - Rain Intensity"
           children={ReportComp}
           options={{
-            tabBarColor: '#E72614',
+            tabBarColor: '#4FC69A', 
             tabBarLabel: "Report",
             tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons name="home-heart" color="#ffff" size={26} />
+              <MaterialCommunityIcons 
+                name="cellphone-message" 
+                color="#ffff" 
+                size={26} />
             ),
            
           }}
         />
 
+        <bottomTab.Screen
+          name="HomeMap"
+          children={MapComp}
+          options={{
+            tabBarColor: '#1EA78C',
+            tabBarLabel: "Map",
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons 
+                name="compass" 
+                color="#ffff" 
+                size={26} />
+            ),
+          }}
+        />
+       
+      
+
 <bottomTab.Screen
           name="User Profile"
           children={ProfileComp}
           options={{
-            tabBarColor: '#EBC50E',
+            tabBarColor: '#0E956A',
             tabBarLabel: "Profile",
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons
-                name="contactless-payment"
+                name="account-circle"
                 color="#ffff"
                 size={26}
               />

@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
-    backgroundColor: "#005DBE",
+    backgroundColor: "#1EA78C",
   },
 
   buttonCancel: {
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: "#434343",
     borderWidth: 2,
-    borderColor: "#005DBE",
+    borderColor: "#1EA78C",
   },
 
   buttonContainer: {

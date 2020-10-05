@@ -41,7 +41,7 @@ const Login = (props) => {
         <View style={styles.logoContainer}>
           <Image
             source={require("../assets/Logo.png")}
-            style={{ height: "35%", width: "90%" }}
+            style={{ height: "38%", width: "90%" }}
           />
         </View>
 
@@ -78,7 +78,7 @@ const Login = (props) => {
             <TouchableOpacity
               onPress={() => props.navigation.navigate("Signup")}
             >
-              <Text style={{ color: "dodgerblue", paddingTop: 15 }}>
+              <Text style={{ color: "#27B296", paddingTop: 15 }}>
                 Register now!
               </Text>
             </TouchableOpacity>
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
-    backgroundColor: "#005DBE",
+    backgroundColor: "#1EA78C",
   },
 
   buttonContainer: {

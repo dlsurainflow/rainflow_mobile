@@ -10,59 +10,71 @@ import {
 
 import { WebView } from "react-native-webview";
 import {html_map} from "./html_map"
+import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 
 const HomeMap = (props) => {
-const [marker, setMarker] = useState(undefined)
+const [marker, setMarker] = useState(`
+L.marker([14.605174, 120.978484]).addTo(mymap)
+.bindPopup("<b>HELLO</b><br />added to map upon loading").openPopup();`)
 const [webviewComponent, setWebviewComponent] = useState()
 const webViewRef = useRef();
 
-useEffect(()=>{
-    setMarker(`L.marker([14.6047, 120.97833]).addTo(mymap)
-    .bindPopup("<b>GRR!!</b><br />I am a popup.").openPopup();`)
-    console.log("changes r happening")
 
-}, [webViewRef.current])
+
+useEffect(()=>{
+  console.log("hello! ", marker)  
+    if(webviewComponent == undefined){
+      setWebviewComponent(
+          <WebView
+          ref = {webViewRef}
+          geolocationEnabled = {true}
+          originWhitelist={['*']}
+          style={{flex: 1, borderWidth: 1}}
+          injectedJavaScript = {marker}
+            source={{ html: html_map}} 
+          />
+      )
+    }
+}, [])
 
 const addMarker = (lat, long) => {
   webViewRef.current.injectJavaScript(`
+  mymap.setView([${lat}, ${long}], 18);
   L.marker([${lat}, ${long}]).addTo(mymap)
-  .bindPopup("<b>Certified freak</b><br />seven days a week!").openPopup();`
+  .bindPopup("<b>HELLO</b><br />this is a test node").openPopup();`
   )
-}
-const addMarker2 = (lat, long) => {
-  webViewRef.current.injectJavaScript(`
-  L.marker([${lat}, ${long}]).addTo(mymap)
-  .bindPopup("<b>Certified freak</b><br />seven days a week!").openPopup();`
-  )
-}
- 
+} 
   return (
-    <View style = {{flex: 1}}>
-       <WebView
-        ref = {webViewRef}
-        geolocationEnabled = {true}
-        originWhitelist={['*']}
-        style={{flex: 1, borderWidth: 1}}
-        injectedJavaScript = {marker}
-          source={{ html: html_map}} 
-        />
-     
+    <View style = {styles.backgroundContainer}>
+        <WebView
+          ref = {webViewRef}
+          geolocationEnabled = {true}
+          originWhitelist={['*']}
+          style={{flex: 1, borderWidth: 1}}
+          injectedJavaScript = {marker}
+            source={{ html: html_map}} 
+          />
 
 <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
             onPress={() =>
-              addMarker(14.605174, 120.978484)
+              addMarker(14.604452, 120.978688)
             }
           >
+            <MaterialCommunityIcons
+                name="map-marker-outline"
+                color="#ffff"
+                size={20}
+              />
             <Text
-              style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold", marginLeft: 4}}
             >
-              PLOT 
+              Back to start point 
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/*<TouchableOpacity
             style={styles.button}
             onPress={() =>
               addMarker2(14.60478, 120.978484)
@@ -73,7 +85,7 @@ const addMarker2 = (lat, long) => {
             >
               PLOT ANOTHER
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity>*/}
         </View>
 
 
@@ -87,7 +99,7 @@ const styles = StyleSheet.create({
   backgroundContainer: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#434343",
+    backgroundColor: "#fff",
     justifyContent: "center",
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
@@ -140,7 +152,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
-    backgroundColor: "#005DBE",
+    backgroundColor: "#27B296",
+    flexDirection: "row",
+  
   },
 
   buttonContainer: {
