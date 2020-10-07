@@ -16,6 +16,7 @@ const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+
   const usernameHandler = (e) => {
     setUsername(e);
   };
@@ -55,6 +56,7 @@ const Login = (props) => {
             console.log(responseJson);
             await AsyncStorage.setItem("token", responseJson.data.token); // Save token to storage
             await AsyncStorage.setItem("username", responseJson.data.username); // Save username
+            props.navigation.navigate("MainMenu")
 
             ToastAndroid.show(
               "Welcome, " + responseJson.data.username + "!",

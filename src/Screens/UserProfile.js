@@ -76,53 +76,21 @@ const UserProfile = (props) => {
   };
 
   return (
-    <View style={styles.backgroundContainer}>
-      <View style={styles.contentContainer}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require("../assets/Logo.png")}
-            style={{ height: "38%", width: "90%" }}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder="Username"
-            style={styles.textInput}
-            onChangeText={usernameHandler}
-          />
-          <TextInput
-            placeholder="Password"
-            style={styles.textInput}
-            onChangeText={passwordHandler}
-          />
-        </View>
-
-        <View style={styles.buttonContainer}>
+    <View>
+      <Text style = {{paddingVertical: 50}}>User profile - TBU</Text>
+      <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => loginHandler()}
+            onPress={() => props.navigation.navigate("Login")}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
-              LOGIN
+              Login
             </Text>
           </TouchableOpacity>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={{ color: "white", paddingTop: 15 }}>
-              Don't have an account?{" "}
-            </Text>
-            <TouchableOpacity
-              onPress={() => props.navigation.navigate("Signup")}
-            >
-              <Text style={{ color: "#27B296", paddingTop: 15 }}>
-                Register now!
-              </Text>
-            </TouchableOpacity>
+   
           </View>
-        </View>
-      </View>
     </View>
   );
 };
@@ -192,7 +160,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "#434343",
+   // backgroundColor: "#434343",
     paddingHorizontal: 5,
     paddingTop: 20,
   },
