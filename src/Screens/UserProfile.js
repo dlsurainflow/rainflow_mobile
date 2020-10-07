@@ -11,7 +11,7 @@ import {
 
 import AsyncStorage from "@react-native-community/async-storage";
 
-const Login = (props) => {
+const UserProfile = (props) => {
   const [textInputHandler, setTextInputHandler] = useState({});
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -198,4 +198,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default UserProfile;
