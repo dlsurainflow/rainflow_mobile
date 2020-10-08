@@ -7,21 +7,11 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { RadioButton } from "react-native-paper";
 
-const RreportingFloodLevel = (props) => {
-  const [checked, setChecked] = React.useState("first");
+const ReportHistory = (props) => {
   return (
     <View style={styles.backgroundContainer}>
       <View style={styles.contentContainer}>
-        {/* 
-        <View style={styles.logoContainer}>
-          <Image
-            source={require("../../assets/Logo.png")}
-            style={{ height: "35%", width: "110%" }}
-          />
-        </View>
-        */}
         <Text
           style={{
             textAlign: "left",
@@ -30,55 +20,13 @@ const RreportingFloodLevel = (props) => {
             paddingBottom: 30,
           }}
         >
-          REPORTING
+          Report History
         </Text>
-
-        {/*Rain Intensity START*/}
-
-        <Text style={{ textAlign: "left", color: "#fff", fontWeight: "bold" }}>
-          FLOOD LEVEL
-        </Text>
-
-        <View style={styles.rbuttonContainer}>
-          <RadioButton
-            value="first"
-            status={checked === "first" ? "checked" : "unchecked"}
-            onPress={() => setChecked("first")}
-            text={"Hi"}
-          />
-          <Text style={{ color: "#fff", fontWeight: "bold" }}>Item 1</Text>
-          <RadioButton
-            value="second"
-            status={checked === "second" ? "checked" : "unchecked"}
-            onPress={() => setChecked("second")}
-          />
-          <Text style={{ color: "#fff", fontWeight: "bold" }}>Item 2</Text>
-          <RadioButton
-            value="third"
-            status={checked === "third" ? "checked" : "unchecked"}
-            onPress={() => setChecked("third")}
-          />
-          <Text style={{ color: "#fff", fontWeight: "bold" }}>Item 3</Text>
-          <RadioButton
-            value="fourth"
-            status={checked === "fourth" ? "checked" : "unchecked"}
-            onPress={() => setChecked("fourth")}
-          />
-          <Text style={{ color: "#fff", fontWeight: "bold" }}>Item 4</Text>
-          <RadioButton
-            value="fifth"
-            status={checked === "fifth" ? "checked" : "unchecked"}
-            onPress={() => setChecked("fifth")}
-          />
-          <Text style={{ color: "#fff", fontWeight: "bold" }}>Item 5</Text>
-        </View>
-
-        {/*Rain Intensity END*/}
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.navigation.navigate("Reporting - Rain Intensity")}
+            onPress={() => props.navigation.navigate("Reporting")}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
@@ -90,7 +38,7 @@ const RreportingFloodLevel = (props) => {
         <View style={styles.buttonCancelContainer}>
           <TouchableOpacity
             style={styles.buttonCancel}
-            onPress={() => console.log('CANCEL')}
+            onPress={() => console.log("CANCEL")}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
@@ -120,6 +68,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#434343",
     paddingHorizontal: 30,
+    paddingTop: Platform.OS === "android" ? 25 : 0,
   },
 
   rbuttonContainer: {
@@ -203,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RreportingFloodLevel;
+export default ReportHistory;

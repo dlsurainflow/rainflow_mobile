@@ -4,19 +4,17 @@ import {
   View,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   Image,
-  Alert,
 } from "react-native";
 
-import { WebView } from "react-native-webview";
+import AsyncStorage from "@react-native-community/async-storage";
 
-const Signup = (props) => {
+const UserProfile = (props) => {
   const [textInputHandler, setTextInputHandler] = useState({});
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [rpassword, setrPassword] = useState("");
-  const [email, setEmail] = useState("");
 
   const usernameHandler = (e) => {
     setUsername(e);
@@ -24,20 +22,57 @@ const Signup = (props) => {
   const passwordHandler = (e) => {
     setPassword(e);
   };
-  const rpasswordHandler = (e) => {
-    setrPassword(e);
-  };
-  const emailHandler = (e) => {
-    setEmail(e);
-  };
 
-  checkSamePass = () => {
-    if (password == rpassword) {
-      console.log("Passwords matched!");
-      props.navigation.navigate("Login");
-    } else {
-      alert("Passwords do not match!");
-    }
+  const loginHandler = () => {
+    const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
+    RCTNetworking.clearCookies((result) => {
+      console.log(result); //true if successfully cleared
+    });
+
+
+    fetch("https://rainflow.live/api/users/login", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ 
+          username: username, 
+          password: password
+        }),
+    }).then(function (response) {
+      if (response.status === 400) {
+        // Error if username/password is invalid
+        response.json().then(function (object) {
+          alert("Invalid username or password!");
+          console.log("400: ", object.non_field_errors);
+        });
+      } else if (response.status === 200) {
+        // Correct username and password
+        response
+          .json()
+          .then(async (responseJson) => {
+            console.log(responseJson);
+            await AsyncStorage.setItem("token", responseJson.data.token); // Save token to storage
+            await AsyncStorage.setItem("username", responseJson.data.username); // Save username
+
+            ToastAndroid.show(
+              "Welcome, " + responseJson.data.username + "!",
+              ToastAndroid.SHORT
+            )
+            //props.navigation.navigate("Main Menu");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        alert(response.status);
+        ToastAndroid.show("Error: " + response.status, ToastAndroid.SHORT);
+        console.log("Error: ", response.status);
+      }
+    });
+
+
   };
 
   return (
@@ -45,17 +80,12 @@ const Signup = (props) => {
       <View style={styles.contentContainer}>
         <View style={styles.logoContainer}>
           <Image
-            source={require("../../assets/Logo.png")}
+            source={require("../assets/Logo.png")}
             style={{ height: "38%", width: "90%" }}
           />
         </View>
 
         <View style={styles.inputContainer}>
-          <TextInput
-            placeholder="Email"
-            style={styles.textInput}
-            onChangeText={emailHandler}
-          />
           <TextInput
             placeholder="Username"
             style={styles.textInput}
@@ -66,33 +96,28 @@ const Signup = (props) => {
             style={styles.textInput}
             onChangeText={passwordHandler}
           />
-          <TextInput
-            placeholder="Repeat Password"
-            style={styles.textInput}
-            onChangeText={rpasswordHandler}
-          />
         </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => checkSamePass()}
+            onPress={() => loginHandler()}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
-              SIGN UP
+              LOGIN
             </Text>
           </TouchableOpacity>
           <View style={{ flexDirection: "row" }}>
             <Text style={{ color: "white", paddingTop: 15 }}>
-              Already have an account?{" "}
+              Don't have an account?{" "}
             </Text>
             <TouchableOpacity
-              onPress={() => props.navigation.navigate("Login")}
+              onPress={() => props.navigation.navigate("Signup")}
             >
               <Text style={{ color: "#27B296", paddingTop: 15 }}>
-                Click here to login!
+                Register now!
               </Text>
             </TouchableOpacity>
           </View>
@@ -130,9 +155,9 @@ const styles = StyleSheet.create({
   },
 
   inputContainer: {
-    flex: 1,
+    flex: 0.5,
     width: "100%",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
     backgroundColor: "#434343",
     paddingTop: 40,
@@ -159,7 +184,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
-    backgroundColor: "#005DBE",
+    backgroundColor: "#1EA78C",
   },
 
   buttonContainer: {
@@ -173,4 +198,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Signup;
+export default UserProfile;

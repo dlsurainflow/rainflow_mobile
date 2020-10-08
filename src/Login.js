@@ -4,35 +4,75 @@ import {
   View,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   Image,
 } from "react-native";
 
+import AsyncStorage from "@react-native-community/async-storage";
+
 const Login = (props) => {
   const [textInputHandler, setTextInputHandler] = useState({});
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const emailHandler = (e) => {
-    setEmail(e);
+  const usernameHandler = (e) => {
+    setUsername(e);
   };
   const passwordHandler = (e) => {
     setPassword(e);
   };
 
   const loginHandler = () => {
-    console.log(email);
-    console.log(password);
-    fetch("http://192.168.1.7:3000/login", {
-      method: "post",
+    const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
+    RCTNetworking.clearCookies((result) => {
+      console.log(result); //true if successfully cleared
+    });
+
+
+    fetch("https://rainflow.live/api/users/login", {
+      method: "POST",
       headers: {
-        "Content-type": "application/json",
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    }).then((response) => response.json().then((JSON) => console.log(JSON)));
+      body: JSON.stringify({ 
+          username: username, 
+          password: password
+        }),
+    }).then(function (response) {
+      if (response.status === 400) {
+        // Error if username/password is invalid
+        response.json().then(function (object) {
+          alert("Invalid username or password!");
+          console.log("400: ", object.non_field_errors);
+        });
+      } else if (response.status === 200) {
+        // Correct username and password
+        response
+          .json()
+          .then(async (responseJson) => {
+            console.log(responseJson);
+            await AsyncStorage.setItem("token", responseJson.data.token); // Save token to storage
+            await AsyncStorage.setItem("username", responseJson.data.username); // Save username
+
+            ToastAndroid.show(
+              "Welcome, " + responseJson.data.username + "!",
+              ToastAndroid.SHORT
+            )
+            //props.navigation.navigate("Main Menu");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        alert(response.status);
+        ToastAndroid.show("Error: " + response.status, ToastAndroid.SHORT);
+        console.log("Error: ", response.status);
+      }
+    });
+
+
   };
 
   return (
@@ -47,9 +87,9 @@ const Login = (props) => {
 
         <View style={styles.inputContainer}>
           <TextInput
-            placeholder="Email"
+            placeholder="Username"
             style={styles.textInput}
-            onChangeText={emailHandler}
+            onChangeText={usernameHandler}
           />
           <TextInput
             placeholder="Password"
@@ -61,14 +101,12 @@ const Login = (props) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() =>
-              props.navigation.navigate("HomeMap")
-            }
+            onPress={() => loginHandler()}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
-              CONTINUE
+              LOGIN
             </Text>
           </TouchableOpacity>
           <View style={{ flexDirection: "row" }}>
