@@ -6,37 +6,72 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  Alert
 } from "react-native";
 
 import { WebView } from "react-native-webview";
-import {html_map} from "./html_map"
+import { html_map } from "./html_map"
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 
 const HomeMap = (props) => {
-const [marker, setMarker] = useState(`
-L.marker([14.605174, 120.978484]).addTo(mymap)
-.bindPopup("<b>HELLO</b><br />added to map upon loading").openPopup();`)
-const [webviewComponent, setWebviewComponent] = useState()
+const [markers, setMarkers] = useState()
+const [injectJS, setInjectJS] = useState()
+const [currentNodes, setCurrentNodes] = useState([])
 const webViewRef = useRef();
 
-
+const getNodes = async() => {
+  let reports = await fetch('https://rainflow.live/api/map/all', {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept' : 'application/json',
+    }
+    }).then(response => {
+      console.log(response.status);
+      if(response.status == 200)
+        response.json().then( data =>{setMarkers(data)});
+      else{
+        Alert.alert(
+          'Error retrieving reports! (Code: ' + response.status + ')');
+      }
+    })
+}
 
 useEffect(()=>{
-  console.log("hello! ", marker)  
-    if(webviewComponent == undefined){
-      setWebviewComponent(
-          <WebView
-          ref = {webViewRef}
-          geolocationEnabled = {true}
-          originWhitelist={['*']}
-          style={{flex: 1, borderWidth: 1}}
-          injectedJavaScript = {marker}
-            source={{ html: html_map}} 
-          />
-      )
-    }
+  console.log("this has been triggered by first network request")
+  const interval = setInterval(() => {
+    getNodes()
+        console.log("second")
+          if(currentNodes == markers){ //
+            console.log("wala idadagdag sa map")
+          }else{
+            console.log("may idadagdag sa map")
+            setCurrentNodes(markers)
+           // console.log("haha, ", currentNodes)
+           {/* webViewRef.current.injectJavaScript(`
+            mymap.setView([${lat}, ${long}], 18);
+            L.marker([${lat}, ${long}]).addTo(mymap)
+            .bindPopup("<b>HELLO</b><br />this is a test node").openPopup();`
+            
+          )*/}
+           // console.log(currentNodes)
+          }
+        
+      
+  }, 10000); //every 10 seconds
+  return () => clearInterval(interval);
+
+}, [markers])
+
+
+useEffect(()=> {
+  getNodes()
+  setCurrentNodes(markers)
+  console.log("upon loading")
 }, [])
+
+
 
 const addMarker = (lat, long) => {
   webViewRef.current.injectJavaScript(`
@@ -52,7 +87,7 @@ const addMarker = (lat, long) => {
           geolocationEnabled = {true}
           originWhitelist={['*']}
           style={{flex: 1, borderWidth: 1}}
-          injectedJavaScript = {marker}
+       //   injectedJavaScript = {marker}
             source={{ html: html_map}} 
           />
 
