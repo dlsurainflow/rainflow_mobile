@@ -6,18 +6,99 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 
 import { WebView } from "react-native-webview";
 
 const Signup = (props) => {
+  const [textInputHandler, setTextInputHandler] = useState({});
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [rpassword, setrPassword] = useState("");
+  const [email, setEmail] = useState("");
+
+  const usernameHandler = (e) => {
+    setUsername(e);
+  };
+  const passwordHandler = (e) => {
+    setPassword(e);
+  };
+  const rpasswordHandler = (e) => {
+    setrPassword(e);
+  };
+  const emailHandler = (e) => {
+    setEmail(e);
+  };
+
+  checkSamePass = () => {
+    if (password == rpassword) {
+      console.log("Passwords matched!");
+      props.navigation.navigate("Login");
+    } else {
+      alert("Passwords do not match!");
+    }
+  };
+
   return (
-    <WebView
-      source={{
-        uri: "https://rainflow.live",
-      }}
-      style={{ marginBottom: 0 }}
-    />
+    <View style={styles.backgroundContainer}>
+      <View style={styles.contentContainer}>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require("../../assets/Logo.png")}
+            style={{ height: "38%", width: "90%" }}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Email"
+            style={styles.textInput}
+            onChangeText={emailHandler}
+          />
+          <TextInput
+            placeholder="Username"
+            style={styles.textInput}
+            onChangeText={usernameHandler}
+          />
+          <TextInput
+            placeholder="Password"
+            style={styles.textInput}
+            onChangeText={passwordHandler}
+          />
+          <TextInput
+            placeholder="Repeat Password"
+            style={styles.textInput}
+            onChangeText={rpasswordHandler}
+          />
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => checkSamePass()}
+          >
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
+            >
+              SIGN UP
+            </Text>
+          </TouchableOpacity>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={{ color: "white", paddingTop: 15 }}>
+              Already have an account?{" "}
+            </Text>
+            <TouchableOpacity
+              onPress={() => props.navigation.navigate("Login")}
+            >
+              <Text style={{ color: "#27B296", paddingTop: 15 }}>
+                Click here to login!
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </View>
   );
 };
 
@@ -49,9 +130,9 @@ const styles = StyleSheet.create({
   },
 
   inputContainer: {
-    flex: 0.5,
+    flex: 1,
     width: "100%",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#434343",
     paddingTop: 40,
