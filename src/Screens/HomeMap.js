@@ -43,10 +43,20 @@ useEffect(()=>{
   const interval = setInterval(() => {
     getNodes()
         console.log("second")
-          if(currentNodes == markers){ //
+          if(JSON.stringify(currentNodes) == JSON.stringify(markers)){ //
             console.log("wala idadagdag sa map")
+            currentNodes.mobile.map(data => {
+              console.log("nadagdag sa mobile")
+              webViewRef.current.injectJavaScript(`L.marker([${data.latitude}, ${data.longitude}]).addTo(mymap)`)
+            })
+            currentNodes.raft.map(data => {
+              console.log("nadagdag sa RAFT")
+              webViewRef.current.injectJavaScript(`L.marker([${data.latitude}, ${data.longitude}]).addTo(mymap)`)
+            })
           }else{
             console.log("may idadagdag sa map")
+            //console.log(currentNodes)
+
             setCurrentNodes(markers)
            // console.log("haha, ", currentNodes)
            {/* webViewRef.current.injectJavaScript(`

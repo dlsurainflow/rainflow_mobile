@@ -11,73 +11,16 @@ import {
 
 import AsyncStorage from "@react-native-community/async-storage";
 
+//<View style = {{borderWidth: .5, borderColor: "#BCBCBC", marginHorizontal: 30, marginTop: 10}} />
 const UserProfile = (props) => {
-  const [textInputHandler, setTextInputHandler] = useState({});
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const usernameHandler = (e) => {
-    setUsername(e);
-  };
-  const passwordHandler = (e) => {
-    setPassword(e);
-  };
-
-  const loginHandler = () => {
-    const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
-    RCTNetworking.clearCookies((result) => {
-      console.log(result); //true if successfully cleared
-    });
-
-
-    fetch("https://rainflow.live/api/users/login", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ 
-          username: username, 
-          password: password
-        }),
-    }).then(function (response) {
-      if (response.status === 400) {
-        // Error if username/password is invalid
-        response.json().then(function (object) {
-          alert("Invalid username or password!");
-          console.log("400: ", object.non_field_errors);
-        });
-      } else if (response.status === 200) {
-        // Correct username and password
-        response
-          .json()
-          .then(async (responseJson) => {
-            console.log(responseJson);
-            await AsyncStorage.setItem("token", responseJson.data.token); // Save token to storage
-            await AsyncStorage.setItem("username", responseJson.data.username); // Save username
-
-            ToastAndroid.show(
-              "Welcome, " + responseJson.data.username + "!",
-              ToastAndroid.SHORT
-            )
-            //props.navigation.navigate("Main Menu");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else {
-        alert(response.status);
-        ToastAndroid.show("Error: " + response.status, ToastAndroid.SHORT);
-        console.log("Error: ", response.status);
-      }
-    });
-
-
-  };
-
   return (
-    <View>
-      <Text style = {{paddingVertical: 50}}>User profile - TBU</Text>
+    <View style = {{paddingTop: 25, backgroundColor: "#fff"}}>
+      <View style = {{paddingHorizontal: 30, paddingVertical:40,  backgroundColor: "#DEDEDE", flex: 1, justifyContent: "center"}}>
+      <Text style = {{fontWeight: "bold", fontSize: 30}}>Guest</Text>
+        </View> 
+      <View style = {{padding: 40, height: "70%", justifyContent: "flex-start", backgroundColor: "#FFF"}}>
+      <Text style = {{fontSize: 16}}>You are currently not logged in. Login to view your report history, as well as submit a report.</Text>
+        </View> 
       <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
@@ -161,7 +104,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
    // backgroundColor: "#434343",
-    paddingHorizontal: 5,
+    paddingHorizontal: 20,
     paddingTop: 20,
   },
 });
