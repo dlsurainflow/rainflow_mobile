@@ -37,42 +37,39 @@ const getNodes = async() => {
       }
     })
 }
-
-useEffect(()=>{
-  console.log("this has been triggered by first network request")
-  const interval = setInterval(() => {
-    getNodes()
-        console.log("second")
-          if(JSON.stringify(currentNodes) == JSON.stringify(markers)){ //
-            console.log("wala idadagdag sa map")
-            currentNodes.mobile.map(data => {
-              console.log("nadagdag sa mobile")
-              webViewRef.current.injectJavaScript(`L.marker([${data.latitude}, ${data.longitude}]).addTo(mymap)`)
-            })
-            currentNodes.raft.map(data => {
-              console.log("nadagdag sa RAFT")
-              webViewRef.current.injectJavaScript(`L.marker([${data.latitude}, ${data.longitude}]).addTo(mymap)`)
-            })
-          }else{
-            console.log("may idadagdag sa map")
-            //console.log(currentNodes)
-
-            setCurrentNodes(markers)
-           // console.log("haha, ", currentNodes)
-           {/* webViewRef.current.injectJavaScript(`
-            mymap.setView([${lat}, ${long}], 18);
-            L.marker([${lat}, ${long}]).addTo(mymap)
-            .bindPopup("<b>HELLO</b><br />this is a test node").openPopup();`
-            
-          )*/}
-           // console.log(currentNodes)
-          }
+{/*
+  
+  useEffect(()=>{
+    console.log("this has been triggered by first network request")
+    const interval = setInterval(() => {
+      getNodes()
+          console.log("second")
+            if(JSON.stringify(currentNodes) == JSON.stringify(markers)){ //
+              console.log("wala idadagdag sa map")
+              currentNodes.mobile.map(data => {
+                console.log("nadagdag sa mobile")
+                webViewRef.current.injectJavaScript(`L.marker([${data.latitude}, ${data.longitude}]).addTo(mymap)`)
+              })
+              currentNodes.raft.map(data => {
+                console.log("nadagdag sa RAFT")
+                webViewRef.current.injectJavaScript(`L.marker([${data.latitude}, ${data.longitude}]).addTo(mymap)`)
+              })
+            }else{
+              console.log("may idadagdag sa map")
+              //console.log(currentNodes)
+  
+              setCurrentNodes(markers)
+    
+             // console.log(currentNodes)
+            }
+          
         
-      
-  }, 10000); //every 10 seconds
-  return () => clearInterval(interval);
-
-}, [markers])
+    }, 10000); //every 10 seconds
+    return () => clearInterval(interval);
+  
+  }, [markers])
+  */
+}
 
 
 useEffect(()=> {

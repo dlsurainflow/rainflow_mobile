@@ -56,7 +56,7 @@ const Login = (props) => {
             console.log(responseJson);
             await AsyncStorage.setItem("token", responseJson.data.token); // Save token to storage
             await AsyncStorage.setItem("username", responseJson.data.username); // Save username
-            props.navigation.navigate("MainMenu")
+            props.navigation.push("MainMenu", { screen: 'User Profile' })
 
             ToastAndroid.show(
               "Welcome, " + responseJson.data.username + "!",
