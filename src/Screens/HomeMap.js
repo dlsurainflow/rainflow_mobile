@@ -12,12 +12,14 @@ import {
 import { WebView } from "react-native-webview";
 import { html_map } from "./html_map"
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import StepModal from "../components/NodeModal"
 
 
 const HomeMap = (props) => {
 const [markers, setMarkers] = useState()
 const [injectJS, setInjectJS] = useState()
 const [currentNodes, setCurrentNodes] = useState([])
+const [sidebar, setSidebar] = useState(false)
 const webViewRef = useRef();
 
 const getNodes = async() => {
@@ -87,6 +89,12 @@ const addMarker = (lat, long) => {
   .bindPopup("<b>HELLO</b><br />this is a test node").openPopup();`
   )
 } 
+
+const showSidebar = () => {
+
+setSidebar(true)
+  
+}
   return (
     <View style = {styles.backgroundContainer}>
         <WebView
@@ -102,7 +110,7 @@ const addMarker = (lat, long) => {
           <TouchableOpacity
             style={styles.button}
             onPress={() =>
-              addMarker(14.604452, 120.978688)
+              showSidebar()
             }
           >
             <MaterialCommunityIcons
@@ -116,22 +124,58 @@ const addMarker = (lat, long) => {
               Back to start point 
             </Text>
           </TouchableOpacity>
-          {/*<TouchableOpacity
+  
+        </View>
+
+  <StepModal  modalVisible={sidebar}  confirmText={"OK"}>
+
+    <View style = {{flex:1, flexDirection: "row", alignItems: "center"}}>
+    <Text style = {{textAlign: "justify", fontWeight: "bold", right: 2}}>Submitted by: tammyc</Text>
+      <MaterialCommunityIcons
+                    name="shield"
+                    color="dodgerblue"
+                    size={18}
+                  />
+        </View>
+ 
+    <Text style = {{textAlign: "justify"}}>10/10/2020, 2:03 PM</Text>
+    <TouchableOpacity
             style={styles.button}
-            onPress={() =>
-              addMarker2(14.60478, 120.978484)
-            }
+            onPress={() => setSidebar(false)}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
-              PLOT ANOTHER
+              Close modal
             </Text>
-          </TouchableOpacity>*/}
-        </View>
-
-
+          </TouchableOpacity>
+    <View style = {{borderWidth: .5, width: "100%", borderColor: "#BCBCBC", marginHorizontal: 5, marginTop: 10}} />
+    <View style = {{flexDirection: "row", marginVertical: 5}}>
+    <Text style = {{textAlign: "justify", fontWeight: "bold"}}>Latitude: </Text>
+    <Text style = {{textAlign: "justify"}}>14.476576</Text>
     </View>
+    <View style = {{flexDirection: "row", marginVertical: 5}}>
+    <Text style = {{textAlign: "justify", fontWeight: "bold"}}>Longitude: </Text>
+    <Text style = {{textAlign: "justify"}}>120.0068565</Text>
+    </View>
+    <View style = {{flexDirection: "row", marginVertical: 5}}>
+    <Text style = {{textAlign: "justify", fontWeight: "bold"}}>Rain Intensity: </Text>
+    <Text style = {{textAlign: "justify"}}>Light Rain</Text>
+    </View>
+    <View style = {{flexDirection: "row", marginVertical: 5}}>
+    <Text style = {{textAlign: "justify", fontWeight: "bold"}}>Flood Level: </Text>
+    <Text style = {{textAlign: "justify"}}>No flooding</Text>
+    </View>
+
+    <View style={{marginTop: 5, justifyContent: "center"}}>
+
+    <Text style = {{textAlign: "justify", fontWeight: "bold"}}>Photo: </Text>
+    <Image style={{height: 300, width: 150, alignSelf: "center"}}
+            source={require('../../assets/sample_image.jpg')  }/>
+    </View>
+
+</StepModal>
+</View>
 
     
   );
@@ -153,6 +197,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#434343",
     paddingHorizontal: 30,
+  },
+
+  button: {
+    width: "100%",
+    height: 45,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: "#1EA78C",
   },
 
   logoContainer: {
@@ -189,13 +242,15 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: "100%",
+    width: "80%",
     height: 45,
     justifyContent: "center",
     alignItems: "center",
+    alignSelf: "center",
     borderRadius: 30,
     backgroundColor: "#27B296",
     flexDirection: "row",
+    marginVertical: 15
   
   },
 

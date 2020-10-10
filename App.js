@@ -95,7 +95,7 @@ export default function App() {
         
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons 
-                name="cellphone-message" 
+                name="alert-octagon" 
                 color="#ffff" 
                 size={26} />
             ),
@@ -146,10 +146,10 @@ export default function App() {
 
   return (
    <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="MainMenu" component={Navbar} />
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="MainMenu">
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen name="MainMenu" component={Navbar} />
     </Stack.Navigator>
    </NavigationContainer>
   );

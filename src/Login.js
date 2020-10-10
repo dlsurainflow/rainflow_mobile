@@ -56,6 +56,7 @@ const Login = (props) => {
             console.log(responseJson);
             await AsyncStorage.setItem("token", responseJson.data.token); // Save token to storage
             await AsyncStorage.setItem("username", responseJson.data.username); // Save username
+            await AsyncStorage.setItem("points", JSON.stringify(responseJson.data.points)); // Save username
             props.navigation.push("MainMenu", { screen: 'User Profile' })
 
             ToastAndroid.show(
