@@ -11,16 +11,14 @@ import {
 } from "react-native";
 
 import AsyncStorage from "@react-native-community/async-storage";
-
-
-
+import { CirclesRotationScaleLoader } from 'react-native-indicator';
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 //<View style = {{borderWidth: .5, borderColor: "#BCBCBC", marginHorizontal: 30, marginTop: 10}} />
 
 const UserProfile = (props) => {
   const [username, setUsername] = useState();
   const [accPoints, setAccPoints] = useState();
-  const [bodyComponent, setBodyComponent] = useState();
+  const [showLoading, setShowLoading] = useState(false)
   const [buttonLabel, setButtonLabel] = useState()
   
   const  checkUserSignedIn = async() =>{
@@ -35,7 +33,7 @@ const UserProfile = (props) => {
          
         }
         else {
-        //  console.log("not logged in")
+        //console.log("not logged in")
           setButtonLabel("Login")
 
       }
@@ -46,12 +44,20 @@ const UserProfile = (props) => {
 }
   const  logOut = async() =>{
     try {
-      await AsyncStorage.removeItem('username');
-      await AsyncStorage.removeItem('points');
-      console.log("yeh")
-      setUsername(undefined)
-      setAccPoints(undefined)
-      setButtonLabel("Login")
+      setShowLoading(true)
+      setTimeout(async() => {
+        setShowLoading(false)
+        await AsyncStorage.removeItem('username');
+        await AsyncStorage.removeItem('points');
+        console.log("yeh")
+        setUsername(undefined)
+        setAccPoints(undefined)
+        setButtonLabel("Login")
+        props.navigation.navigate("HomeMap")
+      }, 5000);
+
+
+
   }
   catch(exception) {
       return false;
@@ -121,6 +127,14 @@ const logoutHandler = () =>{
    
         </View> 
           </View>
+
+          {showLoading ? (
+            <View style = {styles.loadingContainer}>
+            <CirclesRotationScaleLoader size = {100}color = {"#434343"} /> 
+            <Text style = {{fontWeight: "bold", color : "#434343"}}>Loading</Text>       
+            </View>
+          ) : null}
+          
     </View>
   );
 };
@@ -159,6 +173,27 @@ const styles = StyleSheet.create({
   fontSize: 16, 
   color: "#fff"
  },
+ button: {
+  width: "100%",
+  height: 45,
+  justifyContent: "center",
+  alignItems: "center",
+  alignSelf: "center",
+  borderRadius: 30,
+  backgroundColor: "#0E956A",
+  flexDirection: "row",
+  marginVertical: 15,
+},
+
+buttonContainer: {
+  flex: 1,
+  width: "70%",
+ position: "absolute",
+  alignItems: "center",
+  alignSelf: "center",
+  paddingHorizontal: 5,
+  bottom:40,
+},
 
  bodyContainer: {
   flex:1,
@@ -172,6 +207,17 @@ const styles = StyleSheet.create({
   marginTop: 20, 
   fontSize: 14, 
   color: "#434343"
+ },
+
+ loadingContainer: {
+  flex:1, 
+  height: "100%", 
+  width: "100%",
+  flexDirection: "column", 
+  alignItems: "center", 
+  justifyContent: "center", 
+  position: "absolute",
+  paddingTop: Platform.OS === "android" ? 25 : 0,
  }
 });
 

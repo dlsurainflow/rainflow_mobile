@@ -12,6 +12,7 @@ import {
 import { WebView } from "react-native-webview";
 import { html_map } from "./html_map"
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import { useFocusEffect } from '@react-navigation/native';
 import StepModal from "../components/NodeModal"
 
 
@@ -80,6 +81,17 @@ useEffect(()=> {
   console.log("upon loading")
 }, [])
 
+useFocusEffect( // fetch again when we switch between tabs. because useeffect isnt triggered when we go from one tab to the next
+  React.useCallback(() => {
+    let isActive = true;
+    getNodes()
+    setCurrentNodes(markers)
+
+    return () => {
+      isActive = false;
+    };
+  }, [])
+);
 
 
 const addMarker = (lat, long) => {
