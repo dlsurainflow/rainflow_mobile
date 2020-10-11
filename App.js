@@ -16,6 +16,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import AnimatedSplash from "react-native-animated-splash-screen";
 
 const Stack = createStackNavigator();
 const bottomTab = createMaterialBottomTabNavigator();
@@ -23,7 +24,14 @@ const bottomTab = createMaterialBottomTabNavigator();
 
 export default function App() {
   
-  const [barStyle, setBarStyle] = useState()
+  const [loadSplash, setLoadSplash] = useState(false)
+
+  useEffect(()=>{
+    setTimeout(async() => {
+      setLoadSplash(true)
+    }, 2500);
+  }
+  , [])
 
   const ReportComp = (props) => (
     <>
@@ -145,6 +153,14 @@ export default function App() {
   }
 
   return (
+    <AnimatedSplash
+    translucent={true}
+    isLoaded={loadSplash}
+    logoImage={require("./assets/Logo.png")}
+    backgroundColor={"#434343"}
+    logoHeight={150}
+    logoWidth={200}
+  >
    <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="MainMenu">
       <Stack.Screen name="Login" component={LoginScreen} />
@@ -152,6 +168,7 @@ export default function App() {
       <Stack.Screen name="MainMenu" component={Navbar} />
     </Stack.Navigator>
    </NavigationContainer>
+   </AnimatedSplash>
   );
 }
 

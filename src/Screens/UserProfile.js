@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 import AsyncStorage from "@react-native-community/async-storage";
-import { CirclesRotationScaleLoader } from 'react-native-indicator';
+import { ColorDotsLoader } from 'react-native-indicator';
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 //<View style = {{borderWidth: .5, borderColor: "#BCBCBC", marginHorizontal: 30, marginTop: 10}} />
 
@@ -53,8 +53,12 @@ const UserProfile = (props) => {
         setUsername(undefined)
         setAccPoints(undefined)
         setButtonLabel("Login")
+        ToastAndroid.show(
+          "Welcome, guest!",
+          ToastAndroid.SHORT
+        )
         props.navigation.navigate("HomeMap")
-      }, 5000);
+      }, 3000);
 
 
 
@@ -86,6 +90,8 @@ const logoutHandler = () =>{
     console.log("heyyo!")
     checkUserSignedIn()
   }, [])
+
+  
   return (
     <View style = {styles.backgroundContainer}>
       <View style = {styles.headerContainer}>
@@ -130,7 +136,7 @@ const logoutHandler = () =>{
 
           {showLoading ? (
             <View style = {styles.loadingContainer}>
-            <CirclesRotationScaleLoader size = {100}color = {"#434343"} /> 
+            <ColorDotsLoader size = {30} color1 = {"#4FC69A"} color2 = {"#1EA78C"} color3 = {"#0E956A"} /> 
             <Text style = {{fontWeight: "bold", color : "#434343"}}>Loading</Text>       
             </View>
           ) : null}
