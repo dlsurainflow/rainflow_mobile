@@ -13,7 +13,8 @@ import {
 import AsyncStorage from "@react-native-community/async-storage";
 import { ColorDotsLoader } from 'react-native-indicator';
 import { MaterialCommunityIcons } from "react-native-vector-icons";
-import { Chip } from 'react-native-paper';
+import { List } from 'react-native-paper';
+import { ScrollView } from "react-native-gesture-handler";
 
 const UserProfile = (props) => {
   const [username, setUsername] = useState();
@@ -111,8 +112,14 @@ const logoutHandler = () =>{
       <View style = {styles.bodyContainer}>
       {username ? 
       (
-        <Text style = {styles.bodyText}>You are logged in</Text>
-        
+        <ScrollView showsVerticalScrollIndicator = {false}>
+          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Dashboard" description="Monitor your RAFT device"/>
+          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Report History" description="View a history of all the reports you've submitted"/>
+          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Active Reports" description="View list of active reports"/>          
+          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Account Information" description="Change your password"/>
+          <List.Item  titleStyle = {{fontSize: 15}} descriptionStyle = {{fontSize: 12}} title="About Us" description="Learn more about user privileges and our team"/>
+        </ScrollView>
+      
       ): (
       <>
       <Text style = {styles.bodyText2}>You are currently not logged in.</Text>
@@ -122,6 +129,7 @@ const logoutHandler = () =>{
       )}
 
     
+          </View>
       <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
@@ -135,7 +143,6 @@ const logoutHandler = () =>{
           </TouchableOpacity>
    
         </View> 
-          </View>
 
           {showLoading ? (
             <View style = {styles.loadingContainer}>
@@ -190,7 +197,7 @@ const styles = StyleSheet.create({
 
  },
  button: {
-  width: "100%",
+  width: "80%",
   height: 45,
   justifyContent: "center",
   alignItems: "center",
@@ -202,21 +209,19 @@ const styles = StyleSheet.create({
 },
 
 buttonContainer: {
-  flex: 1,
-  width: "70%",
- position: "absolute",
+  width: "100%",
   alignItems: "center",
   alignSelf: "center",
   paddingHorizontal: 5,
-  bottom:40,
+  
 },
 
  bodyContainer: {
   flex:1,
-  paddingHorizontal: 20, 
+  paddingHorizontal: 10, 
   height: "80%", 
   justifyContent: "flex-start", 
-  backgroundColor: "#FFF"
+  backgroundColor: "#FFF",
  },
 
  bodyText: {
@@ -243,6 +248,12 @@ buttonContainer: {
   justifyContent: "center", 
   position: "absolute",
   paddingTop: Platform.OS === "android" ? 25 : 0,
+ },
+
+ listItem: {
+  borderBottomWidth: 0.5, 
+  borderBottomColor: "#bcbcbc", 
+  paddingVertical: 10
  }
 });
 
