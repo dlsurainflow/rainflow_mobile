@@ -16,6 +16,7 @@ const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+
   const usernameHandler = (e) => {
     setUsername(e);
   };
@@ -55,6 +56,8 @@ const Login = (props) => {
             console.log(responseJson);
             await AsyncStorage.setItem("token", responseJson.data.token); // Save token to storage
             await AsyncStorage.setItem("username", responseJson.data.username); // Save username
+            await AsyncStorage.setItem("points", JSON.stringify(responseJson.data.points)); // Save username
+            props.navigation.push("MainMenu", { screen: 'HomeMap' })
 
             ToastAndroid.show(
               "Welcome, " + responseJson.data.username + "!",
@@ -93,6 +96,7 @@ const Login = (props) => {
           />
           <TextInput
             placeholder="Password"
+            secureTextEntry={true}
             style={styles.textInput}
             onChangeText={passwordHandler}
           />
