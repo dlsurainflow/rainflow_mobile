@@ -29,7 +29,7 @@ export default function App() {
   useEffect(()=>{
     setTimeout(async() => {
       setLoadSplash(true)
-    }, 2500);
+    }, 10000);
   }
   , [])
 
@@ -154,10 +154,10 @@ export default function App() {
     <AnimatedSplash
     translucent={true}
     isLoaded={loadSplash}
-    logoImage={require("./assets/Logo.png")}
-    backgroundColor={"#434343"}
-    logoHeight={150}
-    logoWidth={200}
+    logoImage={require("./assets/animated_logo.gif")}
+    backgroundColor={"#3D3D3D"}
+    logoHeight={200}
+    logoWidth={300}
   >
    <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="MainMenu">
