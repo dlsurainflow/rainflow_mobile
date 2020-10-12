@@ -6,12 +6,44 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  BackHandler
+  BackHandler,
+  ScrollView
 } from "react-native";
-
+import AsyncStorage from "@react-native-community/async-storage";
 import { Appbar } from 'react-native-paper';
+import ReportCard from '../components/ReportCard'
 
 const ReportHistory = (props) => {
+
+  const [reportsList, setReportsList] = useState()
+  const [historyBody, setHistoryBody] = useState()
+
+  const getReports = async() => {
+
+    const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
+    RCTNetworking.clearCookies((result) => {
+    //console.log(result); //true if successfully cleared
+    });
+
+    const userID = await AsyncStorage.getItem("userID")
+    const token = await AsyncStorage.getItem("token")
+
+    await fetch(`https://rainflow.live/api/report/user/${userID}`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          'Accept' : 'application/json',
+          'Authorization' :  `Bearer ${token}`
+      }
+      }).then(response => {
+        if(response.status == 200)
+          response.json().then( (data) => {setReportsList(data)});
+        else{
+          Alert.alert(
+            'Error retrieving reports! (Code: ' + response.status + ')');
+        }
+      })
+  }
 
   useEffect(() => {
     const backAction = () => {
@@ -25,6 +57,39 @@ const ReportHistory = (props) => {
     return () => backHandler.remove();
   });
 
+  useEffect(() => {
+    if(reportsList == undefined){
+      getReports()
+    } else {
+      console.log("FOUND REPORTS: ", reportsList)
+      if(reportsList.length == 0){
+          setHistoryBody(
+            <View>
+              <Text>You have not submitted any reports.</Text>
+            </View>
+          )
+      }else{
+        setHistoryBody(
+          reportsList.map(data =>{
+            return(
+              <ReportCard 
+                key = {data.id}
+                createdAt = {data.createdAt}
+                latitude = {data.latitude}
+                longitude = {data.longitude}
+                rain = {data.rainfall_rate}
+                flood = {data.flood_depth}
+                image = {data.image}
+                id = {data.id}
+                 />
+            )
+          })
+        )
+        }
+    }
+  }, [reportsList]);
+
+
   return (
     <View style={styles.backgroundContainer}>
       <Appbar.Header style = {{backgroundColor: "#0E956A"}}>
@@ -32,41 +97,9 @@ const ReportHistory = (props) => {
       <Appbar.Content title="Report History" titleStyle= {{fontSize: 15}} subtitle="All the reports you've ever submitted" subtitleStyle={{fontSize: 12}}/>
     </Appbar.Header>
       <View style={styles.contentContainer}>
-        <Text
-          style={{
-            textAlign: "left",
-            color: "#fff",
-            fontWeight: "bold",
-            paddingBottom: 30,
-          }}
-        >
-          Report History
-        </Text>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => props.navigation.navigate("Reporting")}
-          >
-            <Text
-              style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
-            >
-              CONTINUE
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.buttonCancelContainer}>
-          <TouchableOpacity
-            style={styles.buttonCancel}
-            onPress={() => console.log("CANCEL")}
-          >
-            <Text
-              style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
-            >
-              CANCEL
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <ScrollView style = {{width: "100%"}} showsVerticalScrollIndicator = {false}>
+        {historyBody}
+        </ScrollView>
       </View>
     </View>
   );
@@ -84,10 +117,10 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     width: "100%",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "#434343",
-    paddingHorizontal: 30,
+    backgroundColor: "#fff",
+    padding: 15
   },
 
   rbuttonContainer: {
