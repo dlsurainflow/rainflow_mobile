@@ -31,10 +31,25 @@ const UserProfile = (props) => {
          setUsername(un)
          setAccPoints(pts)
          setButtonLabel("Logout")
-         
+         setBodyComponent(
+          <ScrollView showsVerticalScrollIndicator = {false}>
+          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Dashboard" description="Monitor your RAFT device"/>
+          <List.Item  onPress = {()=> props.navigation.navigate("Reporting", { screen: 'ReportHistory' })} titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Report History" description="View a history of all the reports you've submitted"/>
+          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Active Reports" description="View list of active reports"/>          
+          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Account Information" description="Change your password"/>
+          <List.Item  titleStyle = {{fontSize: 15}} descriptionStyle = {{fontSize: 12}} title="About Us" description="Learn more about user privileges and our team"/>
+        </ScrollView>
+         )
         }
         else {
           setButtonLabel("Login")
+          setBodyComponent(
+            <View style = {{paddingHorizontal: 10}}>
+              <Text style = {styles.bodyText2}>You are currently not logged in.</Text>
+              <Text style = {styles.bodyText}>Login to view your report history, as well as submit a report.</Text>
+              <Text style = {styles.bodyText}>To know more about our authenticated user privileges, go to our About Page. </Text>
+            </View>
+          )
 
       }
     } catch (error) {
@@ -52,6 +67,13 @@ const UserProfile = (props) => {
         setUsername(undefined)
         setAccPoints(undefined)
         setButtonLabel("Login")
+        setBodyComponent(
+          <View style = {{paddingHorizontal: 10}}>
+            <Text style = {styles.bodyText2}>You are currently not logged in.</Text>
+            <Text style = {styles.bodyText}>Login to view your report history, as well as submit a report.</Text>
+            <Text style = {styles.bodyText}>To know more about our authenticated user privileges, go to our About Page. </Text>
+          </View>
+        )
         ToastAndroid.show(
           "Welcome, guest!",
           ToastAndroid.SHORT
@@ -109,27 +131,11 @@ const logoutHandler = () =>{
   </View>
       </View>
       </View>
-      <View style = {styles.bodyContainer}>
-      {username ? 
-      (
-        <ScrollView showsVerticalScrollIndicator = {false}>
-          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Dashboard" description="Monitor your RAFT device"/>
-          <List.Item  onPress = {()=> props.navigation.navigate("Reporting", { screen: 'ReportHistory' })} titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Report History" description="View a history of all the reports you've submitted"/>
-          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Active Reports" description="View list of active reports"/>          
-          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Account Information" description="Change your password"/>
-          <List.Item  titleStyle = {{fontSize: 15}} descriptionStyle = {{fontSize: 12}} title="About Us" description="Learn more about user privileges and our team"/>
-        </ScrollView>
-      
-      ): (
-      <>
-      <Text style = {styles.bodyText2}>You are currently not logged in.</Text>
-      <Text style = {styles.bodyText}>Login to view your report history, as well as submit a report.</Text>
-      <Text style = {styles.bodyText}>To know more about our authenticated user privileges, go to our About Page. </Text>
-      </>
-      )}
 
-    
-          </View>
+      <View style = {styles.bodyContainer}>
+      {bodyComponent}
+      </View>
+
       <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
