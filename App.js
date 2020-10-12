@@ -1,6 +1,6 @@
-import { StatusBar } from "expo-status-bar";
-import React from "react";
-//import { StyleSheet, Text } from "react-native";
+
+import React, {useEffect, useState} from "react";
+
 import "react-native-gesture-handler";
 
 //SCREENS START
@@ -9,29 +9,39 @@ import SignupScreen from "./src/Screens/Signup.js";
 import ReportingScreen from "./src/Screens/Reporting.js";
 import ReportHistoryScreen from "./src/Screens/ReportHistory.js";
 import HomeMap from "./src/Screens/HomeMap.js";
+import UserProfileScreen from "./src/Screens/UserProfile.js";
 //SCREENS END
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import AnimatedSplash from "react-native-animated-splash-screen";
 
 const Stack = createStackNavigator();
 const bottomTab = createMaterialBottomTabNavigator();
 
+
 export default function App() {
+  
+  const [loadSplash, setLoadSplash] = useState(false)
+
+  useEffect(()=>{
+    setTimeout(async() => {
+      setLoadSplash(true)
+    }, 2500);
+  }
+  , [])
+
   const ReportComp = (props) => (
     <>
-      <Stack.Navigator
-        screenOptions={{ headerShown: false }}
-        initialRouteName="Reporting"
-      >
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="ReportingScreen">
         <Stack.Screen
-          name="Reporting"
+          name="ReportingScreen"
           component={ReportingScreen}
           options={{ title: "Reporting" }}
         />
-        <Stack.Screen
+         <Stack.Screen
           name="ReportHistory"
           component={ReportHistoryScreen}
           options={{ title: "ReportHistory" }}
@@ -41,10 +51,7 @@ export default function App() {
   );
   const MapComp = (props) => (
     <>
-      <Stack.Navigator
-        screenOptions={{ headerShown: false }}
-        initialRouteName="HomeMap"
-      >
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="HomeMap">
         <Stack.Screen
           name="HomeMap"
           component={HomeMap}
@@ -53,68 +60,52 @@ export default function App() {
       </Stack.Navigator>
     </>
   );
+
 
   const ProfileComp = (props) => (
     <>
-      <Stack.Navigator
-        screenOptions={{ headerShown: false }}
-        initialRouteName="Login"
-      >
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ title: "Login" }}
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="UserProfile">
+      <Stack.Screen
+          name="UserProfile"
+          component={UserProfileScreen}
+          options={{ title: "UserProfile" }}
         />
-        <Stack.Screen
-          name="HomeMap"
-          component={HomeMap}
-          options={{ title: "HomeMap" }}
-        />
-        <Stack.Screen
-          name="Signup"
-          component={SignupScreen}
-          options={{ title: "Signup" }}
+
+      <Stack.Screen
+          name="ReportHistory"
+          component={ReportHistoryScreen}
+          options={{ title: "ReportHistory" }}
         />
       </Stack.Navigator>
     </>
   );
 
-  const SignupComp = (props) => (
-    <>
-      <Stack.Navigator
-        screenOptions={{ headerShown: false }}
-        initialRouteName="Signup"
-      >
-        <Stack.Screen
-          name="Signup"
-          component={SignupScreen}
-          options={{ title: "Signup" }}
-        />
-      </Stack.Navigator>
-    </>
-  );
-  return (
-    <NavigationContainer>
-      <bottomTab.Navigator
+
+
+  const Navbar = (props) => {
+      return(
+    <bottomTab.Navigator
         initialRouteName="HomeMap"
         backBehavior="none"
-        barStyle={{ backgroundColor: "#fff" }}
-        activeColor="#f0edf6"
+        barStyle = {{backgroundColor: "#fff"}}
+        activeColor="#f0edf6" 
         shifting
       >
-        <bottomTab.Screen
-          name="Reporting - Rain Intensity"
+
+<bottomTab.Screen
+          name="Reporting"
           children={ReportComp}
           options={{
-            tabBarColor: "#4FC69A",
+            tabBarColor: '#4FC69A', 
             tabBarLabel: "Report",
+        
             tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons
-                name="cellphone-message"
-                color="#ffff"
-                size={26}
-              />
+              <MaterialCommunityIcons 
+                name="alert-octagon" 
+                color="#ffff" 
+                size={26} />
             ),
+           
           }}
         />
 
@@ -122,19 +113,26 @@ export default function App() {
           name="HomeMap"
           children={MapComp}
           options={{
-            tabBarColor: "#1EA78C",
+            tabBarColor: '#1EA78C',
+
             tabBarLabel: "Map",
             tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons name="compass" color="#ffff" size={26} />
+              <MaterialCommunityIcons 
+                name="compass" 
+                color="#ffff" 
+                size={26} />
             ),
           }}
         />
+       
+      
 
-        <bottomTab.Screen
+<bottomTab.Screen
           name="User Profile"
           children={ProfileComp}
           options={{
-            tabBarColor: "#0E956A",
+            tabBarColor: '#0E956A',
+         
             tabBarLabel: "Profile",
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons
@@ -145,7 +143,30 @@ export default function App() {
             ),
           }}
         />
+        
+        
       </bottomTab.Navigator>
-    </NavigationContainer>
+
+      )
+  }
+
+  return (
+    <AnimatedSplash
+    translucent={true}
+    isLoaded={loadSplash}
+    logoImage={require("./assets/Logo.png")}
+    backgroundColor={"#434343"}
+    logoHeight={150}
+    logoWidth={200}
+  >
+   <NavigationContainer>
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="MainMenu">
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen name="MainMenu" component={Navbar} />
+    </Stack.Navigator>
+   </NavigationContainer>
+   </AnimatedSplash>
   );
 }
+

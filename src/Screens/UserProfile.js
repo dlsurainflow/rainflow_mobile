@@ -7,195 +7,260 @@ import {
   ToastAndroid,
   TouchableOpacity,
   Image,
+  Alert
 } from "react-native";
 
 import AsyncStorage from "@react-native-community/async-storage";
+import { ColorDotsLoader } from 'react-native-indicator';
+import { MaterialCommunityIcons } from "react-native-vector-icons";
+import { List } from 'react-native-paper';
+import { ScrollView } from "react-native-gesture-handler";
 
 const UserProfile = (props) => {
-  const [textInputHandler, setTextInputHandler] = useState({});
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState();
+  const [accPoints, setAccPoints] = useState();
+  const [showLoading, setShowLoading] = useState(false)
+  const [buttonLabel, setButtonLabel] = useState()
+  const [bodyComponent, setBodyComponent] = useState()
+  
+  const  checkUserSignedIn = async() =>{
+    try {
+       let un = await AsyncStorage.getItem("username");
+       let pts = await AsyncStorage.getItem("points");
+       if (un != null){
+         setUsername(un)
+         setAccPoints(pts)
+         setButtonLabel("Logout")
+         setBodyComponent(
+          <ScrollView showsVerticalScrollIndicator = {false}>
+          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Dashboard" description="Monitor your RAFT device"/>
+          <List.Item  onPress = {()=> props.navigation.navigate("ReportHistory")} titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Report History" description="View a history of all the reports you've submitted"/>
+          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Active Reports" description="View list of active reports"/>          
+          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Account Information" description="Change your password"/>
+          <List.Item  titleStyle = {{fontSize: 15}} descriptionStyle = {{fontSize: 12}} title="About Us" description="Learn more about user privileges and our team"/>
+        </ScrollView>
+         )
+        }
+        else {
+          setButtonLabel("Login")
+          setBodyComponent(
+            <View style = {{paddingHorizontal: 10}}>
+              <Text style = {styles.bodyText2}>You are currently not logged in.</Text>
+              <Text style = {styles.bodyText}>Login to view your report history, as well as submit a report.</Text>
+              <Text style = {styles.bodyText}>To know more about our authenticated user privileges, go to our About Page. </Text>
+            </View>
+          )
 
-  const usernameHandler = (e) => {
-    setUsername(e);
-  };
-  const passwordHandler = (e) => {
-    setPassword(e);
-  };
-
-  const loginHandler = () => {
-    const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
-    RCTNetworking.clearCookies((result) => {
-      console.log(result); //true if successfully cleared
-    });
-
-
-    fetch("https://rainflow.live/api/users/login", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ 
-          username: username, 
-          password: password
-        }),
-    }).then(function (response) {
-      if (response.status === 400) {
-        // Error if username/password is invalid
-        response.json().then(function (object) {
-          alert("Invalid username or password!");
-          console.log("400: ", object.non_field_errors);
-        });
-      } else if (response.status === 200) {
-        // Correct username and password
-        response
-          .json()
-          .then(async (responseJson) => {
-            console.log(responseJson);
-            await AsyncStorage.setItem("token", responseJson.data.token); // Save token to storage
-            await AsyncStorage.setItem("username", responseJson.data.username); // Save username
-
-            ToastAndroid.show(
-              "Welcome, " + responseJson.data.username + "!",
-              ToastAndroid.SHORT
-            )
-            //props.navigation.navigate("Main Menu");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else {
-        alert(response.status);
-        ToastAndroid.show("Error: " + response.status, ToastAndroid.SHORT);
-        console.log("Error: ", response.status);
       }
-    });
+    } catch (error) {
+      // Error retrieving data
+      console.log(error)
+    }
+}
+  const  logOut = async() =>{
+    try {
+      setShowLoading(true)
+      setTimeout(async() => {
+        setShowLoading(false)
+        await AsyncStorage.removeItem('username');
+        await AsyncStorage.removeItem('points');
+        setUsername(undefined)
+        setAccPoints(undefined)
+        setButtonLabel("Login")
+        setBodyComponent(
+          <View style = {{paddingHorizontal: 10}}>
+            <Text style = {styles.bodyText2}>You are currently not logged in.</Text>
+            <Text style = {styles.bodyText}>Login to view your report history, as well as submit a report.</Text>
+            <Text style = {styles.bodyText}>To know more about our authenticated user privileges, go to our About Page. </Text>
+          </View>
+        )
+        ToastAndroid.show(
+          "Welcome, guest!",
+          ToastAndroid.SHORT
+        )
+        props.navigation.navigate("HomeMap")
+      }, 3000);
 
 
-  };
 
+  }
+  catch(exception) {
+      return false;
+  }
+}
+
+const logoutHandler = () =>{
+    return Alert.alert(
+      "Log out",
+      "Are you sure you want to log out?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {},
+          style: "cancel",
+        },
+        { text: "OK", onPress: () => logOut() },
+      ],
+      { cancelable: false }
+    );
+  
+  
+}
+
+  useEffect(()=> {
+    checkUserSignedIn()
+  }, [])
+
+  
   return (
-    <View style={styles.backgroundContainer}>
-      <View style={styles.contentContainer}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require("../assets/Logo.png")}
-            style={{ height: "38%", width: "90%" }}
-          />
+    <View style = {styles.backgroundContainer}>
+      <View style = {styles.headerContainer}>
+      <View style = {styles.headerInfo}>
+        <View style = {{borderRadius: 100, padding: 8, borderColor: "#fff", backgroundColor: "#fff"}}>
+      <MaterialCommunityIcons
+                name="shield-half-full"
+                color="#0E956A"
+                size={60}
+              />
         </View>
+  <Text style = {styles.userText}>{username ? username : 'Guest'}</Text>
+  <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>
+  <Text style = {styles.pointsText}>{accPoints ? accPoints : '0'} pts</Text>
+  <Text style = {styles.pointsText}>{accPoints ? 'Silver badge' : 'No badge'}</Text> 
+  <Text style = {styles.pointsText}>{accPoints ? '5 reports' : '0 reports'}</Text>  
+  </View>
+      </View>
+      </View>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder="Username"
-            style={styles.textInput}
-            onChangeText={usernameHandler}
-          />
-          <TextInput
-            placeholder="Password"
-            style={styles.textInput}
-            onChangeText={passwordHandler}
-          />
-        </View>
+      <View style = {styles.bodyContainer}>
+      {bodyComponent}
+      </View>
 
-        <View style={styles.buttonContainer}>
+      <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => loginHandler()}
+            onPress={() => {username ? logoutHandler() : props.navigation.navigate('Login')}}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
-              LOGIN
+              {buttonLabel}
             </Text>
           </TouchableOpacity>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={{ color: "white", paddingTop: 15 }}>
-              Don't have an account?{" "}
-            </Text>
-            <TouchableOpacity
-              onPress={() => props.navigation.navigate("Signup")}
-            >
-              <Text style={{ color: "#27B296", paddingTop: 15 }}>
-                Register now!
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
+   
+        </View> 
+
+          {showLoading ? (
+            <View style = {styles.loadingContainer}>
+            <ColorDotsLoader size = {30} color1 = {"#4FC69A"} color2 = {"#1EA78C"} color3 = {"#0E956A"} /> 
+            <Text style = {{fontWeight: "bold", color : "#434343"}}>Loading</Text>       
+            </View>
+          ) : null}
+          
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+
   backgroundContainer: {
+    backgroundColor: "#fff", 
     flex: 1,
-    width: "100%",
-    backgroundColor: "#434343",
-    justifyContent: "center",
-    paddingTop: Platform.OS === "android" ? 25 : 0,
-  },
 
-  contentContainer: {
-    flex: 1,
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#434343",
-    paddingHorizontal: 30,
   },
+ headerContainer: {
+  backgroundColor: "#0E956A", 
+  flex: 0.65, 
+  justifyContent: "center", 
+  padding: 20, 
+  justifyContent: "flex-end", 
+  alignItems: "center", 
 
-  logoContainer: {
-    flex: 1.1,
-    width: "100%",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    backgroundColor: "#434343",
-    paddingBottom: 40,
-  },
 
-  inputContainer: {
-    flex: 0.5,
-    width: "100%",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    backgroundColor: "#434343",
-    paddingTop: 40,
-    paddingHorizontal: 5,
-  },
+ },
 
-  textInput: {
-    backgroundColor: "#F0F3F4",
-    marginVertical: 1.5,
-    paddingHorizontal: 10,
-    height: 40,
-    width: "100%",
-    borderColor: "#dedede",
-    borderStyle: "solid",
-    borderWidth: 1,
-    letterSpacing: 2,
-    alignItems: "center",
-    borderRadius: 30,
-  },
+ headerInfo: {
+  justifyContent: "center", 
+  alignItems: "center", 
+  marginTop: 70
+ },
 
-  button: {
-    width: "100%",
-    height: 45,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 30,
-    backgroundColor: "#1EA78C",
-  },
+ userText:{
+  fontSize: 30, 
+  fontWeight: "bold", 
+  color: "#fff"
+ },
 
-  buttonContainer: {
-    flex: 1,
-    width: "100%",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    backgroundColor: "#434343",
-    paddingHorizontal: 5,
-    paddingTop: 20,
-  },
+ pointsText:{
+  fontSize: 12, 
+  fontWeight: "bold",
+  backgroundColor: "#fff",
+  color: "#0E956A",
+  paddingVertical: 5,
+  paddingHorizontal: 10,
+  borderRadius: 30,
+  marginHorizontal: 5,
+
+ },
+ button: {
+  width: "80%",
+  height: 45,
+  justifyContent: "center",
+  alignItems: "center",
+  alignSelf: "center",
+  borderRadius: 30,
+  backgroundColor: "#0E956A",
+  flexDirection: "row",
+  marginVertical: 15,
+},
+
+buttonContainer: {
+  width: "100%",
+  alignItems: "center",
+  alignSelf: "center",
+  paddingHorizontal: 5,
+  
+},
+
+ bodyContainer: {
+  flex:1,
+  paddingHorizontal: 10, 
+  height: "80%", 
+  justifyContent: "flex-start", 
+  backgroundColor: "#FFF",
+ },
+
+ bodyText: {
+  marginTop: 20, 
+  fontSize: 14, 
+  color: "#434343",
+  textAlign: "justify"
+ },
+
+ bodyText2: {
+  marginTop: 20, 
+  fontSize: 14, 
+  color: "#434343",
+  textAlign: "justify",
+  fontWeight: "bold"
+ },
+
+ loadingContainer: {
+  flex:1, 
+  height: "100%", 
+  width: "100%",
+  flexDirection: "column", 
+  alignItems: "center", 
+  justifyContent: "center", 
+  position: "absolute",
+  paddingTop: Platform.OS === "android" ? 25 : 0,
+ },
+
+ listItem: {
+  borderBottomWidth: 0.5, 
+  borderBottomColor: "#bcbcbc", 
+  paddingVertical: 10
+ }
 });
 
 export default UserProfile;
