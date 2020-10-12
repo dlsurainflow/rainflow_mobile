@@ -71,13 +71,11 @@ export default function App() {
           options={{ title: "UserProfile" }}
         />
 
-          {/*   <Stack.Screen
-       
-      
-          name="Signup"
-          component={SignupScreen}
-          options={{ title: "Signup" }}
-      />*/}
+      <Stack.Screen
+          name="ReportHistory"
+          component={ReportHistoryScreen}
+          options={{ title: "ReportHistory" }}
+        />
       </Stack.Navigator>
     </>
   );
