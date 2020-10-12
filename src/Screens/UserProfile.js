@@ -13,27 +13,26 @@ import {
 import AsyncStorage from "@react-native-community/async-storage";
 import { ColorDotsLoader } from 'react-native-indicator';
 import { MaterialCommunityIcons } from "react-native-vector-icons";
-//<View style = {{borderWidth: .5, borderColor: "#BCBCBC", marginHorizontal: 30, marginTop: 10}} />
+import { Chip } from 'react-native-paper';
 
 const UserProfile = (props) => {
   const [username, setUsername] = useState();
   const [accPoints, setAccPoints] = useState();
   const [showLoading, setShowLoading] = useState(false)
   const [buttonLabel, setButtonLabel] = useState()
+  const [bodyComponent, setBodyComponent] = useState()
   
   const  checkUserSignedIn = async() =>{
     try {
        let un = await AsyncStorage.getItem("username");
        let pts = await AsyncStorage.getItem("points");
        if (un != null){
-         //console.log("logged in")
          setUsername(un)
          setAccPoints(pts)
          setButtonLabel("Logout")
          
         }
         else {
-        //console.log("not logged in")
           setButtonLabel("Login")
 
       }
@@ -49,7 +48,6 @@ const UserProfile = (props) => {
         setShowLoading(false)
         await AsyncStorage.removeItem('username');
         await AsyncStorage.removeItem('points');
-        console.log("yeh")
         setUsername(undefined)
         setAccPoints(undefined)
         setButtonLabel("Login")
@@ -87,7 +85,6 @@ const logoutHandler = () =>{
 }
 
   useEffect(()=> {
-    console.log("heyyo!")
     checkUserSignedIn()
   }, [])
 
@@ -96,14 +93,19 @@ const logoutHandler = () =>{
     <View style = {styles.backgroundContainer}>
       <View style = {styles.headerContainer}>
       <View style = {styles.headerInfo}>
+        <View style = {{borderRadius: 100, padding: 8, borderColor: "#fff", backgroundColor: "#fff"}}>
       <MaterialCommunityIcons
                 name="shield-half-full"
-                color="#ffff"
+                color="#0E956A"
                 size={60}
               />
+        </View>
   <Text style = {styles.userText}>{username ? username : 'Guest'}</Text>
+  <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>
   <Text style = {styles.pointsText}>{accPoints ? accPoints : '0'} pts</Text>
-        
+  <Text style = {styles.pointsText}>{accPoints ? 'Silver badge' : 'No badge'}</Text> 
+  <Text style = {styles.pointsText}>{accPoints ? '5 reports' : '0 reports'}</Text>  
+  </View>
       </View>
       </View>
       <View style = {styles.bodyContainer}>
@@ -113,8 +115,9 @@ const logoutHandler = () =>{
         
       ): (
       <>
-      <Text style = {styles.bodyText}>You are currently not logged in.</Text>
+      <Text style = {styles.bodyText2}>You are currently not logged in.</Text>
       <Text style = {styles.bodyText}>Login to view your report history, as well as submit a report.</Text>
+      <Text style = {styles.bodyText}>To know more about our authenticated user privileges, go to our About Page. </Text>
       </>
       )}
 
@@ -154,13 +157,13 @@ const styles = StyleSheet.create({
   },
  headerContainer: {
   backgroundColor: "#0E956A", 
-  flex: 0.60, 
+  flex: 0.65, 
   justifyContent: "center", 
   padding: 20, 
   justifyContent: "flex-end", 
   alignItems: "center", 
-  borderBottomLeftRadius: 170, 
-  borderBottomRightRadius: 170
+
+
  },
 
  headerInfo: {
@@ -176,8 +179,15 @@ const styles = StyleSheet.create({
  },
 
  pointsText:{
-  fontSize: 16, 
-  color: "#fff"
+  fontSize: 12, 
+  fontWeight: "bold",
+  backgroundColor: "#fff",
+  color: "#0E956A",
+  paddingVertical: 5,
+  paddingHorizontal: 10,
+  borderRadius: 30,
+  marginHorizontal: 5,
+
  },
  button: {
   width: "100%",
@@ -212,7 +222,16 @@ buttonContainer: {
  bodyText: {
   marginTop: 20, 
   fontSize: 14, 
-  color: "#434343"
+  color: "#434343",
+  textAlign: "justify"
+ },
+
+ bodyText2: {
+  marginTop: 20, 
+  fontSize: 14, 
+  color: "#434343",
+  textAlign: "justify",
+  fontWeight: "bold"
  },
 
  loadingContainer: {

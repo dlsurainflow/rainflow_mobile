@@ -76,9 +76,16 @@ const getNodes = async() => {
 
 
 useEffect(()=> {
-  getNodes()
-  setCurrentNodes(markers)
-  console.log("upon loading")
+  let unmounted = false;
+
+  if(unmounted == false){
+
+    getNodes()
+    setCurrentNodes(markers)
+    console.log("upon loading")
+  }
+
+  return () => {unmounted = true}
 }, [])
 
 useFocusEffect( // fetch again when we switch between tabs. because useeffect isnt triggered when we go from one tab to the next
