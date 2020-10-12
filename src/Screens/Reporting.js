@@ -253,6 +253,18 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     width: "100%",
+
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#434343",
+    paddingHorizontal: 30,
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+  },
+
+  reportcontentContainer: {
+    flex: 1,
+    width: "100%",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#434343",
@@ -263,11 +275,14 @@ const styles = StyleSheet.create({
   pads: {
     paddingTop: 2,
     paddingBottom: 2,
+    paddingLeft: 2,
+    //paddingRight: 2,
   },
 
   choiceContainer: {
-    width: "50%",
-    height: 35,
+    width: "20%",
+    height: 50,
+    textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
@@ -295,6 +310,8 @@ const styles = StyleSheet.create({
   overView: {
     width: "100%",
     alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
     paddingTop: 10,
     paddingBottom: 10,
   },

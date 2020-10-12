@@ -29,17 +29,16 @@ const Login = (props) => {
       console.log(result); //true if successfully cleared
     });
 
-
     fetch("https://rainflow.live/api/users/login", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ 
-          username: username, 
-          password: password
-        }),
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
     }).then(function (response) {
       if (response.status === 400) {
         // Error if username/password is invalid
@@ -59,7 +58,7 @@ const Login = (props) => {
             ToastAndroid.show(
               "Welcome, " + responseJson.data.username + "!",
               ToastAndroid.SHORT
-            )
+            );
             //props.navigation.navigate("Main Menu");
           })
           .catch((error) => {
@@ -71,8 +70,6 @@ const Login = (props) => {
         console.log("Error: ", response.status);
       }
     });
-
-
   };
 
   return (
