@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -6,11 +6,31 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  BackHandler
 } from "react-native";
 
+import { Appbar } from 'react-native-paper';
+
 const ReportHistory = (props) => {
+
+  useEffect(() => {
+    const backAction = () => {
+      props.navigation.goBack();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  });
+
   return (
     <View style={styles.backgroundContainer}>
+      <Appbar.Header style = {{backgroundColor: "#0E956A"}}>
+      <Appbar.BackAction onPress={()=> props.navigation.navigate("UserProfile")} />
+      <Appbar.Content title="Report History" titleStyle= {{fontSize: 15}} subtitle="All the reports you've ever submitted" subtitleStyle={{fontSize: 12}}/>
+    </Appbar.Header>
       <View style={styles.contentContainer}>
         <Text
           style={{
@@ -56,9 +76,9 @@ const styles = StyleSheet.create({
   backgroundContainer: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#434343",
+    backgroundColor: "#fff",
     justifyContent: "center",
-    paddingTop: Platform.OS === "android" ? 25 : 0,
+   marginTop: Platform.OS === "android" ? 25 : 0,
   },
 
   contentContainer: {
@@ -68,7 +88,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#434343",
     paddingHorizontal: 30,
-    paddingTop: Platform.OS === "android" ? 25 : 0,
   },
 
   rbuttonContainer: {

@@ -27,11 +27,16 @@ export default function App() {
   const [loadSplash, setLoadSplash] = useState(false)
 
   useEffect(()=>{
+    let unmounted = false;
+
+  if(unmounted == false){
     setTimeout(async() => {
       setLoadSplash(true)
     }, 10000);
   }
-  , [])
+
+  return () => {unmounted = true}
+  }, [])
 
   const ReportComp = (props) => (
     <>

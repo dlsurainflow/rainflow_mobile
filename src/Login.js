@@ -7,6 +7,7 @@ import {
   ToastAndroid,
   TouchableOpacity,
   Image,
+  BackHandler
 } from "react-native";
 
 import AsyncStorage from "@react-native-community/async-storage";
@@ -23,6 +24,20 @@ const Login = (props) => {
   const passwordHandler = (e) => {
     setPassword(e);
   };
+
+
+  useEffect(() => {
+    const backAction = () => {
+      props.navigation.navigate("MainMenu", {screen: 'UserProfile'});
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  });
+
 
   const loginHandler = () => {
     const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");

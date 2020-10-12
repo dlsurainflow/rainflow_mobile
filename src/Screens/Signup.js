@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  BackHandler
 } from "react-native";
 
 import { WebView } from "react-native-webview";
@@ -31,7 +32,20 @@ const Signup = (props) => {
     setEmail(e);
   };
 
-  checkSamePass = () => {
+  useEffect(() => {
+    const backAction = () => {
+      props.navigation.goBack();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  });
+
+
+  const checkSamePass = () => {
     if (password == rpassword) {
       console.log("Passwords matched!");
       props.navigation.navigate("Login");
@@ -159,7 +173,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
-    backgroundColor: "#005DBE",
+    backgroundColor: "#1EA78C",
   },
 
   buttonContainer: {
