@@ -5,8 +5,9 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Image,
+  Alert,
 } from "react-native";
+
 
 const Reporting = (props) => {
   var rainIntensityVal = 0;
@@ -71,6 +72,141 @@ const Reporting = (props) => {
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
+  const LRainAlert = () =>
+    Alert.alert(
+      "LIGHT rain intensity selected!",
+      "Light rain is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeTwo()}
+      ],
+      { cancelable: false }
+    );
+
+    const MRainAlert = () =>
+    Alert.alert(
+      "MEDIUM rain intensity selected!",
+      "Medium rain is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeThree()}
+      ],
+      { cancelable: false }
+    );
+
+    const HRainAlert = () =>
+    Alert.alert(
+      "HEAVY rain intensity selected!",
+      "Heavy rain is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeFour()}
+      ],
+      { cancelable: false }
+    );
+
+    const EHRainAlert = () =>
+    Alert.alert(
+      "EXTREMELY HEAVY rain intensity selected!",
+      "Extremely heavy rain is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeFive()}
+      ],
+      { cancelable: false }
+    );
+
+    const ADeepAlert = () =>
+    Alert.alert(
+      "ANKLE DEEP intensity selected!",
+      "Ankle deep is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeTwoF()}
+      ],
+      { cancelable: false }
+    );
+
+    const KDeepAlert = () =>
+    Alert.alert(
+      "KNEE DEEP flood level is selected!",
+      "Knee Deep is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeThreeF()}
+      ],
+      { cancelable: false }
+    );
+
+    const WDeepAlert = () =>
+    Alert.alert(
+      "WAIST DEEP flood level is selected!",
+      "Waist deep is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeFourF()}
+      ],
+      { cancelable: false }
+    );
+
+    const AWDeepAlert = () =>
+    Alert.alert(
+      "ABOVE WAIST DEEP flood level is selected!",
+      "Above waist deep is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeFiveF()}
+      ],
+      { cancelable: false }
+    );
+
+    const checkIfNoReport = () => {
+      if(rainIntensityVal == 0 && floodLevelVal == 0){
+        alert("Missing rain intensity and flood level data to be reported");
+      }
+      else if(rainIntensityVal == 0){
+        alert("Missing rain intensity data to be reported");
+      }
+      else if(floodLevelVal == 0){
+        alert("Missing flood level data to be reported");
+      }
+      else{
+        console.log("Reported successfully!")
+      }
+    }
+
   return (
     <View style={styles.backgroundContainer}>
       <View style={styles.contentContainer}>
@@ -101,8 +237,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeTwo()}
+            style={styles.choice2Container}
+            onPress={() => LRainAlert()}
           >
             <Text style={{ color: "yellowgreen", fontWeight: "bold" }}>
               Light Rain
@@ -112,8 +248,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeThree()}
+            style={styles.choice3Container}
+            onPress={() => MRainAlert()}
           >
             <Text style={{ color: "yellow", fontWeight: "bold" }}>
               Medium Rain
@@ -123,8 +259,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeFour()}
+            style={styles.choice4Container}
+            onPress={() => HRainAlert()}
           >
             <Text style={{ color: "orange", fontWeight: "bold" }}>
               Heavy Rain
@@ -134,8 +270,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeFive()}
+            style={styles.choice5Container}
+            onPress={() => EHRainAlert()}
           >
             <Text style={{ color: "red", fontWeight: "bold" }}>
               Extremely Heavy Rain
@@ -158,8 +294,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeTwoF()}
+            style={styles.choice2Container}
+            onPress={() => ADeepAlert()}
           >
             <Text style={{ color: "yellowgreen", fontWeight: "bold" }}>
               Ankle Deep
@@ -169,8 +305,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeThreeF()}
+            style={styles.choice3Container}
+            onPress={() => KDeepAlert()}
           >
             <Text style={{ color: "yellow", fontWeight: "bold" }}>
               Knee Deep
@@ -180,8 +316,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeFourF()}
+            style={styles.choice4Container}
+            onPress={() => WDeepAlert()}
           >
             <Text style={{ color: "orange", fontWeight: "bold" }}>
               Waist Deep
@@ -191,8 +327,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeFiveF()}
+            style={styles.choice5Container}
+            onPress={() => AWDeepAlert()}
           >
             <Text style={{ color: "red", fontWeight: "bold" }}>
               Above Waist
@@ -208,19 +344,19 @@ const Reporting = (props) => {
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
-              CONTINUE
+              Take a photo
             </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.navigation.navigate("ReportHistory")}
+            onPress={() => checkIfNoReport()}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
-              REPORT HISTORY
+              REPORT NOW!
             </Text>
           </TouchableOpacity>
         </View>
@@ -253,6 +389,18 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     width: "100%",
+
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#434343",
+    paddingHorizontal: 30,
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+  },
+
+  reportcontentContainer: {
+    flex: 1,
+    width: "100%",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#434343",
@@ -263,17 +411,73 @@ const styles = StyleSheet.create({
   pads: {
     paddingTop: 2,
     paddingBottom: 2,
+    paddingLeft: 3,
+    paddingRight: 3,
   },
-
   choiceContainer: {
-    width: "50%",
-    height: 35,
+    width: "21%",
+    height: 50,
+    textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     backgroundColor: "#434343",
     borderWidth: 2,
-    borderColor: "#1EA78C",
+    borderColor: "green",
+    
+  },
+
+  choice2Container: {
+    width: "21%",
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "#434343",
+    borderWidth: 2,
+    borderColor: "yellowgreen",
+    paddingLeft: 3,
+    paddingRight: 3,
+  },
+  
+  choice3Container: {
+    width: "21%",
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "#434343",
+    borderWidth: 2,
+    borderColor: "yellow",
+    paddingLeft: 3,
+  },
+
+  choice4Container: {
+    width: "21%",
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "#434343",
+    borderWidth: 2,
+    borderColor: "orange",
+    paddingLeft: 3,
+  },
+
+  choice5Container: {
+    width: "21%",
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "#434343",
+    borderWidth: 2,
+    borderColor: "red",
+    paddingLeft: 3,
   },
 
   rbuttonContainer: {
@@ -295,6 +499,8 @@ const styles = StyleSheet.create({
   overView: {
     width: "100%",
     alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
     paddingTop: 10,
     paddingBottom: 10,
   },
