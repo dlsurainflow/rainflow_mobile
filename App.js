@@ -35,9 +35,9 @@ export default function App() {
 
   const ReportComp = (props) => (
     <>
-      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Reporting Screen">
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="ReportingScreen">
         <Stack.Screen
-          name="Reporting"
+          name="ReportingScreen"
           component={ReportingScreen}
           options={{ title: "Reporting" }}
         />
@@ -95,7 +95,7 @@ export default function App() {
       >
 
 <bottomTab.Screen
-          name="Reporting - Rain Intensity"
+          name="Reporting"
           children={ReportComp}
           options={{
             tabBarColor: '#4FC69A', 

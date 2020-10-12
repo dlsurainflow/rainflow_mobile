@@ -114,7 +114,7 @@ const logoutHandler = () =>{
       (
         <ScrollView showsVerticalScrollIndicator = {false}>
           <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Dashboard" description="Monitor your RAFT device"/>
-          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Report History" description="View a history of all the reports you've submitted"/>
+          <List.Item  onPress = {()=> props.navigation.navigate("Reporting", { screen: 'ReportHistory' })} titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Report History" description="View a history of all the reports you've submitted"/>
           <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Active Reports" description="View list of active reports"/>          
           <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Account Information" description="Change your password"/>
           <List.Item  titleStyle = {{fontSize: 15}} descriptionStyle = {{fontSize: 12}} title="About Us" description="Learn more about user privileges and our team"/>
