@@ -10,64 +10,64 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 
 const Reporting = (props) => {
-  var rainIntensityVal = 0;
+  var rainIntensityVal = -1;
 
   changeOne = () => {
-    rainIntensityVal = 1;
+    rainIntensityVal = 0;
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeTwo = () => {
-    rainIntensityVal = 2;
+    rainIntensityVal = 1.25;
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeThree = () => {
-    rainIntensityVal = 3;
+    rainIntensityVal = 2.5;
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeFour = () => {
-    rainIntensityVal = 4;
+    rainIntensityVal = 7.5;
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeFive = () => {
-    rainIntensityVal = 5;
+    rainIntensityVal = 10;
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
-  var floodLevelVal = 0;
+  var floodLevelVal = -1;
 
   changeOneF = () => {
-    floodLevelVal = 1;
+    floodLevelVal = 0;
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeTwoF = () => {
-    floodLevelVal = 2;
+    floodLevelVal = 25;
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeThreeF = () => {
-    floodLevelVal = 3;
+    floodLevelVal = 50;
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeFourF = () => {
-    floodLevelVal = 4;
+    floodLevelVal = 75;
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeFiveF = () => {
-    floodLevelVal = 5;
+    floodLevelVal = 100;
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   //Reset
   resetValue = () => {
-    floodLevelVal = 0;
-    rainIntensityVal = 0;
+    floodLevelVal = -1;
+    rainIntensityVal = -1;
     console.log("Rain Intensity Set at: " + rainIntensityVal);
     console.log("Flood Level Set at: " + floodLevelVal);
   };
@@ -193,13 +193,13 @@ const Reporting = (props) => {
     );
 
     const checkIfNoReport = () => {
-      if(rainIntensityVal == 0 && floodLevelVal == 0){
+      if(rainIntensityVal == -1 && floodLevelVal == -1){
         alert("Missing rain intensity and flood level data to be reported");
       }
-      else if(rainIntensityVal == 0){
+      else if(rainIntensityVal == -1){
         alert("Missing rain intensity data to be reported");
       }
-      else if(floodLevelVal == 0){
+      else if(floodLevelVal == -1){
         alert("Missing flood level data to be reported");
       }
       else{
