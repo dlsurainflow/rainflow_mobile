@@ -1,74 +1,239 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
   Text,
   TextInput,
   TouchableOpacity,
-  Image,
+  Alert,
 } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 
 const Reporting = (props) => {
-  var rainIntensityVal = 0;
+  var rainIntensityVal = -1;
 
   changeOne = () => {
-    rainIntensityVal = 1;
+    rainIntensityVal = 0;
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeTwo = () => {
-    rainIntensityVal = 2;
+    rainIntensityVal = 1.25;
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeThree = () => {
-    rainIntensityVal = 3;
+    rainIntensityVal = 2.5;
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeFour = () => {
-    rainIntensityVal = 4;
+    rainIntensityVal = 7.5;
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeFive = () => {
-    rainIntensityVal = 5;
+    rainIntensityVal = 10;
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
-  var floodLevelVal = 0;
+  var floodLevelVal = -1;
 
   changeOneF = () => {
-    floodLevelVal = 1;
+    floodLevelVal = 0;
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeTwoF = () => {
-    floodLevelVal = 2;
+    floodLevelVal = 25;
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeThreeF = () => {
-    floodLevelVal = 3;
+    floodLevelVal = 50;
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeFourF = () => {
-    floodLevelVal = 4;
+    floodLevelVal = 75;
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeFiveF = () => {
-    floodLevelVal = 5;
+    floodLevelVal = 100;
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   //Reset
   resetValue = () => {
-    floodLevelVal = 0;
-    rainIntensityVal = 0;
+    floodLevelVal = -1;
+    rainIntensityVal = -1;
     console.log("Rain Intensity Set at: " + rainIntensityVal);
     console.log("Flood Level Set at: " + floodLevelVal);
+  };
+
+  const LRainAlert = () =>
+    Alert.alert(
+      "LIGHT rain intensity selected!",
+      "Light rain: Scattered drops that do not completely wet an exposed surface regardless of duration.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeTwo()}
+      ],
+      { cancelable: false }
+    );
+
+    const MRainAlert = () =>
+    Alert.alert(
+      "MEDIUM rain intensity selected!",
+      "Medium rain: The rate of fall is from trace to 2.5 mm per hour. Individual drops easily identified and puddles(small muddy pools) form slowly. Small streams may flow in gutters.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeThree()}
+      ],
+      { cancelable: false }
+    );
+
+    const HRainAlert = () =>
+    Alert.alert(
+      "HEAVY rain intensity selected!",
+      "Heavy rain: The rate of fall is between 2.5 mm to 7.5 mm per hour. Puddles rapidly forming and down pipes flowing freely.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeFour()}
+      ],
+      { cancelable: false }
+    );
+
+    const EHRainAlert = () =>
+    Alert.alert(
+      "EXTREMELY HEAVY rain intensity selected!",
+      "Extremely heavy rain: The rate of fall is greater than 7.5 mm per hour. The sky is overcast, there is a continuous precipitation. Falls in sheets, misty spray over hard surfaces. May cause roaring noise on roofs.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeFive()}
+      ],
+      { cancelable: false }
+    );
+
+    const ADeepAlert = () =>
+    Alert.alert(
+      "ANKLE DEEP intensity selected!",
+      "Ankle deep: Flood is around 0.25 meters high",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeTwoF()}
+      ],
+      { cancelable: false }
+    );
+
+    const KDeepAlert = () =>
+    Alert.alert(
+      "KNEE DEEP flood level is selected!",
+      "Knee Deep: 7.5 - 15 mm of rain observed in the next two hours. Flood is around 0.5 meters high. Response: Monitor weather condition.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeThreeF()}
+      ],
+      { cancelable: false }
+    );
+
+    const WDeepAlert = () =>
+    Alert.alert(
+      "WAIST DEEP flood level is selected!",
+      "Waist deep: 15 - 30 mm of rain observed in an hour and expected to continue in the next two hours. Flood is threatening, around 1 meter high Response: Alert for possible evacuation.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeFourF()}
+      ],
+      { cancelable: false }
+    );
+
+    const AWDeepAlert = () =>
+    Alert.alert(
+      "ABOVE WAIST DEEP flood level is selected!",
+      "Above waist: More than 30 mm of rain observed in an hour and expected to continue in the next two hours. Serious flooding expected in low lying areas. Response: evacuation. ",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Report", onPress: () => changeFiveF()}
+      ],
+      { cancelable: false }
+    );
+
+    const checkIfNoReport = () => {
+      if(rainIntensityVal == -1 && floodLevelVal == -1){
+        alert("Missing rain intensity and flood level data to be reported");
+      }
+      else if(rainIntensityVal == -1){
+        alert("Missing rain intensity data to be reported");
+      }
+      else if(floodLevelVal == -1){
+        alert("Missing flood level data to be reported");
+      }
+      else{
+        console.log("Reported successfully!")
+      }
+    }
+
+    const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    console.log("HELLO");
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
   };
 
   return (
@@ -101,8 +266,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeTwo()}
+            style={styles.choice2Container}
+            onPress={() => LRainAlert()}
           >
             <Text style={{ color: "yellowgreen", fontWeight: "bold" }}>
               Light Rain
@@ -112,8 +277,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeThree()}
+            style={styles.choice3Container}
+            onPress={() => MRainAlert()}
           >
             <Text style={{ color: "yellow", fontWeight: "bold" }}>
               Medium Rain
@@ -123,8 +288,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeFour()}
+            style={styles.choice4Container}
+            onPress={() => HRainAlert()}
           >
             <Text style={{ color: "orange", fontWeight: "bold" }}>
               Heavy Rain
@@ -134,8 +299,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeFive()}
+            style={styles.choice5Container}
+            onPress={() => EHRainAlert()}
           >
             <Text style={{ color: "red", fontWeight: "bold" }}>
               Extremely Heavy Rain
@@ -158,8 +323,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeTwoF()}
+            style={styles.choice2Container}
+            onPress={() => ADeepAlert()}
           >
             <Text style={{ color: "yellowgreen", fontWeight: "bold" }}>
               Ankle Deep
@@ -169,8 +334,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeThreeF()}
+            style={styles.choice3Container}
+            onPress={() => KDeepAlert()}
           >
             <Text style={{ color: "yellow", fontWeight: "bold" }}>
               Knee Deep
@@ -180,8 +345,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeFourF()}
+            style={styles.choice4Container}
+            onPress={() => WDeepAlert()}
           >
             <Text style={{ color: "orange", fontWeight: "bold" }}>
               Waist Deep
@@ -191,8 +356,8 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choiceContainer}
-            onPress={() => changeFiveF()}
+            style={styles.choice5Container}
+            onPress={() => AWDeepAlert()}
           >
             <Text style={{ color: "red", fontWeight: "bold" }}>
               Above Waist
@@ -203,24 +368,24 @@ const Reporting = (props) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.navigation.navigate("ReportHistory")}
+            onPress={() => pickImage()}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
-              CONTINUE
+              Take a photo
             </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.navigation.navigate("ReportHistory")}
+            onPress={() => checkIfNoReport()}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
-              REPORT HISTORY
+              REPORT NOW!
             </Text>
           </TouchableOpacity>
         </View>
@@ -253,6 +418,18 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     width: "100%",
+
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#434343",
+    paddingHorizontal: 30,
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+  },
+
+  reportcontentContainer: {
+    flex: 1,
+    width: "100%",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#434343",
@@ -263,17 +440,73 @@ const styles = StyleSheet.create({
   pads: {
     paddingTop: 2,
     paddingBottom: 2,
+    paddingLeft: 3,
+    paddingRight: 3,
   },
-
   choiceContainer: {
-    width: "50%",
-    height: 35,
+    width: "21%",
+    height: 50,
+    textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     backgroundColor: "#434343",
     borderWidth: 2,
-    borderColor: "#1EA78C",
+    borderColor: "green",
+    
+  },
+
+  choice2Container: {
+    width: "21%",
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "#434343",
+    borderWidth: 2,
+    borderColor: "yellowgreen",
+    paddingLeft: 3,
+    paddingRight: 3,
+  },
+  
+  choice3Container: {
+    width: "21%",
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "#434343",
+    borderWidth: 2,
+    borderColor: "yellow",
+    paddingLeft: 3,
+  },
+
+  choice4Container: {
+    width: "21%",
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "#434343",
+    borderWidth: 2,
+    borderColor: "orange",
+    paddingLeft: 3,
+  },
+
+  choice5Container: {
+    width: "21%",
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "#434343",
+    borderWidth: 2,
+    borderColor: "red",
+    paddingLeft: 3,
   },
 
   rbuttonContainer: {
@@ -295,6 +528,8 @@ const styles = StyleSheet.create({
   overView: {
     width: "100%",
     alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
     paddingTop: 10,
     paddingBottom: 10,
   },
