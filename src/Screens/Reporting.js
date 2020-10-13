@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-
+import * as ImagePicker from 'expo-image-picker';
 
 const Reporting = (props) => {
   var rainIntensityVal = 0;
@@ -180,7 +180,7 @@ const Reporting = (props) => {
     const AWDeepAlert = () =>
     Alert.alert(
       "ABOVE WAIST DEEP flood level is selected!",
-      "Above waist: More than 30 mm of rain observed in an hour and expected to continue in the next two hours. Serious flooding expected in low lying areas. Response: evacuation.",
+      "Above waist: More than 30 mm of rain observed in an hour and expected to continue in the next two hours. Serious flooding expected in low lying areas. Response: evacuation. ",
       [
         {
           text: "Cancel",
@@ -206,6 +206,35 @@ const Reporting = (props) => {
         console.log("Reported successfully!")
       }
     }
+
+    const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    console.log("HELLO");
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
 
   return (
     <View style={styles.backgroundContainer}>
@@ -339,7 +368,7 @@ const Reporting = (props) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.navigation.navigate("ReportHistory")}
+            onPress={() => pickImage()}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}

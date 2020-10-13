@@ -1,56 +1,87 @@
-'use strict';
-import React, { PureComponent } from 'react';
+import React, { useState, useEffect } from "react";
 import {
-  AppRegistry, StyleSheet, Text, TouchableOpacity, View
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
 } from "react-native";
-import { RNCamera } from 'react-native-camera';
+import * as ImagePicker from 'expo-image-picker';
 
 const ReportHistory = (props) => {
 
+  const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    console.log("HELLO");
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-        <RNCamera
-          ref={ref => {
-            this.camera = ref;
+    <View style={styles.backgroundContainer}>
+      <View style={styles.contentContainer}>
+        <Text
+          style={{
+            textAlign: "left",
+            color: "#fff",
+            fontWeight: "bold",
+            paddingBottom: 30,
           }}
-          style={styles.preview}
-          type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.on}
-          androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-          androidRecordAudioPermissionOptions={{
-            title: 'Permission to use audio recording',
-            message: 'We need your permission to use your audio',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-          onGoogleVisionBarcodesDetected={({ barcodes }) => {
-            console.log(barcodes);
-          }}
-        />
-        <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-          <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
-            <Text style={{ fontSize: 14 }}> SNAP </Text>
+        >
+          Report History
+        </Text>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => pickImage()}
+          >
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
+            >
+              CONTINUE
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonCancelContainer}>
+          <TouchableOpacity
+            style={styles.buttonCancel}
+            onPress={() => console.log("CANCEL")}
+          >
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
+            >
+              CANCEL
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
+    </View>
   );
 };
-
-takePicture = async () => {
-  if (this.camera) {
-    const options = { quality: 0.5, base64: true };
-    const data = await this.camera.takePictureAsync(options);
-    console.log(data.uri);
-  }
-};
-
-
-
 
 const styles = StyleSheet.create({
   backgroundContainer: {
@@ -61,12 +92,6 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
 
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'black',
-  },
-
   contentContainer: {
     flex: 1,
     width: "100%",
@@ -75,20 +100,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#434343",
     paddingHorizontal: 30,
     paddingTop: Platform.OS === "android" ? 25 : 0,
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-    margin: 20,
   },
 
   rbuttonContainer: {
