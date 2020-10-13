@@ -97,8 +97,8 @@ const ReportHistory = (props) => {
       //console.log("FOUND REPORTS: ", reportsList)
       if(reportsList.length == 0){
           setHistoryBody(
-            <View>
-              <Text>You have not submitted any reports.</Text>
+            <View style ={{justifyContent: "center", alignItems: "center"}}>
+              <Text style = {{textAlign: "center"}}>You have not submitted any reports.</Text>
             </View>
           )
       }else{
