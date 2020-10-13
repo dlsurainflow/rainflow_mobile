@@ -12,6 +12,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 const Reporting = (props) => {
   var rainIntensityVal = -1;
+  navigator.geolocation.getCurrentPosition(success, error, options);
   var dispLat = null;
   var dispLong = null;
 
@@ -23,7 +24,6 @@ const Reporting = (props) => {
   
   function success(pos) {
     var crd = pos.coords;
-  
     console.log('Your current position is:');
     console.log(`Latitude : ${crd.latitude}`);
     console.log(`Longitude: ${crd.longitude}`);
@@ -36,8 +36,6 @@ const Reporting = (props) => {
     console.warn(`ERROR(${err.code}): ${err.message}`);
   }
   
-  navigator.geolocation.getCurrentPosition(success, error, options);
-
   const introAlert = () =>
     Alert.alert(
       "You are now in Reporting!",
@@ -288,12 +286,13 @@ const Reporting = (props) => {
           REPORTING
         </Text>
         <Text style={{
-            textAlign: "left",
+            textAlign: "center",
             color: "#fff",
             fontWeight: "bold",
             paddingBottom: 30,
+           
           }}>
-          Latitude: {dispLat}
+          Latitude: {dispLat} {"\n"}
           Longitude: {dispLong}
         </Text>
         
