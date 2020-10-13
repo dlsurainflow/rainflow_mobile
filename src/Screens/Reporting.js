@@ -269,8 +269,7 @@ const Reporting = (props) => {
       setImage(result.uri);
     }
   };
-  
-  
+
   return (
     <View style={styles.backgroundContainer}>
       <View style={styles.contentContainer}>
