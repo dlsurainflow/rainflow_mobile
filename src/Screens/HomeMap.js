@@ -24,7 +24,7 @@ const [sidebar, setSidebar] = useState(false)
 const webViewRef = useRef();
 
 const getNodes = async() => {
-  let reports = await fetch('https://rainflow.live/api/map/all', {
+  await fetch('https://rainflow.live/api/map/all', {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',

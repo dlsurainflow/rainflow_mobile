@@ -7,6 +7,7 @@ import {
   ToastAndroid,
   TouchableOpacity,
   Image,
+  BackHandler
 } from "react-native";
 
 import AsyncStorage from "@react-native-community/async-storage";
@@ -23,6 +24,20 @@ const Login = (props) => {
   const passwordHandler = (e) => {
     setPassword(e);
   };
+
+
+  useEffect(() => {
+    const backAction = () => {
+      props.navigation.navigate("MainMenu", {screen: 'UserProfile'});
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  });
+
 
   const loginHandler = () => {
     const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
@@ -56,7 +71,8 @@ const Login = (props) => {
             console.log(responseJson);
             await AsyncStorage.setItem("token", responseJson.data.token); // Save token to storage
             await AsyncStorage.setItem("username", responseJson.data.username); // Save username
-            await AsyncStorage.setItem("points", JSON.stringify(responseJson.data.points)); // Save username
+            await AsyncStorage.setItem("points", JSON.stringify(responseJson.data.points)); // Save points
+            await AsyncStorage.setItem("userID", JSON.stringify(responseJson.data.userID)); // Save userID
             props.navigation.push("MainMenu", { screen: 'HomeMap' })
 
             ToastAndroid.show(
@@ -135,7 +151,7 @@ const styles = StyleSheet.create({
   backgroundContainer: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#434343",
+    backgroundColor: "#3d3d3d",
     justifyContent: "center",
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
@@ -145,7 +161,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#434343",
+    backgroundColor: "#3d3d3d",
     paddingHorizontal: 30,
   },
 
@@ -154,7 +170,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-end",
     alignItems: "center",
-    backgroundColor: "#434343",
+    backgroundColor: "#3d3d3d",
     paddingBottom: 40,
   },
 
@@ -163,7 +179,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "space-evenly",
     alignItems: "center",
-    backgroundColor: "#434343",
+    backgroundColor: "#3d3d3d",
     paddingTop: 40,
     paddingHorizontal: 5,
   },
@@ -196,7 +212,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "#434343",
+    backgroundColor: "#3d3d3d",
     paddingHorizontal: 5,
     paddingTop: 20,
   },

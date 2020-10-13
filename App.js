@@ -10,6 +10,7 @@ import ReportingScreen from "./src/Screens/Reporting.js";
 import ReportHistoryScreen from "./src/Screens/ReportHistory.js";
 import HomeMap from "./src/Screens/HomeMap.js";
 import UserProfileScreen from "./src/Screens/UserProfile.js";
+import AboutUsScreen from "./src/Screens/AboutUs.js"
 //SCREENS END
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -27,11 +28,16 @@ export default function App() {
   const [loadSplash, setLoadSplash] = useState(false)
 
   useEffect(()=>{
+    let unmounted = false;
+
+  if(unmounted == false){
     setTimeout(async() => {
       setLoadSplash(true)
-    }, 2500);
+    }, 10000);
   }
-  , [])
+
+  return () => {unmounted = true}
+  }, [])
 
   const ReportComp = (props) => (
     <>
@@ -75,6 +81,12 @@ export default function App() {
           name="ReportHistory"
           component={ReportHistoryScreen}
           options={{ title: "ReportHistory" }}
+        />
+
+      <Stack.Screen
+          name="About Us"
+          component={AboutUsScreen}
+          options={{ title: "About Us" }}
         />
       </Stack.Navigator>
     </>
@@ -154,10 +166,10 @@ export default function App() {
     <AnimatedSplash
     translucent={true}
     isLoaded={loadSplash}
-    logoImage={require("./assets/Logo.png")}
-    backgroundColor={"#434343"}
-    logoHeight={150}
-    logoWidth={200}
+    logoImage={require("./assets/animated_logo.gif")}
+    backgroundColor={"#3D3D3D"}
+    logoHeight={200}
+    logoWidth={300}
   >
    <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="MainMenu">

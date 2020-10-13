@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  BackHandler
 } from "react-native";
 
 import { WebView } from "react-native-webview";
@@ -31,7 +32,20 @@ const Signup = (props) => {
     setEmail(e);
   };
 
-  checkSamePass = () => {
+  useEffect(() => {
+    const backAction = () => {
+      props.navigation.goBack();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  });
+
+
+  const checkSamePass = () => {
     if (password == rpassword) {
       console.log("Passwords matched!");
       props.navigation.navigate("Login");
@@ -106,7 +120,7 @@ const styles = StyleSheet.create({
   backgroundContainer: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#434343",
+    backgroundColor: "#3d3d3d",
     justifyContent: "center",
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
@@ -116,7 +130,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#434343",
+    backgroundColor: "#3d3d3d",
     paddingHorizontal: 30,
   },
 
@@ -125,7 +139,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-end",
     alignItems: "center",
-    backgroundColor: "#434343",
+    backgroundColor: "#3d3d3d",
     paddingBottom: 40,
   },
 
@@ -134,7 +148,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#434343",
+    backgroundColor: "#3d3d3d",
     paddingTop: 40,
     paddingHorizontal: 5,
   },
@@ -159,7 +173,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
-    backgroundColor: "#005DBE",
+    backgroundColor: "#1EA78C",
   },
 
   buttonContainer: {
@@ -167,7 +181,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "#434343",
+    backgroundColor: "#3d3d3d",
     paddingHorizontal: 5,
     paddingTop: 20,
   },
