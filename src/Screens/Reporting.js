@@ -75,7 +75,7 @@ const Reporting = (props) => {
   const LRainAlert = () =>
     Alert.alert(
       "LIGHT rain intensity selected!",
-      "Light rain is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      "Light rain: Scattered drops that do not completely wet an exposed surface regardless of duration.",
       [
         {
           text: "Cancel",
@@ -90,7 +90,7 @@ const Reporting = (props) => {
     const MRainAlert = () =>
     Alert.alert(
       "MEDIUM rain intensity selected!",
-      "Medium rain is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      "Medium rain: The rate of fall is from trace to 2.5 mm per hour. Individual drops easily identified and puddles(small muddy pools) form slowly. Small streams may flow in gutters.",
       [
         {
           text: "Cancel",
@@ -105,7 +105,7 @@ const Reporting = (props) => {
     const HRainAlert = () =>
     Alert.alert(
       "HEAVY rain intensity selected!",
-      "Heavy rain is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      "Heavy rain: The rate of fall is between 2.5 mm to 7.5 mm per hour. Puddles rapidly forming and down pipes flowing freely.",
       [
         {
           text: "Cancel",
@@ -120,7 +120,7 @@ const Reporting = (props) => {
     const EHRainAlert = () =>
     Alert.alert(
       "EXTREMELY HEAVY rain intensity selected!",
-      "Extremely heavy rain is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      "Extremely heavy rain: The rate of fall is greater than 7.5 mm per hour. The sky is overcast, there is a continuous precipitation. Falls in sheets, misty spray over hard surfaces. May cause roaring noise on roofs.",
       [
         {
           text: "Cancel",
@@ -135,7 +135,7 @@ const Reporting = (props) => {
     const ADeepAlert = () =>
     Alert.alert(
       "ANKLE DEEP intensity selected!",
-      "Ankle deep is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      "Ankle deep: Flood is around 0.25 meters high",
       [
         {
           text: "Cancel",
@@ -150,7 +150,7 @@ const Reporting = (props) => {
     const KDeepAlert = () =>
     Alert.alert(
       "KNEE DEEP flood level is selected!",
-      "Knee Deep is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      "Knee Deep: 7.5 - 15 mm of rain observed in the next two hours. Flood is around 0.5 meters high. Response: Monitor weather condition.",
       [
         {
           text: "Cancel",
@@ -165,7 +165,7 @@ const Reporting = (props) => {
     const WDeepAlert = () =>
     Alert.alert(
       "WAIST DEEP flood level is selected!",
-      "Waist deep is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      "Waist deep: 15 - 30 mm of rain observed in an hour and expected to continue in the next two hours. Flood is threatening, around 1 meter high Response: Alert for possible evacuation.",
       [
         {
           text: "Cancel",
@@ -180,7 +180,7 @@ const Reporting = (props) => {
     const AWDeepAlert = () =>
     Alert.alert(
       "ABOVE WAIST DEEP flood level is selected!",
-      "Above waist deep is blahhhhhhhhh lezgo hahahaahaha anu lalagay ko dito. lorem ipsumm muna kk",
+      "Above waist: More than 30 mm of rain observed in an hour and expected to continue in the next two hours. Serious flooding expected in low lying areas. Response: evacuation.",
       [
         {
           text: "Cancel",
