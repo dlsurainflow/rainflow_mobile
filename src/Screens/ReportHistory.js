@@ -10,19 +10,27 @@ import {
   ScrollView
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
-import { Appbar } from 'react-native-paper';
+import { Appbar, Modal, Portal, Provider } from 'react-native-paper';
 import ReportCard from '../components/ReportCard'
 
 const ReportHistory = (props) => {
 
   const [reportsList, setReportsList] = useState()
+  const [reportInfo, setReportInfo] = useState()
   const [historyBody, setHistoryBody] = useState()
+  const [modalComponent, setModalComponent] = useState()
+  const [visible, setVisible] = React.useState(false);
+
+  const showModal = (id) =>{
+    getReportInfo(id)
+    setVisible(true)
+  };
+
+  const hideModal = () => setVisible(false);
 
   const getReports = async() => {
-
     const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
     RCTNetworking.clearCookies((result) => {
-    //console.log(result); //true if successfully cleared
     });
 
     const userID = await AsyncStorage.getItem("userID")
@@ -45,6 +53,31 @@ const ReportHistory = (props) => {
       })
   }
 
+  const getReportInfo = async(id) => {
+    const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
+    RCTNetworking.clearCookies((result) => {
+    });
+
+    const userID = await AsyncStorage.getItem("userID")
+    const token = await AsyncStorage.getItem("token")
+
+    await fetch(`https://rainflow.live/api/report/${id}`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          'Accept' : 'application/json',
+          'Authorization' :  `Bearer ${token}`
+      }
+      }).then(response => {
+        if(response.status == 200)
+          response.json().then( (data) => {setReportInfo(data)});
+        else{
+          Alert.alert(
+            'Error retrieving reports! (Code: ' + response.status + ')');
+        }
+      })
+  }
+
   useEffect(() => {
     const backAction = () => {
       props.navigation.goBack();
@@ -57,11 +90,11 @@ const ReportHistory = (props) => {
     return () => backHandler.remove();
   });
 
-  useEffect(() => {
+  useEffect(() => { // REPORT CARDS. for putting API response in the cards 
     if(reportsList == undefined){
       getReports()
     } else {
-      console.log("FOUND REPORTS: ", reportsList)
+      //console.log("FOUND REPORTS: ", reportsList)
       if(reportsList.length == 0){
           setHistoryBody(
             <View>
@@ -72,6 +105,8 @@ const ReportHistory = (props) => {
         setHistoryBody(
           reportsList.map(data =>{
             return(
+              <TouchableOpacity key = {data.id} onPress = {()=>showModal(data.id)}>
+
               <ReportCard 
                 key = {data.id}
                 createdAt = {data.createdAt}
@@ -81,7 +116,8 @@ const ReportHistory = (props) => {
                 flood = {data.flood_depth}
                 image = {data.image}
                 id = {data.id}
-                 />
+                />
+                </TouchableOpacity>
             )
           })
         )
@@ -89,12 +125,44 @@ const ReportHistory = (props) => {
     }
   }, [reportsList]);
 
+  useEffect(() => { // REPORT INFORMATION. for putting API response into modal
+    if(reportInfo == undefined){
+      null;
+    } else {
+        setModalComponent(
+          <Portal>
+            <Modal contentContainerStyle={styles.modalContainer} visible={visible} onDismiss={hideModal}>
+              <ScrollView showsVerticalScrollIndicator = {false}>
+                <Text style={{fontSize: 14, fontWeight: "bold"}}>Report ID: {reportInfo.id}</Text>
+                <Text style={{fontSize: 14, fontWeight: "bold"}}>{reportInfo.createdAt}</Text>
+                <Text>Location: [{reportInfo.latitude},{reportInfo.longitude}] </Text>
+                <Text>Rain Intensity: {reportInfo.rainfall_rate} </Text>
+                <Text>Flood Level: {reportInfo.flood_depth} </Text>
+                <View style = {{borderColor: 1, width: "100%", flexDirection: "row", marginVertical: 8, justifyContent: "space-evenly"}}>
+                <Text style={styles.likesText}>{reportInfo.upvote} Like/s</Text>
+                <Text style={styles.dislikesText}>{reportInfo.downvote} Dislike/s</Text>
+                </View>
+                {reportInfo.image != null ? (
+                  <>
+                  <View style = {styles.divider} />
+                  <Image style={{height: 300, width: 170, alignSelf: "center"}} source={{uri:`https://rainflow.live/api/uploads/reports/${reportInfo.image}`}} />
+                  </>
+                ) : null}
+              </ScrollView>
+          </Modal>
+        </Portal>
+        )
+    }
+  }, [reportInfo]);
+
 
   return (
+    <Provider>
+      {modalComponent && visible ? modalComponent : null}
     <View style={styles.backgroundContainer}>
       <Appbar.Header style = {{backgroundColor: "#0E956A"}}>
       <Appbar.BackAction onPress={()=> props.navigation.navigate("UserProfile")} />
-      <Appbar.Content title="Report History" titleStyle= {{fontSize: 15}} subtitle="All the reports you've ever submitted" subtitleStyle={{fontSize: 12}}/>
+      <Appbar.Content title="Report History" titleStyle= {{fontSize: 15}} subtitle="Click the cards to view more info" subtitleStyle={{fontSize: 12}}/>
     </Appbar.Header>
       <View style={styles.contentContainer}>
         <ScrollView style = {{width: "100%"}} showsVerticalScrollIndicator = {false}>
@@ -102,6 +170,7 @@ const ReportHistory = (props) => {
         </ScrollView>
       </View>
     </View>
+    </Provider>
   );
 };
 
@@ -202,6 +271,42 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 20,
   },
+
+  modalContainer: {
+    backgroundColor: "#fff", 
+    padding: 20, 
+    minHeight: 200, 
+    maxHeight:400, 
+    width: "90%", 
+    alignSelf: "center", 
+    justifyContent: "flex-start"
+  },
+
+  likesText: {
+    backgroundColor: "#1EA78C", 
+    color: "#fff", 
+    fontWeight: "bold", 
+    textAlign: "center", 
+    borderRadius: 30, 
+    paddingHorizontal: 25, 
+    paddingVertical: 2
+  },
+
+  dislikesText: {
+    backgroundColor: "#E64022", 
+    color: "#fff", 
+    fontWeight: "bold", 
+    textAlign: "center", 
+    borderRadius: 30, 
+    paddingHorizontal: 25, 
+    paddingVertical: 2
+  },
+
+  divider: {
+    borderWidth: 0.5, 
+    borderColor: "#bcbcbc", 
+    marginBottom: 5
+}
 });
 
 export default ReportHistory;
