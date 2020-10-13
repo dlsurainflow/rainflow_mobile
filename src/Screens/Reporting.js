@@ -9,8 +9,44 @@ import {
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 
+
 const Reporting = (props) => {
   var rainIntensityVal = -1;
+  var dispLat = null;
+  var dispLong = null;
+
+  var options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
+  
+  function success(pos) {
+    var crd = pos.coords;
+  
+    console.log('Your current position is:');
+    console.log(`Latitude : ${crd.latitude}`);
+    console.log(`Longitude: ${crd.longitude}`);
+    console.log(`More or less ${crd.accuracy} meters.`);
+    dispLat = crd.latitude;
+    dispLong = crd.longitude;
+  }
+  
+  function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+  
+  navigator.geolocation.getCurrentPosition(success, error, options);
+
+  const introAlert = () =>
+    Alert.alert(
+      "You are now in Reporting!",
+      "Your Location is: Latitude : " + dispLat + ", Longitude: " + dispLong,
+      [
+        { text: "Okay", onPress: () => console.log("OK Pressed")}
+      ],
+      { cancelable: false }
+    );
 
   changeOne = () => {
     rainIntensityVal = 0;
@@ -235,7 +271,8 @@ const Reporting = (props) => {
       setImage(result.uri);
     }
   };
-
+  
+  
   return (
     <View style={styles.backgroundContainer}>
       <View style={styles.contentContainer}>
@@ -245,14 +282,24 @@ const Reporting = (props) => {
             color: "#fff",
             fontWeight: "bold",
             paddingBottom: 30,
+            fontSize: 40,
           }}
         >
           REPORTING
         </Text>
-
+        <Text style={{
+            textAlign: "left",
+            color: "#fff",
+            fontWeight: "bold",
+            paddingBottom: 30,
+          }}>
+          Latitude: {dispLat}
+          Longitude: {dispLong}
+        </Text>
+        
         {/*Rain Intensity START*/}
 
-        <Text style={{ textAlign: "left", color: "#fff", fontWeight: "bold" }}>
+        <Text style={{ textAlign: "left", color: "#fff", fontWeight: "bold", fontSize: 30}}>
           RAIN INTENSITY
         </Text>
         <View style={styles.overView}>
@@ -308,7 +355,7 @@ const Reporting = (props) => {
           </TouchableOpacity>
         </View>
 
-        <Text style={{ textAlign: "left", color: "#fff", fontWeight: "bold" }}>
+        <Text style={{ textAlign: "left", color: "#fff", fontWeight: "bold", fontSize: 30,}}>
           FLOOD LEVEL
         </Text>
 
@@ -380,24 +427,24 @@ const Reporting = (props) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => checkIfNoReport()}
+            onPress={() => introAlert()}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
-              REPORT NOW!
+              Check Location
             </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonCancelContainer}>
           <TouchableOpacity
             style={styles.buttonCancel}
-            onPress={() => resetValue()}
+            onPress={() => checkIfNoReport()}
           >
             <Text
-              style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold"}}
             >
-              RESET
+              R E P O R T 
             </Text>
           </TouchableOpacity>
         </View>
