@@ -11,9 +11,11 @@ import * as ImagePicker from 'expo-image-picker';
 
 
 const Reporting = (props) => {
-  var rainIntensityVal = -1;
+  const[rainIntensityVal, setRainIntensityVal] = useState(3);
+  const[floodLevelVal, setFloodLevelVal] = useState(3);
   const[dispLat, setDispLat] = useState("Analyzing . . .");
   const[dispLong, setDispLong] = useState("Analyzing . . .");
+  const[accR, setAccR] = useState("Analyzing . . .");
  
   navigator.geolocation.getCurrentPosition(success, error, options);
   //var dispLat = 1;
@@ -27,12 +29,13 @@ const Reporting = (props) => {
   
   function success(pos) {
     var crd = pos.coords;
-    console.log('Your current position is:');
-    console.log(`Latitude : ${crd.latitude}`);
-    console.log(`Longitude: ${crd.longitude}`);
-    console.log(`More or less ${crd.accuracy} meters.`);
+    //console.log('Your current position is:');
+    //console.log(`Latitude : ${crd.latitude}`);
+    //console.log(`Longitude: ${crd.longitude}`);
+    //console.log(`More or less ${crd.accuracy} meters.`);
     setDispLat(crd.latitude);
     setDispLong(crd.longitude);
+    setAccR(crd.accuracy);
   }
   
   function error(err) {
@@ -54,55 +57,56 @@ const Reporting = (props) => {
     navigator.geolocation.getCurrentPosition(success, error, options);
   }
 
+  
   changeOne = () => {
-    rainIntensityVal = 0;
+    setRainIntensityVal(0);
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeTwo = () => {
-    rainIntensityVal = 1.25;
+    setRainIntensityVal(1.25);
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeThree = () => {
-    rainIntensityVal = 2.5;
+    setRainIntensityVal(2.5);
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeFour = () => {
-    rainIntensityVal = 7.5;
+    setRainIntensityVal(7.5);
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeFive = () => {
-    rainIntensityVal = 10;
+    setRainIntensityVal(10);
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
-  var floodLevelVal = -1;
+  
 
   changeOneF = () => {
-    floodLevelVal = 0;
+    setFloodLevelVal(0);
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeTwoF = () => {
-    floodLevelVal = 25;
+    setFloodLevelVal(25);
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeThreeF = () => {
-    floodLevelVal = 50;
+    setFloodLevelVal(50);
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeFourF = () => {
-    floodLevelVal = 75;
+    setFloodLevelVal(75);
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeFiveF = () => {
-    floodLevelVal = 100;
+    setFloodLevelVal(100);
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
@@ -234,18 +238,67 @@ const Reporting = (props) => {
       { cancelable: false }
     );
 
+    const alertUserReport = () => {
+      Alert.alert(
+        "Report Now",
+        "You are about to report this information \nLatitude: " + dispLat + "\nLongitude: " + dispLong + "\nRain Intensity: " + rainIntensityVal + "\nFlood Level: " + floodLevelVal,
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          {
+            text: "Report", onPress: () => reportUserReport()
+          }
+        ],
+        { cancelable: false }
+      )
+    }
+    
+
+    const reportUserReport = () => {
+      let formdata = new FormData();
+      formdata.append("latitude", dispLat);
+      formdata.append("longitude", dispLong);
+      formdata.append("rainfall_rate", rainIntensityVal);
+      formdata.append("flood_depth", floodLevelVal);
+      //formdata.append("image", image);
+
+      fetch("https://rainflow.live/api/report/submit", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+          },
+          body: formdata,
+        }).then((response) => {
+          if (!response.ok) {
+            throw new Error(response.status);
+             //console.log("Error: " + response)
+          }
+          console.log(response.json());
+          })
+          .catch((error) => {
+            console.log("ERROR: " + error.message);
+          });
+        //setRainIntensityVal(3);
+        //setFloodLevelVal(3);
+        
+    }
+
     const checkIfNoReport = () => {
-      if(rainIntensityVal == -1 && floodLevelVal == -1){
+      if(rainIntensityVal == 3 && floodLevelVal == 3){
         alert("Missing rain intensity and flood level data to be reported");
       }
-      else if(rainIntensityVal == -1){
+      else if(rainIntensityVal == 3){
         alert("Missing rain intensity data to be reported");
       }
-      else if(floodLevelVal == -1){
+      else if(floodLevelVal == 3){
         alert("Missing flood level data to be reported");
       }
       else{
-        console.log("Reported successfully!")
+        alertUserReport();
       }
     }
 
@@ -300,7 +353,8 @@ const Reporting = (props) => {
            
           }}>
           Latitude: {dispLat} {"\n"}
-          Longitude: {dispLong}
+          Longitude: {dispLong} {"\n"}
+          Accuracy: {accR} meters.
         </Text>
         
         {/*Rain Intensity START*/}
