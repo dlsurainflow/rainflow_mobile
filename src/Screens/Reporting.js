@@ -12,9 +12,12 @@ import * as ImagePicker from 'expo-image-picker';
 
 const Reporting = (props) => {
   var rainIntensityVal = -1;
+  const[dispLat, setDispLat] = useState("Analyzing . . .");
+  const[dispLong, setDispLong] = useState("Analyzing . . .");
+ 
   navigator.geolocation.getCurrentPosition(success, error, options);
-  var dispLat = null;
-  var dispLong = null;
+  //var dispLat = 1;
+  //var dispLong = 1;
 
   var options = {
     enableHighAccuracy: true,
@@ -28,15 +31,16 @@ const Reporting = (props) => {
     console.log(`Latitude : ${crd.latitude}`);
     console.log(`Longitude: ${crd.longitude}`);
     console.log(`More or less ${crd.accuracy} meters.`);
-    dispLat = crd.latitude;
-    dispLong = crd.longitude;
+    setDispLat(crd.latitude);
+    setDispLong(crd.longitude);
   }
   
   function error(err) {
     console.warn(`ERROR(${err.code}): ${err.message}`);
   }
-  
+
   const introAlert = () =>
+  
     Alert.alert(
       "You are now in Reporting!",
       "Your Location is: Latitude : " + dispLat + ", Longitude: " + dispLong,
@@ -45,6 +49,10 @@ const Reporting = (props) => {
       ],
       { cancelable: false }
     );
+
+  const updateMyLoc = () => {
+    navigator.geolocation.getCurrentPosition(success, error, options);
+  }
 
   changeOne = () => {
     rainIntensityVal = 0;
@@ -425,12 +433,12 @@ const Reporting = (props) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => introAlert()}
+            onPress={() => updateMyLoc()}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
-              Check Location
+              Update My Location
             </Text>
           </TouchableOpacity>
         </View>
