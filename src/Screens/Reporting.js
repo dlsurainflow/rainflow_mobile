@@ -6,12 +6,15 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Image,
+  AsyncStorage,
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 
 
 const Reporting = (props) => {
   const[rainIntensityVal, setRainIntensityVal] = useState(3);
+  const[filename, setFileName] = useState(null);
   const[floodLevelVal, setFloodLevelVal] = useState(3);
   const[dispLat, setDispLat] = useState("Analyzing . . .");
   const[dispLong, setDispLong] = useState("Analyzing . . .");
@@ -257,19 +260,29 @@ const Reporting = (props) => {
     }
     
 
-    const reportUserReport = () => {
+    const reportUserReport = async() => {
+      let token = await AsyncStorage.getItem("token");
       let formdata = new FormData();
+      let match = /\.(\w+)$/.exec(filename);
+      let type1 = match ? `image/${match[1]}` : `image`;
+      console.log(filename);
+      console.log(match);
+      console.log(type1);
       formdata.append("latitude", dispLat);
       formdata.append("longitude", dispLong);
       formdata.append("rainfall_rate", rainIntensityVal);
       formdata.append("flood_depth", floodLevelVal);
-      //formdata.append("image", image);
+      if(image !== null){
+        formdata.append("image", {uri: image, name: filename, type: "image/jpeg/jpg"});
+      }
+      else{
 
       fetch("https://rainflow.live/api/report/submit", {
           method: "POST",
           headers: {
             Accept: "application/json",
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
           body: formdata,
         }).then((response) => {
@@ -277,14 +290,16 @@ const Reporting = (props) => {
             throw new Error(response.status);
              //console.log("Error: " + response)
           }
-          console.log(response.json());
+          console.log(response.json().then(data => console.log(data)));
           })
           .catch((error) => {
             console.log("ERROR: " + error.message);
           });
+        console.log("Fetch Done");
         //setRainIntensityVal(3);
         //setFloodLevelVal(3);
-        
+      }
+      
     }
 
     const checkIfNoReport = () => {
@@ -319,15 +334,17 @@ const Reporting = (props) => {
     console.log("HELLO");
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
+      allowsEditing: false,
+      maxWidth: 500, maxHeight: 500,
+      aspect: [1, 1],
+      quality: 0.1,
     });
 
     console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
+      setFileName(result.uri.split('/').pop());
     }
   };
 
@@ -339,23 +356,31 @@ const Reporting = (props) => {
             textAlign: "left",
             color: "#fff",
             fontWeight: "bold",
-            paddingBottom: 30,
+            paddingBottom: 0,
             fontSize: 40,
           }}
         >
           REPORTING
         </Text>
+        
         <Text style={{
             textAlign: "center",
             color: "#fff",
             fontWeight: "bold",
-            paddingBottom: 30,
+            paddingBottom: 10,
            
           }}>
           Latitude: {dispLat} {"\n"}
           Longitude: {dispLong} {"\n"}
-          Accuracy: {accR} meters.
+          Accuracy: {accR} meters. {"\n"}
+          Image to upload: 
         </Text>
+        <Image
+            source={{
+              uri: image,
+            }}
+            style={{ width: 100, height: 100, paddingBottom: 0 }}
+          />
         
         {/*Rain Intensity START*/}
 
