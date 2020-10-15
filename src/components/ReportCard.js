@@ -5,11 +5,13 @@ import {StyleSheet,
         TouchableOpacity } from 'react-native'
 
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import moment from 'moment'
 
 
 const ReportCard = props => {
     const {createdAt, latitude, longitude, id, rain, flood, image} = props;
     const [img, setImg] = useState();
+    const convertedTime = moment(createdAt).format("DD MMM YYYY (dddd) HH:mm")
 
     useEffect(()=>{
         if(image){
@@ -25,11 +27,12 @@ const ReportCard = props => {
         }
     },[])
 
+
   return(
     <View style={styles.cardContainer}>
       <View style = {styles.cardContent}>
           <View style = {{flexDirection: "row", alignItems: "center", width: "100%", borderBottomWidth: 1, paddingBottom: 5, borderBottomColor: "#BCBCBC", marginBottom: 5}}>
-          <Text style = {styles.dateText}> {createdAt} </Text>
+          <Text style = {styles.dateText}>{convertedTime}</Text>
           <View style = {{right: 0, position: "absolute"}}>
             {img}
           </View>

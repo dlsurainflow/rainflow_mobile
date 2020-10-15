@@ -12,6 +12,7 @@ import {
 import AsyncStorage from "@react-native-community/async-storage";
 import { Appbar, Modal, Portal, Provider } from 'react-native-paper';
 import ReportCard from '../components/ReportCard'
+import moment from 'moment'
 
 const ReportHistory = (props) => {
 
@@ -129,12 +130,13 @@ const ReportHistory = (props) => {
     if(reportInfo == undefined){
       null;
     } else {
+        var convertedTime = moment(reportInfo.createdAt).format("DD MMM YYYY (dddd) HH:mm");
         setModalComponent(
           <Portal>
             <Modal contentContainerStyle={styles.modalContainer} visible={visible} onDismiss={hideModal}>
               <ScrollView showsVerticalScrollIndicator = {false}>
                 <Text style={{fontSize: 14, fontWeight: "bold"}}>Report ID: {reportInfo.id}</Text>
-                <Text style={{fontSize: 14, fontWeight: "bold"}}>{reportInfo.createdAt}</Text>
+                <Text style={{fontSize: 14, fontWeight: "bold"}}>{convertedTime}</Text>
                 <Text>Location: [{reportInfo.latitude},{reportInfo.longitude}] </Text>
                 <Text>Rain Intensity: {reportInfo.rainfall_rate} </Text>
                 <Text>Flood Level: {reportInfo.flood_depth} </Text>

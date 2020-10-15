@@ -11,6 +11,7 @@ import ReportHistoryScreen from "./src/Screens/ReportHistory.js";
 import HomeMap from "./src/Screens/HomeMap.js";
 import UserProfileScreen from "./src/Screens/UserProfile.js";
 import AboutUsScreen from "./src/Screens/AboutUs.js"
+import AccInfo from "./src/Screens/AccountInfo.js"
 //SCREENS END
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -18,6 +19,7 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import { createStackNavigator } from "@react-navigation/stack";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 import AnimatedSplash from "react-native-animated-splash-screen";
+import AccountInfo from "./src/Screens/AccountInfo.js";
 
 const Stack = createStackNavigator();
 const bottomTab = createMaterialBottomTabNavigator();
@@ -87,6 +89,12 @@ export default function App() {
           name="About Us"
           component={AboutUsScreen}
           options={{ title: "About Us" }}
+        />
+
+      <Stack.Screen
+          name="Account Info"
+          component={AccountInfo}
+          options={{ title: "Account Info" }}
         />
       </Stack.Navigator>
     </>
