@@ -21,6 +21,7 @@ const UserProfile = (props) => {
   const [accPoints, setAccPoints] = useState();
   const [showLoading, setShowLoading] = useState(false)
   const [buttonLabel, setButtonLabel] = useState()
+  const [headerComponent, setHeaderComponent] = useState()
   const [bodyComponent, setBodyComponent] = useState()
   
   const  checkUserSignedIn = async() =>{
@@ -28,21 +29,87 @@ const UserProfile = (props) => {
        let un = await AsyncStorage.getItem("username");
        let pts = await AsyncStorage.getItem("points");
        if (un != null){
-         setUsername(un)
-         setAccPoints(pts)
          setButtonLabel("Logout")
+         setHeaderComponent(
+          <>
+            <View style = {{borderRadius: 100, padding: 8, borderColor: "#fff", backgroundColor: "#fff"}}>
+              <MaterialCommunityIcons
+                        name="shield-half-full"
+                        color="#0E956A"
+                        size={60}
+                      />
+            </View>
+            <Text style = {styles.userText}>{un}</Text>
+            <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>
+              <Text style = {styles.pointsText}>{pts} pts</Text>
+              <Text style = {styles.pointsText}>Silver Badge</Text> 
+            </View>
+          </>
+         )
+
          setBodyComponent(
           <ScrollView showsVerticalScrollIndicator = {false}>
-          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Dashboard" description="Monitor your RAFT device"/>
-          <List.Item  onPress = {()=> props.navigation.navigate("ReportHistory")} titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Report History" description="View a history of all the reports you've submitted"/>
-          <List.Item  titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Active Reports" description="View list of active reports"/>          
-          <List.Item  onPress = {()=> props.navigation.navigate("Account Info")} titleStyle = {{fontSize: 15}} style = {styles.listItem} descriptionStyle = {{fontSize: 12}} title="Account Information" description="Change your password"/>
-          <List.Item  onPress = {()=> props.navigation.navigate("About Us")} titleStyle = {{fontSize: 15}} descriptionStyle = {{fontSize: 12}} title="About Us" description="Learn more about user privileges and our team"/>
+          <List.Item  
+            titleStyle = {{fontSize: 15}} 
+            style = {styles.listItem} 
+            descriptionStyle = {{fontSize: 12}} 
+            title="Dashboard" 
+            description="Monitor your RAFT device"
+          />
+
+          <List.Item  
+            onPress = {()=> props.navigation.navigate("ReportHistory")} 
+            titleStyle = {{fontSize: 15}} 
+            style = {styles.listItem} 
+            descriptionStyle = {{fontSize: 12}} 
+            title="Report History" 
+            description="View a history of all the reports you've submitted"
+            />
+
+          <List.Item
+            onPress = {()=> props.navigation.navigate("Active Reports")}  
+            titleStyle = {{fontSize: 15}} 
+            style = {styles.listItem} 
+            descriptionStyle = {{fontSize: 12}} 
+            title="Active Reports" description="View list of active reports"
+            />          
+
+          <List.Item  
+            onPress = {()=> props.navigation.navigate("Account Info")}
+            titleStyle = {{fontSize: 15}} style = {styles.listItem} 
+            descriptionStyle = {{fontSize: 12}} title="Account Information" 
+            description="Change your password"
+            />
+
+          <List.Item  
+            onPress = {()=> props.navigation.navigate("About Us")} 
+            titleStyle = {{fontSize: 15}} 
+            descriptionStyle = {{fontSize: 12}} 
+            title="About Us" 
+            description="Learn more about user privileges and our team"
+            />
+
         </ScrollView>
          )
         }
         else {
           setButtonLabel("Login")
+          setHeaderComponent(
+            <>
+                <View style = {{borderRadius: 100, padding: 8, borderColor: "#fff", backgroundColor: "#fff"}}>
+                  <MaterialCommunityIcons
+                            name="shield-half-full"
+                            color="#0E956A"
+                            size={60}
+                          />
+                </View>
+                <Text style = {styles.userText}>Guest</Text>
+                <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>
+                  <Text style = {styles.pointsText}>0 pts</Text>
+                  <Text style = {styles.pointsText}>No Badge</Text> 
+                </View>
+            </>
+           )
           setBodyComponent(
             <View style = {{paddingHorizontal: 10}}>
               <Text style = {styles.bodyText2}>You are currently not logged in.</Text>
@@ -67,6 +134,22 @@ const UserProfile = (props) => {
         setUsername(undefined)
         setAccPoints(undefined)
         setButtonLabel("Login")
+        setHeaderComponent(
+          <>
+            <View style = {{borderRadius: 100, padding: 8, borderColor: "#fff", backgroundColor: "#fff"}}>
+              <MaterialCommunityIcons
+                        name="shield-half-full"
+                        color="#0E956A"
+                        size={60}
+                      />
+            </View>
+            <Text style = {styles.userText}>Guest</Text>
+            <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>
+              <Text style = {styles.pointsText}>0 pts</Text>
+              <Text style = {styles.pointsText}>No Badge</Text> 
+            </View>
+          </>
+         )
         setBodyComponent(
           <View style = {{paddingHorizontal: 10}}>
             <Text style = {styles.bodyText2}>You are currently not logged in.</Text>
@@ -116,19 +199,7 @@ const logoutHandler = () =>{
     <View style = {styles.backgroundContainer}>
       <View style = {styles.headerContainer}>
       <View style = {styles.headerInfo}>
-        <View style = {{borderRadius: 100, padding: 8, borderColor: "#fff", backgroundColor: "#fff"}}>
-      <MaterialCommunityIcons
-                name="shield-half-full"
-                color="#0E956A"
-                size={60}
-              />
-        </View>
-  <Text style = {styles.userText}>{username ? username : 'Guest'}</Text>
-  <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>
-  <Text style = {styles.pointsText}>{accPoints ? accPoints : '0'} pts</Text>
-  <Text style = {styles.pointsText}>{accPoints ? 'Silver badge' : 'No badge'}</Text> 
-  <Text style = {styles.pointsText}>{accPoints ? '5 reports' : '0 reports'}</Text>  
-  </View>
+          {headerComponent}
       </View>
       </View>
 

@@ -4,7 +4,7 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
+  Alert,
   BackHandler,
   ScrollView
 } from "react-native";
@@ -17,6 +17,7 @@ const AccountInfo = (props) => {
 const [currentPassword, setCurrentPassword] = useState('');
 const [newPassword, setNewPassword] = useState('');
 const [newPassword1, setNewPassword1] = useState('');
+const [showChange, setShowChange] = useState(false)
 const theme = {
     ...DefaultTheme,
     colors: {
@@ -25,6 +26,20 @@ const theme = {
       primary: '#0E956A',
     },
   };
+
+  const changePasswordHandler = () =>{
+    console.log("hello")
+    if(newPassword == newPassword1 && newPassword != null && newPassword != '' && currentPassword != null && currentPassword != ''){ //Check if new passwords match and current password has been entered
+      console.log("change password") 
+    }else{
+     
+      if(newPassword == null || newPassword =='' || newPassword1 == null || newPassword1 == '' || currentPassword == ''){
+        alert("Please fill out all the information needed!");
+      }else{
+        alert("New passwords do not match. Please check again.");
+      }
+    }
+  }
 
   useEffect(() => {
     const backAction = () => {
@@ -39,6 +54,7 @@ const theme = {
   });
 
 
+
   return (
   
     <View style={styles.backgroundContainer}>
@@ -48,70 +64,73 @@ const theme = {
     </Appbar.Header>
       <View style={styles.contentContainer}>
         <ScrollView style = {{width: "100%"}} showsVerticalScrollIndicator = {false}>
-        <View style = {{flexDirection: "row", alignItems: "center", borderBottomWidth: 1, paddingVertical: 25, marginHorizontal: 5, borderBottomColor: "#bcbcbc"}}>
-            <Text style = {{position: "absolute", left: 15, fontWeight: "bold"}}>Username</Text>
-            <Text style = {{position: "absolute", right: 15}}>tammyc</Text>
+        <View style = {styles.infoContainer}>
+            <Text style = {styles.boldText}>Username</Text>
+            <Text style = {styles.fixedRightText}>tammyc</Text>
         </View>
-        <View style = {{flexDirection: "row", alignItems: "center", borderBottomWidth: 1, paddingVertical: 25, marginHorizontal: 5, borderBottomColor: "#bcbcbc"}}>
-            <Text style = {{position: "absolute", left: 15, fontWeight: "bold"}}>Email</Text>
-            <Text style = {{position: "absolute", right: 15}}>tammara_capa@dlsu.edu.ph</Text>
+        <View style = {styles.infoContainer}>
+            <Text style ={styles.boldText}>Email</Text>
+            <Text style = {styles.fixedRightText}>tammara_capa@dlsu.edu.ph</Text>
         </View>
-        <View style = {{flexDirection: "row", alignItems: "center", borderBottomWidth: 1, paddingVertical: 25, marginHorizontal: 5, borderBottomColor: "#bcbcbc"}}>
-            <Text style = {{position: "absolute", left: 15, fontWeight: "bold"}}>Badge</Text>
-            <Text style = {{position: "absolute", right: 15}}>Silver Badge</Text>
+        <View style = {styles.infoContainer}>
+            <Text style = {styles.boldText}>Badge</Text>
+            <Text style = {styles.fixedRightText}>Silver Badge</Text>
         </View>
-        <View style = {{flexDirection: "row", alignItems: "center", borderBottomWidth: 1, paddingVertical: 25, marginHorizontal: 5, borderBottomColor: "#bcbcbc"}}>
-            <Text style = {{position: "absolute", left: 15, fontWeight: "bold"}}>Points</Text>
-            <Text style = {{position: "absolute", right: 15}}>35</Text>
+        <View style = {styles.infoContainer}>
+            <Text style = {styles.boldText}>Points</Text>
+            <Text style = {styles.fixedRightText}>35</Text>
         </View>
-        <View style = {{flexDirection: "row", alignItems: "center", paddingVertical: 25, marginHorizontal: 5, borderBottomColor: "#bcbcbc"}}>
-            <Text style = {{position: "absolute", left: 15, fontWeight: "bold"}}>Date Joined</Text>
-            <Text style = {{position: "absolute", right: 15}}>February 2, 2020</Text>
+        <View style = {styles.infoContainerBottom}>
+            <Text style ={styles.boldText}>Date Joined</Text>
+            <Text style = {styles.fixedRightText}>February 2, 2020</Text>
         </View>
         
-        <TouchableOpacity style = {{width: "100%", backgroundColor: "#1EA78C", marginHorizontal: 5, marginTop:15, paddingVertical: 20, paddingHorizontal: 10, alignItems: "center"}} onPress = {()=>console.log("change password")}>
+        <TouchableOpacity style = {styles.changePWHeader} onPress = {()=>{setShowChange(!showChange)}}>
             <Text style = {{color: "#fff", fontWeight: "bold"}}> Change Password</Text>
         </TouchableOpacity>
-        <View style = {{paddingHorizontal: 10, width: "100%", backgroundColor: "#f0edf6", marginHorizontal: 5}}>
-            <TextInput
-                type = 'outlined'
-                label="Current Password"
-                value={currentPassword}
-                theme={theme}
-                secureTextEntry={true}
-                style = {{fontSize: 13, marginVertical:2, width: "97%", alignSelf: "center"}}
-                onChangeText={text => setCurrentPassword(text)}
-            />
-            <TextInput
-                type = 'outlined'
-                label="New Password"
-                value={newPassword}
-                theme={theme}
-                secureTextEntry={true}
-                style = {{fontSize: 13, marginVertical:2, width: "97%", alignSelf: "center"}}
-                onChangeText={text => setNewPassword(text)}
-            />
-            <TextInput
-                type = 'outlined'
-                label="Repeat New Password"
-                value={newPassword1}
-                theme={theme}
-                secureTextEntry={true}
-                style = {{fontSize: 13, marginVertical:2, width: "97%", alignSelf: "center"}}
-                onChangeText={text => setNewPassword1(text)}
-            />
+        {showChange ? (
+                <View style = {styles.changePWBody}>
+                    <TextInput
+                        type = 'outlined'
+                        label="Current Password"
+                        value={currentPassword}
+                        theme={theme}
+                        secureTextEntry={true}
+                        style = {styles.outlinedTextBox}
+                        onChangeText={text => setCurrentPassword(text)}
+                    />
+                    <TextInput
+                        type = 'outlined'
+                        label="New Password"
+                        value={newPassword}
+                        theme={theme}
+                        secureTextEntry={true}
+                        style = {styles.outlinedTextBox}
+                        onChangeText={text => setNewPassword(text)}
+                    />
+                    <TextInput
+                        type = 'outlined'
+                        label="Repeat New Password"
+                        value={newPassword1}
+                        theme={theme}
+                        secureTextEntry={true}
+                        style = {styles.outlinedTextBox}
+                        onChangeText={text => setNewPassword1(text)}
+                    />
 
-        <TouchableOpacity
-            style={styles.button}
-            onPress={() => {console.log("confirm change password")}}
-          >
-            <Text
-              style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
-            >
-              Confirm
-            </Text>
-          </TouchableOpacity>
-        </View>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {changePasswordHandler()}}
+                  >
+                    <Text
+                      style={styles.buttonText}
+                    >
+                      Confirm
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+        ) : null}
+
         </ScrollView>
       </View>
     </View>
@@ -172,6 +191,62 @@ const styles = StyleSheet.create({
     marginVertical: 15
   },
 
+  changePWHeader: {
+    width: "100%", 
+    backgroundColor: "#1EA78C", 
+    marginHorizontal: 5, 
+    marginTop:15, 
+    paddingVertical: 20, 
+    paddingHorizontal: 10, 
+    alignItems: "center"
+  },
+
+  infoContainer: {
+    flexDirection: "row", 
+    alignItems: "center", 
+    borderBottomWidth: 1, 
+    paddingVertical: 25, 
+    marginHorizontal: 5, 
+    borderBottomColor: "#bcbcbc"
+  },
+
+  infoContainerBottom: {
+    flexDirection: "row", 
+    alignItems: "center",  
+    paddingVertical: 25, 
+    marginHorizontal: 5, 
+  },
+
+  boldText: {
+    position: "absolute", 
+    left: 15, 
+    fontWeight: "bold"
+  },
+
+  fixedRightText: {
+    position: "absolute", 
+    right: 15
+  },
+
+  changePWBody: {
+    paddingHorizontal: 10, 
+    width: "100%", 
+    backgroundColor: "#f0edf6", 
+    marginHorizontal: 5
+  },
+
+  outlinedTextBox: {
+    fontSize: 13, 
+    marginVertical:2, 
+    width: "97%", 
+    alignSelf: "center"
+  },
+
+  buttonText: {
+    textAlign: "center", 
+    color: "#fff", 
+    fontWeight: "bold" 
+  }
 
 });
 
