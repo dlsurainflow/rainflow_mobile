@@ -6,61 +6,100 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Image,
+  AsyncStorage,
 } from "react-native";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
+import { ColorDotsLoader } from 'react-native-indicator';
 
 const Reporting = (props) => {
-  var rainIntensityVal = -1;
+  const [rainIntensityVal, setRainIntensityVal] = useState(3);
+  const [filename, setFileName] = useState(null);
+  const [floodLevelVal, setFloodLevelVal] = useState(3);
+  const [dispLat, setDispLat] = useState("Analyzing . . .");
+  const [dispLong, setDispLong] = useState("Analyzing . . .");
+  const [accR, setAccR] = useState("Analyzing . . .");
+  const [showLoading, setShowLoading] = useState(false)
+
+  navigator.geolocation.getCurrentPosition(success, error, options);
+
+  var options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  };
+
+  function success(pos) {
+    var crd = pos.coords;
+    //console.log('Your current position is:');     //console.log(`Latitude : ${crd.latitude}`);     //console.log(`Longitude: ${crd.longitude}`);     //console.log(`More or less ${crd.accuracy} meters.`);
+    setDispLat(crd.latitude);
+    setDispLong(crd.longitude);
+    setAccR(crd.accuracy);
+  }
+
+  function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+
+  const introAlert = () =>
+    Alert.alert(
+      "You are now in Reporting!",
+      "Your Location is: Latitude : " + dispLat + ", Longitude: " + dispLong,
+      [{ text: "Okay", onPress: () => console.log("OK Pressed") }],
+      { cancelable: false }
+    );
+
+  const updateMyLoc = () => {
+    navigator.geolocation.getCurrentPosition(success, error, options);
+  };
 
   changeOne = () => {
-    rainIntensityVal = 0;
+    setRainIntensityVal(0);
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeTwo = () => {
-    rainIntensityVal = 1.25;
+    setRainIntensityVal(1.25);
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeThree = () => {
-    rainIntensityVal = 2.5;
+    setRainIntensityVal(2.5);
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeFour = () => {
-    rainIntensityVal = 7.5;
+    setRainIntensityVal(7.5);
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeFive = () => {
-    rainIntensityVal = 10;
+    setRainIntensityVal(10);
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
-  var floodLevelVal = -1;
-
   changeOneF = () => {
-    floodLevelVal = 0;
+    setFloodLevelVal(0);
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeTwoF = () => {
-    floodLevelVal = 25;
+    setFloodLevelVal(25);
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeThreeF = () => {
-    floodLevelVal = 50;
+    setFloodLevelVal(50);
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeFourF = () => {
-    floodLevelVal = 75;
+    setFloodLevelVal(75);
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeFiveF = () => {
-    floodLevelVal = 100;
+    setFloodLevelVal(100);
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
@@ -80,14 +119,14 @@ const Reporting = (props) => {
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "Report", onPress: () => changeTwo()}
+        { text: "Report", onPress: () => changeTwo() },
       ],
       { cancelable: false }
     );
 
-    const MRainAlert = () =>
+  const MRainAlert = () =>
     Alert.alert(
       "MEDIUM rain intensity selected!",
       "Medium rain: The rate of fall is from trace to 2.5 mm per hour. Individual drops easily identified and puddles(small muddy pools) form slowly. Small streams may flow in gutters.",
@@ -95,14 +134,14 @@ const Reporting = (props) => {
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "Report", onPress: () => changeThree()}
+        { text: "Report", onPress: () => changeThree() },
       ],
       { cancelable: false }
     );
 
-    const HRainAlert = () =>
+  const HRainAlert = () =>
     Alert.alert(
       "HEAVY rain intensity selected!",
       "Heavy rain: The rate of fall is between 2.5 mm to 7.5 mm per hour. Puddles rapidly forming and down pipes flowing freely.",
@@ -110,14 +149,14 @@ const Reporting = (props) => {
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "Report", onPress: () => changeFour()}
+        { text: "Report", onPress: () => changeFour() },
       ],
       { cancelable: false }
     );
 
-    const EHRainAlert = () =>
+  const EHRainAlert = () =>
     Alert.alert(
       "EXTREMELY HEAVY rain intensity selected!",
       "Extremely heavy rain: The rate of fall is greater than 7.5 mm per hour. The sky is overcast, there is a continuous precipitation. Falls in sheets, misty spray over hard surfaces. May cause roaring noise on roofs.",
@@ -125,14 +164,14 @@ const Reporting = (props) => {
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "Report", onPress: () => changeFive()}
+        { text: "Report", onPress: () => changeFive() },
       ],
       { cancelable: false }
     );
 
-    const ADeepAlert = () =>
+  const ADeepAlert = () =>
     Alert.alert(
       "ANKLE DEEP intensity selected!",
       "Ankle deep: Flood is around 0.25 meters high",
@@ -140,14 +179,14 @@ const Reporting = (props) => {
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "Report", onPress: () => changeTwoF()}
+        { text: "Report", onPress: () => changeTwoF() },
       ],
       { cancelable: false }
     );
 
-    const KDeepAlert = () =>
+  const KDeepAlert = () =>
     Alert.alert(
       "KNEE DEEP flood level is selected!",
       "Knee Deep: 7.5 - 15 mm of rain observed in the next two hours. Flood is around 0.5 meters high. Response: Monitor weather condition.",
@@ -155,14 +194,14 @@ const Reporting = (props) => {
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "Report", onPress: () => changeThreeF()}
+        { text: "Report", onPress: () => changeThreeF() },
       ],
       { cancelable: false }
     );
 
-    const WDeepAlert = () =>
+  const WDeepAlert = () =>
     Alert.alert(
       "WAIST DEEP flood level is selected!",
       "Waist deep: 15 - 30 mm of rain observed in an hour and expected to continue in the next two hours. Flood is threatening, around 1 meter high Response: Alert for possible evacuation.",
@@ -170,14 +209,14 @@ const Reporting = (props) => {
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "Report", onPress: () => changeFourF()}
+        { text: "Report", onPress: () => changeFourF() },
       ],
       { cancelable: false }
     );
 
-    const AWDeepAlert = () =>
+  const AWDeepAlert = () =>
     Alert.alert(
       "ABOVE WAIST DEEP flood level is selected!",
       "Above waist: More than 30 mm of rain observed in an hour and expected to continue in the next two hours. Serious flooding expected in low lying areas. Response: evacuation. ",
@@ -185,54 +224,143 @@ const Reporting = (props) => {
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "Report", onPress: () => changeFiveF()}
+        { text: "Report", onPress: () => changeFiveF() },
       ],
       { cancelable: false }
     );
 
-    const checkIfNoReport = () => {
-      if(rainIntensityVal == -1 && floodLevelVal == -1){
-        alert("Missing rain intensity and flood level data to be reported");
-      }
-      else if(rainIntensityVal == -1){
-        alert("Missing rain intensity data to be reported");
-      }
-      else if(floodLevelVal == -1){
-        alert("Missing flood level data to be reported");
-      }
-      else{
-        console.log("Reported successfully!")
-      }
-    }
+  const alertUserReport = () => {
+    Alert.alert(
+      "Report Now",
+      "You are about to report this information \nLatitude: " +
+        dispLat +
+        "\nLongitude: " +
+        dispLong +
+        "\nRain Intensity: " +
+        rainIntensityVal +
+        "\nFlood Level: " +
+        floodLevelVal,
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Report",
+          onPress: () => reportUserReport(),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
-    const [image, setImage] = useState(null);
+  const reportUserReport = async () => {
+    setShowLoading(true);
+    let token = await AsyncStorage.getItem("token");
+    let formdata = new FormData();
+    formdata.append("latitude", dispLat);
+    formdata.append("longitude", dispLong);
+    formdata.append("rainfall_rate", rainIntensityVal);
+    formdata.append("flood_depth", floodLevelVal);
+    if (image !== null) {
+      let match = /\.(\w+)$/.exec(filename);
+      let type1 = match ? `image/${match[1]}` : `image`;
+      let fileType = image.substring(image.lastIndexOf(".") + 1);
+      console.log("Filename: " + filename);
+      console.log("Filetype: " + fileType);
+      formdata.append("image", {
+        uri: image,
+        name: filename,
+        type: `image/${fileType}`,
+      });
+    }
+    console.log("Formdata: " + formdata);
+    
+    fetch("https://rainflow.live/api/report/submit", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+      body: formdata,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.status);
+          //console.log("Error: " + response)
+        }
+        
+        //alert("Report submitted! Thank you");
+        console.log(response.json().then((data) => console.log(data)));
+      })
+      .catch((error) => {
+        console.log("ERROR: " + error);
+      });
+      setTimeout(function(){
+        setShowLoading(false);
+        setImage(null);
+        alert("Report submitted! Thank you");
+      }, 2000);
+    
+    console.log("Fetch Done");
+    
+    
+    //setRainIntensityVal(3);
+    //setFloodLevelVal(3);
+  };
+
+  const checkIfNoReport = () => {
+    if (rainIntensityVal == 3 && floodLevelVal == 3) {
+      alert("Missing rain intensity and flood level data to be reported");
+    } else if (rainIntensityVal == 3) {
+      alert("Missing rain intensity data to be reported");
+    } else if (floodLevelVal == 3) {
+      alert("Missing flood level data to be reported");
+    } else {
+      alertUserReport();
+    }
+  };
+
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     (async () => {
-      if (Platform.OS !== 'web') {
+      if (Platform.OS !== "web") {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
         }
       }
     })();
   }, []);
 
   const pickImage = async () => {
-    console.log("HELLO");
+    console.log("At Pick Image");
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
+      allowsEditing: false,
+      // maxWidth: 500,
+      // maxHeight: 500,
+      // aspect: [1, 1],
+      quality: 0.1,
     });
+
+    // let result = await ImagePicker.launchImageLibraryAsync({
+    //   mediaTypes: ImagePicker.MediaTypeOptions.All,
+    //   // allowsEditing: true,
+    //   // aspect: [4, 3],
+    //   quality: 1,
+    // });
 
     console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
+      setFileName(result.uri.split("/").pop());
     }
   };
 
@@ -244,15 +372,48 @@ const Reporting = (props) => {
             textAlign: "left",
             color: "#fff",
             fontWeight: "bold",
-            paddingBottom: 30,
+            paddingBottom: 0,
+            fontSize: 40,
           }}
         >
           REPORTING
         </Text>
 
-        {/*Rain Intensity START*/}
+        <Text
+          style={{
+            textAlign: "center",
+            color: "#fff",
+            fontWeight: "bold",
+            paddingBottom: 10,
+          }}
+        >
+          ({dispLat}, {dispLong}){"\n"}
+          {/* Accuracy: {accR} meters. {"\n"} */}
+          Image to upload:
+        </Text>
+        <Image
+          source={{
+            uri: image,
+          }}
+          style={{ width: 100, height: 100, paddingBottom: 0 }}
+        />
 
-        <Text style={{ textAlign: "left", color: "#fff", fontWeight: "bold" }}>
+        {/*Rain Intensity START*/}
+        {showLoading ? (
+            <View style = {styles.loadingContainer}>
+            <ColorDotsLoader size = {30} color1 = {"#4FC69A"} color2 = {"#1EA78C"} color3 = {"#0E956A"} /> 
+            <Text style = {{fontWeight: "bold", color : "#FFFF"}}>Loading</Text>       
+            </View>
+          ) : null}
+
+        <Text
+          style={{
+            textAlign: "left",
+            color: "#fff",
+            fontWeight: "bold",
+            fontSize: 30,
+          }}
+        >
           RAIN INTENSITY
         </Text>
         <View style={styles.overView}>
@@ -308,7 +469,14 @@ const Reporting = (props) => {
           </TouchableOpacity>
         </View>
 
-        <Text style={{ textAlign: "left", color: "#fff", fontWeight: "bold" }}>
+        <Text
+          style={{
+            textAlign: "left",
+            color: "#fff",
+            fontWeight: "bold",
+            fontSize: 30,
+          }}
+        >
           FLOOD LEVEL
         </Text>
 
@@ -366,10 +534,7 @@ const Reporting = (props) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => pickImage()}
-          >
+          <TouchableOpacity style={styles.button} onPress={() => pickImage()}>
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
@@ -378,26 +543,23 @@ const Reporting = (props) => {
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => checkIfNoReport()}
-          >
+          <TouchableOpacity style={styles.button} onPress={() => updateMyLoc()}>
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
-              REPORT NOW!
+              Update My Location
             </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonCancelContainer}>
           <TouchableOpacity
             style={styles.buttonCancel}
-            onPress={() => resetValue()}
+            onPress={() => checkIfNoReport()}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
-              RESET
+              R E P O R T
             </Text>
           </TouchableOpacity>
         </View>
@@ -414,6 +576,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
+
+  loadingContainer: {
+    flex:1, 
+    height: "100%", 
+    width: "100%",
+    flexDirection: "column", 
+    alignItems: "center", 
+    //justifyContent: "center", 
+    position: "absolute",
+    paddingTop: 170,
+   },
 
   contentContainer: {
     flex: 1,
@@ -453,7 +626,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#434343",
     borderWidth: 2,
     borderColor: "green",
-    
   },
 
   choice2Container: {
@@ -469,7 +641,7 @@ const styles = StyleSheet.create({
     paddingLeft: 3,
     paddingRight: 3,
   },
-  
+
   choice3Container: {
     width: "21%",
     height: 50,
