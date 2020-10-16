@@ -10,6 +10,7 @@ import {
   AsyncStorage,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { ColorDotsLoader } from 'react-native-indicator';
 
 const Reporting = (props) => {
   const [rainIntensityVal, setRainIntensityVal] = useState(3);
@@ -18,10 +19,9 @@ const Reporting = (props) => {
   const [dispLat, setDispLat] = useState("Analyzing . . .");
   const [dispLong, setDispLong] = useState("Analyzing . . .");
   const [accR, setAccR] = useState("Analyzing . . .");
+  const [showLoading, setShowLoading] = useState(false)
 
   navigator.geolocation.getCurrentPosition(success, error, options);
-  //var dispLat = 1;
-  //var dispLong = 1;
 
   var options = {
     enableHighAccuracy: true,
@@ -31,10 +31,7 @@ const Reporting = (props) => {
 
   function success(pos) {
     var crd = pos.coords;
-    //console.log('Your current position is:');
-    //console.log(`Latitude : ${crd.latitude}`);
-    //console.log(`Longitude: ${crd.longitude}`);
-    //console.log(`More or less ${crd.accuracy} meters.`);
+    //console.log('Your current position is:');     //console.log(`Latitude : ${crd.latitude}`);     //console.log(`Longitude: ${crd.longitude}`);     //console.log(`More or less ${crd.accuracy} meters.`);
     setDispLat(crd.latitude);
     setDispLong(crd.longitude);
     setAccR(crd.accuracy);
@@ -261,22 +258,19 @@ const Reporting = (props) => {
   };
 
   const reportUserReport = async () => {
+    setShowLoading(true);
     let token = await AsyncStorage.getItem("token");
     let formdata = new FormData();
-    let match = /\.(\w+)$/.exec(filename);
-    let type1 = match ? `image/${match[1]}` : `image`;
-
-    // extract the filetype
-    let fileType = image.substring(image.lastIndexOf(".") + 1);
-    console.log("Filename: " + filename);
-    console.log("Filetype: " + fileType);
-    // console.log(match);
-    // console.log(type1);
     formdata.append("latitude", dispLat);
     formdata.append("longitude", dispLong);
     formdata.append("rainfall_rate", rainIntensityVal);
     formdata.append("flood_depth", floodLevelVal);
     if (image !== null) {
+      let match = /\.(\w+)$/.exec(filename);
+      let type1 = match ? `image/${match[1]}` : `image`;
+      let fileType = image.substring(image.lastIndexOf(".") + 1);
+      console.log("Filename: " + filename);
+      console.log("Filetype: " + fileType);
       formdata.append("image", {
         uri: image,
         name: filename,
@@ -284,6 +278,7 @@ const Reporting = (props) => {
       });
     }
     console.log("Formdata: " + formdata);
+    
     fetch("https://rainflow.live/api/report/submit", {
       method: "POST",
       headers: {
@@ -298,13 +293,15 @@ const Reporting = (props) => {
           throw new Error(response.status);
           //console.log("Error: " + response)
         }
-        alert("Report submitted! Thank you");
+        //alert("Report submitted! Thank you");
         console.log(response.json().then((data) => console.log(data)));
       })
       .catch((error) => {
         console.log("ERROR: " + error);
       });
+    setShowLoading(false);
     console.log("Fetch Done");
+    setImage(null);
     //setRainIntensityVal(3);
     //setFloodLevelVal(3);
   };
@@ -395,7 +392,13 @@ const Reporting = (props) => {
         />
 
         {/*Rain Intensity START*/}
-
+        {showLoading ? (
+            <View style = {styles.loadingContainer}>
+            <ColorDotsLoader size = {30} color1 = {"#4FC69A"} color2 = {"#1EA78C"} color3 = {"#0E956A"} /> 
+            <Text style = {{fontWeight: "bold", color : "#FFFF"}}>Loading</Text>       
+            </View>
+          ) : null}
+          
         <Text
           style={{
             textAlign: "left",
@@ -566,6 +569,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
+
+  loadingContainer: {
+    flex:1, 
+    height: "100%", 
+    width: "100%",
+    flexDirection: "column", 
+    alignItems: "center", 
+    justifyContent: "center", 
+    position: "absolute",
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+   },
 
   contentContainer: {
     flex: 1,
