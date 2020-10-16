@@ -293,15 +293,22 @@ const Reporting = (props) => {
           throw new Error(response.status);
           //console.log("Error: " + response)
         }
+        
         //alert("Report submitted! Thank you");
         console.log(response.json().then((data) => console.log(data)));
       })
       .catch((error) => {
         console.log("ERROR: " + error);
       });
-    setShowLoading(false);
+      setTimeout(function(){
+        setShowLoading(false);
+        setImage(null);
+        alert("Report submitted! Thank you");
+      }, 2000);
+    
     console.log("Fetch Done");
-    setImage(null);
+    
+    
     //setRainIntensityVal(3);
     //setFloodLevelVal(3);
   };
@@ -398,7 +405,7 @@ const Reporting = (props) => {
             <Text style = {{fontWeight: "bold", color : "#FFFF"}}>Loading</Text>       
             </View>
           ) : null}
-          
+
         <Text
           style={{
             textAlign: "left",
@@ -576,9 +583,9 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "column", 
     alignItems: "center", 
-    justifyContent: "center", 
+    //justifyContent: "center", 
     position: "absolute",
-    paddingTop: Platform.OS === "android" ? 25 : 0,
+    paddingTop: 170,
    },
 
   contentContainer: {
