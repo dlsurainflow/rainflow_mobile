@@ -73,32 +73,34 @@ const getNodes = async() => {
   }, [markers])
   */
 }
+{/* 
 
+  useEffect(()=> {
+    let unmounted = false;
+  
+    if(unmounted == false){
+  
+      getNodes()
+      setCurrentNodes(markers)
+      console.log("upon loading")
+    }
+  
+    return () => {unmounted = true}
+  })
+  
+  useFocusEffect( // fetch again when we switch between tabs. because useeffect isnt triggered when we go from one tab to the next
+    React.useCallback(() => {
+      let isActive = true;
+      getNodes()
+      setCurrentNodes(markers)
+  
+      return () => {
+        isActive = false;
+      };
+    })
+  );
+*/}
 
-useEffect(()=> {
-  let unmounted = false;
-
-  if(unmounted == false){
-
-    getNodes()
-    setCurrentNodes(markers)
-    console.log("upon loading")
-  }
-
-  return () => {unmounted = true}
-}, [])
-
-useFocusEffect( // fetch again when we switch between tabs. because useeffect isnt triggered when we go from one tab to the next
-  React.useCallback(() => {
-    let isActive = true;
-    getNodes()
-    setCurrentNodes(markers)
-
-    return () => {
-      isActive = false;
-    };
-  }, [])
-);
 
 
 const addMarker = (lat, long) => {

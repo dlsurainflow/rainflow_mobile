@@ -11,6 +11,10 @@ import ReportHistoryScreen from "./src/Screens/ReportHistory.js";
 import HomeMap from "./src/Screens/HomeMap.js";
 import UserProfileScreen from "./src/Screens/UserProfile.js";
 import AboutUsScreen from "./src/Screens/AboutUs.js"
+import AccountInfoScreen from "./src/Screens/AccountInfo.js";
+import ActiveReportsScreen from "./src/Screens/ActiveReports.js";
+import DashboardScreen from "./src/Screens/Dashboard.js"
+
 //SCREENS END
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -87,6 +91,24 @@ export default function App() {
           name="About Us"
           component={AboutUsScreen}
           options={{ title: "About Us" }}
+        />
+
+      <Stack.Screen
+          name="Account Info"
+          component={AccountInfoScreen}
+          options={{ title: "Account Info" }}
+        />
+
+      <Stack.Screen
+          name="Active Reports"
+          component={ActiveReportsScreen}
+          options={{ title: "Active Reports" }}
+        />
+
+      <Stack.Screen
+          name="Dashboard"
+          component={DashboardScreen}
+          options={{ title: "Dashboard" }}
         />
       </Stack.Navigator>
     </>

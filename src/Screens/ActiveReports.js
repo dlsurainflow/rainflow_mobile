@@ -14,7 +14,7 @@ import { Appbar, Modal, Portal, Provider } from 'react-native-paper';
 import ReportCard from '../components/ReportCard'
 import moment from 'moment'
 
-const ReportHistory = (props) => {
+const ActiveReports = (props) => {
 
   const [reportsList, setReportsList] = useState()
   const [reportInfo, setReportInfo] = useState()
@@ -164,9 +164,9 @@ const ReportHistory = (props) => {
     <View style={styles.backgroundContainer}>
       <Appbar.Header style = {{backgroundColor: "#0E956A"}}>
       <Appbar.BackAction onPress={()=> props.navigation.navigate("UserProfile")} />
-      <Appbar.Content title="Report History" titleStyle= {{fontSize: 15}} subtitle="Click the cards to view more info" subtitleStyle={{fontSize: 12}}/>
+      <Appbar.Content title="Active Reports" titleStyle= {{fontSize: 15}} subtitle="Click the cards to view more info" subtitleStyle={{fontSize: 12}}/>
     </Appbar.Header>
-      <View style={styles.contentContainer}>
+      <View style={styles.contentContainer}> 
         <ScrollView style = {{width: "100%"}} showsVerticalScrollIndicator = {false}>
         {historyBody}
         </ScrollView>
@@ -311,4 +311,4 @@ const styles = StyleSheet.create({
 }
 });
 
-export default ReportHistory;
+export default ActiveReports;
