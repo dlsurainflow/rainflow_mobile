@@ -6,18 +6,29 @@ import {
   TouchableOpacity,
   Alert,
   BackHandler,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
-import { Appbar, TextInput, DefaultTheme} from 'react-native-paper';
-import ReportCard from '../components/ReportCard'
+import { Appbar, TextInput, DefaultTheme, Snackbar} from 'react-native-paper';
+import { ColorDotsLoader } from 'react-native-indicator';
+import moment from 'moment'
 
 const AccountInfo = (props) => {
 
-const [currentPassword, setCurrentPassword] = useState('');
-const [newPassword, setNewPassword] = useState('');
-const [newPassword1, setNewPassword1] = useState('');
-const [showChange, setShowChange] = useState(false)
+const [username, setUsername] = useState();
+const [email, setEmail] = useState();
+const [badge, setBadge] = useState();
+const [points, setPoints] = useState();
+const [joined, setJoined] = useState();  
+const [currentPassword, setCurrentPassword] = useState();
+const [newPassword, setNewPassword] = useState();
+const [newPassword1, setNewPassword1] = useState();
+const [showChange, setShowChange] = useState(false);
+const [visible, setVisible] = useState(false);
+const [showLoading, setShowLoading] = useState(false)
+
+const onDismissSnackBar = () => setVisible(false);
+
 const theme = {
     ...DefaultTheme,
     colors: {
@@ -27,19 +38,97 @@ const theme = {
     },
   };
 
-  const changePasswordHandler = () =>{
-    console.log("hello")
+  const getStored = async()=>{
+    let un = await AsyncStorage.getItem("username");
+    let pts = await AsyncStorage.getItem("points");
+    let email_add = await AsyncStorage.getItem("email")
+    let badgeRank = await AsyncStorage.getItem("badge");
+    let dateJoined = await AsyncStorage.getItem("dateCreated")
+    console.log(dateJoined)
+    let convertedTime = moment(dateJoined).format("DD MMM YYYY")
+
+    setUsername(un);
+    setPoints(pts);
+    setEmail(email_add)
+    setBadge("Silver Badge")
+    setJoined(convertedTime)
+  }
+
+  const changePasswordHandler = async() =>{
     if(newPassword == newPassword1 && newPassword != null && newPassword != '' && currentPassword != null && currentPassword != ''){ //Check if new passwords match and current password has been entered
-      console.log("change password") 
+          if(newPassword == currentPassword){
+            Alert.alert('New password is the same as current password!')
+          }
+          else{
+              const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
+                RCTNetworking.clearCookies((result) => {
+              });
+    
+              const token = await AsyncStorage.getItem("token")
+    
+              await fetch(`https://rainflow.live/api/users/change-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept' : 'application/json',
+                    'Authorization' :  `Bearer ${token}`
+                },
+                body :JSON.stringify({ 
+                    password: currentPassword,
+                    new_password: newPassword
+                })
+                }).then(response => {
+                  if(response.status == 200){
+                  
+                    response.json().then( (data) => {
+                      if(data.status == "Error"){
+                        console.log(data)
+                        console.log("-----" +currentPassword+ "----")
+                        Alert.alert('Current password is incorrect.');
+                      }else{
+                        logOut()
+                        console.log(data)
+                      }
+                    });
+                  }
+                  else{
+                    Alert.alert(
+                      'Error in changing password! (Code: ' + response.status + ')');
+                  }
+                })  
+          }
+
     }else{
      
       if(newPassword == null || newPassword =='' || newPassword1 == null || newPassword1 == '' || currentPassword == ''){
-        alert("Please fill out all the information needed!");
-      }else{
-        alert("New passwords do not match. Please check again.");
+        Alert.alert("Please fill out all the information needed!");
+      }
+      else{
+       Alert.alert("New passwords do not match. Please check again.");
       }
     }
   }
+
+  const  logOut = async() =>{
+    try {
+      setShowLoading(true)
+      setVisible(true)
+      setTimeout(async() => {
+        setShowLoading(false)
+        setVisible(false)
+        await AsyncStorage.removeItem('username');
+        await AsyncStorage.removeItem('points');
+        await AsyncStorage.removeItem('token');
+        props.navigation.navigate("Login")
+      }, 3500);
+
+
+
+  }
+  catch(exception) {
+      return false;
+  }
+}
 
   useEffect(() => {
     const backAction = () => {
@@ -53,6 +142,10 @@ const theme = {
     return () => backHandler.remove();
   });
 
+  useEffect(()=>{
+    getStored()
+  },[])
+
 
 
   return (
@@ -62,27 +155,35 @@ const theme = {
       <Appbar.BackAction onPress={()=> props.navigation.navigate("UserProfile")} />
       <Appbar.Content title="Account Information" titleStyle= {{fontSize: 15}}/>
     </Appbar.Header>
+
+    <Snackbar
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        >
+        Your password is being updated. Please login again.
+      </Snackbar>
+
       <View style={styles.contentContainer}>
         <ScrollView style = {{width: "100%"}} showsVerticalScrollIndicator = {false}>
         <View style = {styles.infoContainer}>
             <Text style = {styles.boldText}>Username</Text>
-            <Text style = {styles.fixedRightText}>tammyc</Text>
+            <Text style = {styles.fixedRightText}>{username}</Text>
         </View>
         <View style = {styles.infoContainer}>
             <Text style ={styles.boldText}>Email</Text>
-            <Text style = {styles.fixedRightText}>tammara_capa@dlsu.edu.ph</Text>
+            <Text style = {styles.fixedRightText}>{email}</Text>
         </View>
         <View style = {styles.infoContainer}>
             <Text style = {styles.boldText}>Badge</Text>
-            <Text style = {styles.fixedRightText}>Silver Badge</Text>
+            <Text style = {styles.fixedRightText}>{badge}</Text>
         </View>
         <View style = {styles.infoContainer}>
             <Text style = {styles.boldText}>Points</Text>
-            <Text style = {styles.fixedRightText}>35</Text>
+            <Text style = {styles.fixedRightText}>{points}</Text>
         </View>
         <View style = {styles.infoContainerBottom}>
-            <Text style ={styles.boldText}>Date Joined</Text>
-            <Text style = {styles.fixedRightText}>February 2, 2020</Text>
+            <Text style ={styles.boldText}>Joined</Text>
+            <Text style = {styles.fixedRightText}>{joined}</Text>
         </View>
         
         <TouchableOpacity style = {styles.changePWHeader} onPress = {()=>{setShowChange(!showChange)}}>
@@ -120,7 +221,7 @@ const theme = {
 
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => {changePasswordHandler()}}
+                    onPress={() => { showLoading ? null : changePasswordHandler()}}
                   >
                     <Text
                       style={styles.buttonText}
@@ -132,6 +233,12 @@ const theme = {
         ) : null}
 
         </ScrollView>
+        {showLoading ? (
+            <View style = {styles.loadingContainer}>
+            <ColorDotsLoader size = {30} color1 = {"#4FC69A"} color2 = {"#1EA78C"} color3 = {"#0E956A"} /> 
+            <Text style = {{fontWeight: "bold", color : "#434343"}}>Loading</Text>       
+            </View>
+          ) : null}
       </View>
     </View>
   );
@@ -200,6 +307,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10, 
     alignItems: "center"
   },
+
+  loadingContainer: {
+    flex:1, 
+    height: "100%", 
+    width: "100%",
+    flexDirection: "column", 
+    alignItems: "center", 
+    justifyContent: "center", 
+    position: "absolute",
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+   },
 
   infoContainer: {
     flexDirection: "row", 

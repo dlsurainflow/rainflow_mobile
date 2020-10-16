@@ -136,6 +136,7 @@ const UserProfile = (props) => {
         setShowLoading(false)
         await AsyncStorage.removeItem('username');
         await AsyncStorage.removeItem('points');
+        await AsyncStorage.removeItem('token');
         setUsername(undefined)
         setAccPoints(undefined)
         setButtonLabel("Login")
