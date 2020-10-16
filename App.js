@@ -13,6 +13,7 @@ import UserProfileScreen from "./src/Screens/UserProfile.js";
 import AboutUsScreen from "./src/Screens/AboutUs.js"
 import AccountInfoScreen from "./src/Screens/AccountInfo.js";
 import ActiveReportsScreen from "./src/Screens/ActiveReports.js";
+import DashboardScreen from "./src/Screens/Dashboard.js"
 
 //SCREENS END
 
@@ -102,6 +103,12 @@ export default function App() {
           name="Active Reports"
           component={ActiveReportsScreen}
           options={{ title: "Active Reports" }}
+        />
+
+      <Stack.Screen
+          name="Dashboard"
+          component={DashboardScreen}
+          options={{ title: "Dashboard" }}
         />
       </Stack.Navigator>
     </>

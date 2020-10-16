@@ -29,6 +29,7 @@ const UserProfile = (props) => {
        let un = await AsyncStorage.getItem("username");
        let pts = await AsyncStorage.getItem("points");
        if (un != null){
+         setUsername(un)
          setButtonLabel("Logout")
          setHeaderComponent(
           <>
@@ -49,7 +50,8 @@ const UserProfile = (props) => {
 
          setBodyComponent(
           <ScrollView showsVerticalScrollIndicator = {false}>
-          <List.Item  
+          <List.Item
+          onPress = {()=> props.navigation.navigate("Dashboard")}   
             titleStyle = {{fontSize: 15}} 
             style = {styles.listItem} 
             descriptionStyle = {{fontSize: 12}} 
@@ -78,14 +80,14 @@ const UserProfile = (props) => {
             onPress = {()=> props.navigation.navigate("Account Info")}
             titleStyle = {{fontSize: 15}} style = {styles.listItem} 
             descriptionStyle = {{fontSize: 12}} title="Account Information" 
-            description="Change your password"
+            description="View your account details"
             />
 
           <List.Item  
             onPress = {()=> props.navigation.navigate("About Us")} 
             titleStyle = {{fontSize: 15}} 
             descriptionStyle = {{fontSize: 12}} 
-            title="About Us" 
+            title="About RainFLOW" 
             description="Learn more about user privileges and our team"
             />
 
@@ -114,7 +116,10 @@ const UserProfile = (props) => {
             <View style = {{paddingHorizontal: 10}}>
               <Text style = {styles.bodyText2}>You are currently not logged in.</Text>
               <Text style = {styles.bodyText}>Login to view your report history, as well as submit a report.</Text>
-              <Text style = {styles.bodyText}>To know more about our authenticated user privileges, go to our About Page. </Text>
+              <Text style = {styles.bodyText}>To know more about our authenticated user privileges and our team, go to: </Text>
+              <TouchableOpacity onPress= {()=>{props.navigation.navigate("About Us")}} style = {{marginVertical: 10, alignItems: "center"}}>
+                <Text style = {{textAlign: "center", color: "#0E956A", fontWeight: "bold", fontSize: 16}}>About RainFLOW</Text>
+              </TouchableOpacity>
             </View>
           )
 
@@ -152,10 +157,13 @@ const UserProfile = (props) => {
          )
         setBodyComponent(
           <View style = {{paddingHorizontal: 10}}>
-            <Text style = {styles.bodyText2}>You are currently not logged in.</Text>
-            <Text style = {styles.bodyText}>Login to view your report history, as well as submit a report.</Text>
-            <Text style = {styles.bodyText}>To know more about our authenticated user privileges, go to our About Page. </Text>
-          </View>
+              <Text style = {styles.bodyText2}>You are currently not logged in.</Text>
+              <Text style = {styles.bodyText}>Login to view your report history, as well as submit a report.</Text>
+              <Text style = {styles.bodyText}>To know more about our authenticated user privileges and our team, go to: </Text>
+              <TouchableOpacity onPress= {()=>{props.navigation.navigate("About Us")}} style = {{marginVertical: 10, alignItems: "center"}}>
+                <Text style = {{textAlign: "center", color: "#0E956A", fontWeight: "bold", fontSize: 16}}>About RainFLOW</Text>
+              </TouchableOpacity>
+            </View>
         )
         ToastAndroid.show(
           "Welcome, guest!",
