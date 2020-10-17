@@ -250,12 +250,41 @@ const Reporting = (props) => {
         },
         {
           text: "Report",
-          onPress: () => reportUserReport(),
+          onPress: () => isUserLogged(),
         },
       ],
       { cancelable: false }
     );
   };
+
+  const alertUserLogin = () => {
+    Alert.alert(
+      "You cannot report without an account!",
+      "Tap Login to continue. Tap Cancel if you want to cancel reporting." ,
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Login",
+          onPress: () => {props.navigation.navigate("Login")},
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const isUserLogged = async () => {
+    let token = await AsyncStorage.getItem("token");
+    if(token == null){
+      alertUserLogin();
+    }
+    else{
+      reportUserReport();
+    }
+  }
 
   const reportUserReport = async () => {
     setShowLoading(true);

@@ -1,10 +1,10 @@
 {
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 14484,
+  "packagerPid": 17356,
   "expoServerNgrokUrl": "https://4r-gky.anonymous.rainflow-mobile.exp.direct",
   "packagerNgrokUrl": "https://packager.4r-gky.anonymous.rainflow-mobile.exp.direct",
-  "ngrokPid": 11104,
+  "ngrokPid": 9992,
   "webpackServerPort": null,
   "devToolsPort": 19002
 }
