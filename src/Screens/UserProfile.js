@@ -28,22 +28,36 @@ const UserProfile = (props) => {
     try {
        let un = await AsyncStorage.getItem("username");
        let pts = await AsyncStorage.getItem("points");
+       let badgeImage = await AsyncStorage.getItem("badge");
+       var badgeText;
+          switch(badgeImage) {
+            case "1.png":
+              badgeText = "Gold"
+              break;
+            case "2.png":
+              badgeText = "Sapphire"
+              break;
+            case "3.png":
+              badgeText= "Emerald"
+              break;
+            case "0.png":
+              badgeText = "Ruby"
+              break;
+            default: 
+              null;
+          }
        if (un != null){
          setUsername(un)
          setButtonLabel("Logout")
          setHeaderComponent(
           <>
-            <View style = {{borderRadius: 100, padding: 8, borderColor: "#fff", backgroundColor: "#fff"}}>
-              <MaterialCommunityIcons
-                        name="shield-half-full"
-                        color="#0E956A"
-                        size={60}
-                      />
+            <View style = {{borderRadius: 100, paddingVertical: 9, paddingHorizontal: 15, borderColor: "#fff", backgroundColor: "#fff"}}>
+            <Image style={{height: 60, width: 50, alignSelf: "center"}} source={{uri:`https://rainflow.live/api/images/badges/${badgeImage}`}} />
             </View>
             <Text style = {styles.userText}>{un}</Text>
             <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>
               <Text style = {styles.pointsText}>{pts} pts</Text>
-              <Text style = {styles.pointsText}>Silver Badge</Text> 
+              <Text style = {styles.pointsText}>{badgeText} Badge</Text> 
             </View>
           </>
          )
