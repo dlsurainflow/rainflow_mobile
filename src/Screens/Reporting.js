@@ -687,19 +687,7 @@ const Reporting = (props) => {
             
           </Marker>
           </MapView>
-        <Text
-          style={{
-            textAlign: "left",
-            color: "black",
-            fontWeight: "bold",
-            paddingBottom: 0,
-            paddingLeft: 20,
-          }}
-          
-        >
-          Latitude:  {dispLat}  {"\n"}
-          Longitude: {dispLong}          
-        </Text>
+        
         </View>
         <View style={styles.sLine}>
       <Text
