@@ -16,11 +16,12 @@ import moment from 'moment'
 
 const ReportHistory = (props) => {
 
-  const [reportsList, setReportsList] = useState()
-  const [reportInfo, setReportInfo] = useState()
-  const [historyBody, setHistoryBody] = useState()
-  const [modalComponent, setModalComponent] = useState()
+  const [reportsList, setReportsList] = useState();
+  const [reportInfo, setReportInfo] = useState();
+  const [historyBody, setHistoryBody] = useState();
+  const [modalComponent, setModalComponent] = useState();
   const [visible, setVisible] = React.useState(false);
+  const [concatReports, setConcatReports] = useState();
 
   const showModal = (id) =>{
     getReportInfo(id)
@@ -46,7 +47,11 @@ const ReportHistory = (props) => {
       }
       }).then(response => {
         if(response.status == 200)
-          response.json().then( (data) => {setReportsList(data)});
+          response.json().then((data) => {
+            setReportsList([...data.active], data.archive)
+           // console.log("ACTIVE: ", data.active)
+            //console.log("ARCHIVE: ", data.archive)
+          });
         else{
           Alert.alert(
             'Error retrieving reports! (Code: ' + response.status + ')');
@@ -57,7 +62,7 @@ const ReportHistory = (props) => {
   const getReportInfo = async(id) => {
     const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
     RCTNetworking.clearCookies((result) => {
-    });
+    }); 
 
     const userID = await AsyncStorage.getItem("userID")
     const token = await AsyncStorage.getItem("token")
@@ -71,7 +76,9 @@ const ReportHistory = (props) => {
       }
       }).then(response => {
         if(response.status == 200)
-          response.json().then( (data) => {setReportInfo(data)});
+          response.json().then( (data) => {
+            console.log(data)
+            setReportInfo(data)});
         else{
           Alert.alert(
             'Error retrieving reports! (Code: ' + response.status + ')');
@@ -120,6 +127,8 @@ const ReportHistory = (props) => {
                 />
                 </TouchableOpacity>
             )
+
+
           })
         )
         }

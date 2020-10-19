@@ -46,7 +46,7 @@ const ActiveReports = (props) => {
       }
       }).then(response => {
         if(response.status == 200)
-          response.json().then( (data) => {setReportsList(data)});
+          response.json().then( (data) => {setReportsList(data.active)});
         else{
           Alert.alert(
             'Error retrieving reports! (Code: ' + response.status + ')');
