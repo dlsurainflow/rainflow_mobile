@@ -12,6 +12,9 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { ColorDotsLoader } from 'react-native-indicator';
+import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
+import sampleMarker from "../../assets/markers/1-1-01.png";
 
 const Reporting = (props) => {
   const [rainIntensityVal, setRainIntensityVal] = useState(null);
@@ -24,6 +27,8 @@ const Reporting = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   navigator.geolocation.getCurrentPosition(success, error, options);
+
+  
 
   var options = {
     enableHighAccuracy: true,
@@ -663,6 +668,25 @@ const Reporting = (props) => {
         >
           Your Location 
         </Text>
+        <MapView
+          initialRegion={{
+          latitude: dispLat,
+          longitude: dispLong,
+          latitudeDelta: 0.000922,
+          longitudeDelta: 0.000421,
+          }}
+          style={{width: "100%", height: 150}}
+        >
+          <Marker 
+          coordinate={{
+            latitude: dispLat,
+            longitude: dispLong
+          }}
+          image={sampleMarker}
+          style={{height: 10, width: 10}}>
+            
+          </Marker>
+          </MapView>
         <Text
           style={{
             textAlign: "left",
@@ -671,6 +695,7 @@ const Reporting = (props) => {
             paddingBottom: 0,
             paddingLeft: 20,
           }}
+          
         >
           Latitude:  {dispLat}  {"\n"}
           Longitude: {dispLong}          
