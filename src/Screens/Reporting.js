@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Modal,
   Alert,
   Image,
   AsyncStorage,
@@ -13,13 +14,14 @@ import * as ImagePicker from "expo-image-picker";
 import { ColorDotsLoader } from 'react-native-indicator';
 
 const Reporting = (props) => {
-  const [rainIntensityVal, setRainIntensityVal] = useState(3);
+  const [rainIntensityVal, setRainIntensityVal] = useState(null);
   const [filename, setFileName] = useState(null);
-  const [floodLevelVal, setFloodLevelVal] = useState(3);
+  const [floodLevelVal, setFloodLevelVal] = useState(null);
   const [dispLat, setDispLat] = useState("Analyzing . . .");
   const [dispLong, setDispLong] = useState("Analyzing . . .");
   const [accR, setAccR] = useState("Analyzing . . .");
-  const [showLoading, setShowLoading] = useState(false)
+  const [showLoading, setShowLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   navigator.geolocation.getCurrentPosition(success, error, options);
 
@@ -332,8 +334,10 @@ const Reporting = (props) => {
       setTimeout(function(){
         setShowLoading(false);
         setImage(null);
+        setFloodLevelVal(null);
+        setRainIntensityVal(null);
         alert("Report submitted! Thank you");
-      }, 2000);
+      }, 1000);
     
     console.log("Fetch Done");
     
@@ -343,11 +347,11 @@ const Reporting = (props) => {
   };
 
   const checkIfNoReport = () => {
-    if (rainIntensityVal == 3 && floodLevelVal == 3) {
+    if (rainIntensityVal == null && floodLevelVal == null) {
       alert("Missing rain intensity and flood level data to be reported");
-    } else if (rainIntensityVal == 3) {
+    } else if (rainIntensityVal == null) {
       alert("Missing rain intensity data to be reported");
-    } else if (floodLevelVal == 3) {
+    } else if (floodLevelVal == null) {
       alert("Missing flood level data to be reported");
     } else {
       alertUserReport();
@@ -399,7 +403,7 @@ const Reporting = (props) => {
         <Text
           style={{
             textAlign: "left",
-            color: "#fff",
+            color: "black",
             fontWeight: "bold",
             paddingBottom: 0,
             fontSize: 40,
@@ -411,22 +415,16 @@ const Reporting = (props) => {
         <Text
           style={{
             textAlign: "center",
-            color: "#fff",
+            color: "black",
             fontWeight: "bold",
-            paddingBottom: 10,
+            paddingBottom: 0,
           }}
         >
           ({dispLat}, {dispLong}){"\n"}
           {/* Accuracy: {accR} meters. {"\n"} */}
-          Image to upload:
+          
         </Text>
-        <Image
-          source={{
-            uri: image,
-          }}
-          style={{ width: 100, height: 100, paddingBottom: 0 }}
-        />
-
+        
         {/*Rain Intensity START*/}
         {showLoading ? (
             <View style = {styles.loadingContainer}>
@@ -435,16 +433,32 @@ const Reporting = (props) => {
             </View>
           ) : null}
 
-        <Text
+
+      <View style={styles.sLine}>
+      <Text
           style={{
             textAlign: "left",
-            color: "#fff",
+            color: "black",
             fontWeight: "bold",
             fontSize: 30,
           }}
         >
-          RAIN INTENSITY
+          RAIN INTENSITY 
         </Text>
+
+        <Text
+          style={{
+            textAlign: "center",
+            color: "black",
+            fontWeight: "bold",
+            
+          }}
+        >
+          (Currently Selected: { rainIntensityVal } mm/hr)
+        </Text>
+      </View>
+        
+
         <View style={styles.overView}>
           <TouchableOpacity
             style={styles.choiceContainer}
@@ -470,7 +484,7 @@ const Reporting = (props) => {
             style={styles.choice3Container}
             onPress={() => MRainAlert()}
           >
-            <Text style={{ color: "yellow", fontWeight: "bold" }}>
+            <Text style={{ color: "gold", fontWeight: "bold" }}>
               Medium Rain
             </Text>
           </TouchableOpacity>
@@ -498,16 +512,29 @@ const Reporting = (props) => {
           </TouchableOpacity>
         </View>
 
+        <View style={styles.sLine}>
         <Text
           style={{
             textAlign: "left",
-            color: "#fff",
+            color: "black",
             fontWeight: "bold",
             fontSize: 30,
           }}
         >
-          FLOOD LEVEL
+          FLOOD LEVEL 
         </Text>
+        <Text
+          style={{
+            textAlign: "center",
+            color: "black",
+            fontWeight: "bold",
+            
+          }}
+        >
+          (Currently Selected: { floodLevelVal } cm)
+        </Text>
+        </View>
+        
 
         <View style={styles.overView}>
           <TouchableOpacity
@@ -534,7 +561,7 @@ const Reporting = (props) => {
             style={styles.choice3Container}
             onPress={() => KDeepAlert()}
           >
-            <Text style={{ color: "yellow", fontWeight: "bold" }}>
+            <Text style={{ color: "gold", fontWeight: "bold" }}>
               Knee Deep
             </Text>
           </TouchableOpacity>
@@ -580,18 +607,156 @@ const Reporting = (props) => {
             </Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={() => setModalVisible(!modalVisible)}>
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
+            >
+              See Report Summary
+            </Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.buttonCancelContainer}>
           <TouchableOpacity
             style={styles.buttonCancel}
             onPress={() => checkIfNoReport()}
           >
             <Text
-              style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
+              style={{ textAlign: "center", color: "black", fontWeight: "bold" }}
             >
               R E P O R T
             </Text>
           </TouchableOpacity>
         </View>
+        
+        <Modal 
+          animationType="slide"
+          transparent={false}
+          visible={modalVisible}
+          style={{
+            height: 1000,
+            }
+          }
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+          }}
+        >
+          <Text
+          style={{
+            textAlign: "center",
+            color: "black",
+            fontWeight: "bold",
+            fontSize: 30,
+          }}
+        >
+          REPORT SUMMARY 
+        </Text>
+        <View style={styles.sLine}>
+        <Text
+          style={{
+            textAlign: "left",
+            color: "black",
+            fontWeight: "bold",
+            fontSize: 20,
+            paddingLeft: 20,
+          }}
+        >
+          Your Location 
+        </Text>
+        <Text
+          style={{
+            textAlign: "left",
+            color: "black",
+            fontWeight: "bold",
+            paddingBottom: 0,
+            paddingLeft: 20,
+          }}
+        >
+          Latitude:  {dispLat}  {"\n"}
+          Longitude: {dispLong}          
+        </Text>
+        </View>
+        <View style={styles.sLine}>
+      <Text
+          style={{
+            textAlign: "left",
+            color: "black",
+            fontWeight: "bold",
+            fontSize: 20,
+            paddingLeft: 20,
+          }}
+        >
+          Rain Intensity 
+        </Text>
+
+        <Text
+          style={{
+            textAlign: "left",
+            color: "black",
+            fontWeight: "bold",
+            paddingLeft: 20,
+          }}
+        >
+          You selected: { rainIntensityVal } mm/hr
+        </Text>
+      </View>
+      <View style={styles.sLine}>
+        <Text
+          style={{
+            textAlign: "left",
+            color: "black",
+            fontWeight: "bold",
+            fontSize: 20,
+            paddingLeft: 20,
+          }}
+        >
+          Flood Level 
+        </Text>
+        <Text
+          style={{
+            textAlign: "left",
+            color: "black",
+            fontWeight: "bold",
+            paddingLeft: 20,
+          }}
+        >
+          You selected: { floodLevelVal } cm
+        </Text>
+        </View>
+        <View style={styles.sLine}>
+        <Text
+          style={{
+            textAlign: "left",
+            color: "black",
+            fontWeight: "bold",
+            fontSize: 20,
+            paddingLeft: 20,
+          }}
+        >
+          Image 
+        </Text>
+        <View style={{ alignItems: "center"}}>
+        <Image
+          source={{
+            uri: image,
+          }}
+          style={{ height: 200, width: 200, alignItems: "center", paddingBottom: 20}}
+        />
+        </View>
+        
+        </View>
+        
+        <View style={styles.buttonContainerModal}>
+          <TouchableOpacity style={styles.buttonModal} onPress={() => setModalVisible(!modalVisible)}>
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold", width: "50%"}}
+            >
+              Hide Report Summary
+            </Text>
+          </TouchableOpacity>
+        </View>
+          
+        </Modal>
       </View>
     </View>
   );
@@ -601,7 +766,7 @@ const styles = StyleSheet.create({
   backgroundContainer: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     justifyContent: "center",
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
@@ -614,7 +779,7 @@ const styles = StyleSheet.create({
     alignItems: "center", 
     //justifyContent: "center", 
     position: "absolute",
-    paddingTop: 170,
+    paddingTop: 10,
    },
 
   contentContainer: {
@@ -623,7 +788,7 @@ const styles = StyleSheet.create({
 
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     paddingHorizontal: 30,
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
@@ -634,7 +799,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     paddingHorizontal: 30,
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
@@ -652,7 +817,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     borderWidth: 2,
     borderColor: "green",
   },
@@ -664,7 +829,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     borderWidth: 2,
     borderColor: "yellowgreen",
     paddingLeft: 3,
@@ -678,9 +843,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "yellow",
+    borderColor: "gold",
     paddingLeft: 3,
   },
 
@@ -691,7 +856,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     borderWidth: 2,
     borderColor: "orange",
     paddingLeft: 3,
@@ -704,7 +869,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     borderWidth: 2,
     borderColor: "red",
     paddingLeft: 3,
@@ -736,7 +901,16 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: "100%",
+    width: "80%",
+    height: 35,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: "#1EA78C",
+  },
+
+  buttonModal: {
+    width: "70%",
     height: 35,
     justifyContent: "center",
     alignItems: "center",
@@ -745,35 +919,54 @@ const styles = StyleSheet.create({
   },
 
   buttonCancel: {
-    width: "100%",
+    width: "80%",
     height: 35,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     borderWidth: 2,
     borderColor: "#1EA78C",
   },
 
   buttonContainer: {
     width: "100%",
-    justifyContent: "flex-start",
-    alignItems: "flex-end",
-    backgroundColor: "#434343",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    paddingHorizontal: 5,
+    paddingTop: 0,
+    paddingBottom: 10,
+  },
+
+  buttonContainerModal: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
     paddingHorizontal: 5,
     paddingTop: 0,
     paddingBottom: 20,
   },
 
+
   buttonCancelContainer: {
     width: "100%",
-    justifyContent: "flex-start",
-    alignItems: "flex-end",
-    backgroundColor: "#434343",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
     paddingHorizontal: 5,
     paddingTop: 0,
     paddingBottom: 20,
   },
+
+  sLine: {
+    borderBottomWidth: 0.5, 
+    borderBottomColor: "#bcbcbc", 
+    paddingVertical: 10,
+    paddingBottom: 5,
+  },
+  
 });
 
 export default Reporting;
