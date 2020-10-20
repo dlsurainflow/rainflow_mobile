@@ -31,6 +31,8 @@
     "react-native-image-crop-picker": "^0.35.1",
     "react-native-indicator": "^1.2.2",
     "react-native-location": "^2.5.0",
+    "react-native-map-clustering": "^3.3.9",
+    "react-native-maps": "^0.27.1",
     "react-native-material-bottom-navigation": "^1.0.5",
     "react-native-paper": "^4.2.0",
     "react-native-radio-button-group": "^1.0.3",

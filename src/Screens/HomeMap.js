@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, createRef } from "react";
 import {
   StyleSheet,
   View,
@@ -6,22 +6,53 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  Alert
+  Alert,
+  Dimensions
 } from "react-native";
 
 import { WebView } from "react-native-webview";
-import { html_map } from "./html_map"
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 import { useFocusEffect } from '@react-navigation/native';
 import StepModal from "../components/NodeModal"
+//import MapView from 'react-native-map-clustering';
+import MapView,{ Marker } from 'react-native-maps';
+import sampleMarker from "../../assets/markers/1-1-01.png";
 
 
 const HomeMap = (props) => {
 const [markers, setMarkers] = useState()
-const [injectJS, setInjectJS] = useState()
-const [currentNodes, setCurrentNodes] = useState([])
+const [userLatitude, setUserLatitude] = useState(0);
+const [userLongitude, setUserLongitude] = useState(0);
 const [sidebar, setSidebar] = useState(false)
-const webViewRef = useRef();
+const [raftGroup, setRaftGroup] = useState();
+const [mobileGroup, setMobileGroup] = useState();
+const mapRef = createRef({});
+
+const { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
+const LATITUDE = 0;
+const LONGITUDE = 0;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+
+const [boundingBox, setBoundingBox] = useState(
+  {
+    westLng: 0,
+    southLat: 0,
+    eastLng: 0,
+    northLat: 0
+  }
+)
+
+const [region, setRegion] = useState(
+  {
+    latitude: LATITUDE,
+    longitude: LONGITUDE,
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA
+  }
+)
 
 const getNodes = async() => {
   await fetch('https://rainflow.live/api/map/all', {
@@ -33,99 +64,154 @@ const getNodes = async() => {
     }).then(response => {
       console.log(response.status);
       if(response.status == 200)
-        response.json().then( data =>{setMarkers(data)});
+        response.json().then( data =>{
+          setMarkers(data)
+         // console.log(data)
+        });
       else{
         Alert.alert(
           'Error retrieving reports! (Code: ' + response.status + ')');
       }
     })
 }
-{/*
-  
-  useEffect(()=>{
-    console.log("this has been triggered by first network request")
-    const interval = setInterval(() => {
-      getNodes()
-          console.log("second")
-            if(JSON.stringify(currentNodes) == JSON.stringify(markers)){ //
-              console.log("wala idadagdag sa map")
-              currentNodes.mobile.map(data => {
-                console.log("nadagdag sa mobile")
-                webViewRef.current.injectJavaScript(`L.marker([${data.latitude}, ${data.longitude}]).addTo(mymap)`)
-              })
-              currentNodes.raft.map(data => {
-                console.log("nadagdag sa RAFT")
-                webViewRef.current.injectJavaScript(`L.marker([${data.latitude}, ${data.longitude}]).addTo(mymap)`)
-              })
-            }else{
-              console.log("may idadagdag sa map")
-              //console.log(currentNodes)
-  
-              setCurrentNodes(markers)
-    
-             // console.log(currentNodes)
-            }
-          
-        
-    }, 10000); //every 10 seconds
-    return () => clearInterval(interval);
-  
-  }, [markers])
-  */
-}
-{/* 
 
+  var options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  };
+
+  success = (pos) => {
+    var crd = pos.coords;
+    setUserLatitude(crd.latitude);
+    setUserLongitude(crd.longitude);
+  //  animateToRegion(crd.latitude, crd.longitude)
+  }
+
+
+  error = (err) => {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+
+  
   useEffect(()=> {
-    let unmounted = false;
-  
-    if(unmounted == false){
-  
+     // getNodes()
+      navigator.geolocation.getCurrentPosition(success, error, options);
+      console.log("screen width and height: ", width, height)
+  },[])
+
+  useEffect(() => { // REPORT CARDS. for putting API response in the cards 
+    if(markers == undefined){
       getNodes()
-      setCurrentNodes(markers)
-      console.log("upon loading")
+    } else {
+      if(markers.length == 0){
+         console.log("No reports to be plotted!!")
+      }else{
+        console.log
+        setRaftGroup(
+          markers.raft.map(raftData =>{
+           // console.log("raft", raftData)
+            if(isInBoundingBox(raftData.latitude, raftData.longitude)){
+             // console.log("RAFT node in bound: ", raftData.id)
+              return(
+                    <Marker 
+                    onPress={(e) => {e.stopPropagation(); console.log("clicked! raft node id: " , raftData.id, raftData.latitude, raftData.longitude);}}
+                      key = {raftData.id}
+                      tracksViewChanges={false}
+                      coordinate={{
+                        latitude: raftData.latitude,
+                        longitude: raftData.longitude
+                    }}/>
+                
+              )
+            }else null;
+          })
+        )
+      
+        setMobileGroup(
+          markers.mobile.map(mobileData =>{
+            //console.log("data", mobileData )
+            if(isInBoundingBox(mobileData.latitude, mobileData.longitude)){
+              console.log("MOBILE node in bound: ", mobileData.id, "latitude: ", mobileData.latitude, "longitude: ", mobileData.longitude)
+              return(
+                    <Marker 
+                      key = {mobileData.id}
+                      onPress={(e) => {e.stopPropagation(); console.log("clicked! mobile node id " , mobileData.id, mobileData.latitude, mobileData.longitude);}}
+                      tracksViewChanges={false}
+                      coordinate={{
+                        latitude: mobileData.latitude,
+                        longitude: mobileData.longitude
+                    }}/>
+              )
+            }
+            else null;
+          })
+        )
+
+      }
     }
+  }, [boundingBox, markers]);
+
+onregionchangecomplete = (region) => { //set new bounds
+  let newBounds = getBoundingBox(region);
+  setBoundingBox(newBounds);
+}
+
+getBoundingBox = (region) => { //get new bounds when user moves around the map
+  let boundingBox = {
+    westLng: region.longitude - region.longitudeDelta/2, // westLng - min lng
+    southLat: region.latitude - region.latitudeDelta/2, // southLat - min lat
+    eastLng: region.longitude + region.longitudeDelta/2, // eastLng - max lng
+    northLat: region.latitude + region.latitudeDelta/2 // northLat - max lat
+  }
+
+  return boundingBox;
+}
+
+isInBoundingBox = (latitude, longitude) => { //to check if node can be seen in current frame
+  if (latitude > boundingBox.southLat && latitude < boundingBox.northLat &&
+      longitude > boundingBox.westLng && longitude < boundingBox.eastLng)
+  {
+    return true;
+  }
   
-    return () => {unmounted = true}
-  })
-  
-  useFocusEffect( // fetch again when we switch between tabs. because useeffect isnt triggered when we go from one tab to the next
-    React.useCallback(() => {
-      let isActive = true;
-      getNodes()
-      setCurrentNodes(markers)
-  
-      return () => {
-        isActive = false;
-      };
-    })
-  );
-*/}
+  return false;
+}
 
-
-
-const addMarker = (lat, long) => {
-  webViewRef.current.injectJavaScript(`
-  mymap.setView([${lat}, ${long}], 18);
-  L.marker([${lat}, ${long}]).addTo(mymap)
-  .bindPopup("<b>HELLO</b><br />this is a test node").openPopup();`
-  )
-} 
-
-const showSidebar = () => {
-
-setSidebar(true)
-  
+const showSidebar = () => {setSidebar(true)
 }
   return (
     <View style = {styles.backgroundContainer}>
-        <WebView
-          ref = {webViewRef}
-          geolocationEnabled = {true}
-          originWhitelist={['*']}
-          style={{flex: 1, borderWidth: 1}}
-       //   injectedJavaScript = {marker}
-            source={{ html: html_map}} 
-          />
+
+      <MapView
+         ref = {mapRef}
+         onRegionChangeComplete = {onregionchangecomplete}
+         initialRegion={region}
+         style={{flex: 1}}
+        > 
+                
+
+    { userLatitude != 0 && userLongitude != 0 ? [
+          <Marker 
+          coordinate={{
+            latitude: userLatitude,
+            longitude: userLongitude
+          }}>
+           <MaterialCommunityIcons
+                    name="record"
+                    color="dodgerblue"
+                    size={38}
+                  />  
+          </Marker>
+
+        ] : null
+
+        }
+
+           
+            {raftGroup ? raftGroup : null}
+            {mobileGroup ? mobileGroup : null}
+      </MapView>
 
 <View style={styles.buttonContainer}>
           <TouchableOpacity
