@@ -46,10 +46,9 @@ const ActiveReports = (props) => {
       }
       }).then(response => {
         if(response.status == 200)
-          response.json().then( (data) => {setReportsList(data.active)});
+          response.json().then( (data) => {setReportsList(data)});
         else{
-          Alert.alert(
-            'Error retrieving reports! (Code: ' + response.status + ')');
+          console.log(`Error retrieving reports! (Code: ${response.status})`);
         }
       })
   }
@@ -73,8 +72,7 @@ const ActiveReports = (props) => {
         if(response.status == 200)
           response.json().then( (data) => {setReportInfo(data)});
         else{
-          Alert.alert(
-            'Error retrieving reports! (Code: ' + response.status + ')');
+          console.log(`Error retrieving reports! (Code: ${response.status})`);
         }
       })
   }
@@ -96,15 +94,15 @@ const ActiveReports = (props) => {
       getReports()
     } else {
       //console.log("FOUND REPORTS: ", reportsList)
-      if(reportsList.length == 0){
+      if(reportsList.active.length == 0){
           setHistoryBody(
             <View style ={{justifyContent: "center", alignItems: "center"}}>
-              <Text style = {{textAlign: "center"}}>You have not submitted any reports.</Text>
+              <Text style = {{textAlign: "center"}}>You don't have any active reports.</Text>
             </View>
           )
       }else{
         setHistoryBody(
-          reportsList.map(data =>{
+          reportsList.active.map(data =>{
             return(
               <TouchableOpacity key = {data.id} onPress = {()=>showModal(data.id)}>
 
