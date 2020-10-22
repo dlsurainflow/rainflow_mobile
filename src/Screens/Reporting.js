@@ -47,7 +47,7 @@ const Reporting = (props) => {
     setDispLat(crd.latitude);
     setDispLong(crd.longitude);
     setAccR(crd.accuracy);
-    setShowMap(true);
+    //setShowMap(true);
   }
 
   function error(err) {
