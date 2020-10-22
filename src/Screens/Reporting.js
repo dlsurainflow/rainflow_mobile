@@ -16,6 +16,7 @@ import { ColorDotsLoader } from 'react-native-indicator';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import sampleMarker from "../../assets/markers/1-1-01.png";
+import { html_map } from "./html_map";
 
 const Reporting = (props) => {
   const [rainIntensityVal, setRainIntensityVal] = useState(null);
@@ -448,7 +449,8 @@ const Reporting = (props) => {
         </Text>
         
         {showMap ? (
-            <MapView
+            
+            /*<MapView
             initialRegion={{
             latitude: dispLat,
             longitude: dispLong,
@@ -465,7 +467,8 @@ const Reporting = (props) => {
             >
               
             </Marker>
-            </MapView>
+          </MapView>*/
+          <View />
           ) : null}
 
                      {/*Rain Intensity START*/}
