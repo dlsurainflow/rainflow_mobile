@@ -16,18 +16,32 @@ import moment from 'moment'
 
 const ReportHistory = (props) => {
 
-  const [reportsList, setReportsList] = useState()
-  const [reportInfo, setReportInfo] = useState()
-  const [historyBody, setHistoryBody] = useState()
-  const [modalComponent, setModalComponent] = useState()
+  const [reportsList, setReportsList] = useState();
+  const [reportInfo, setReportInfo] = useState();
+  const [historyBodyActive, setHistoryBodyActive] = useState();
+  const [historyBodyArchived, setHistoryBodyArchived] = useState();
+  const [modalComponent, setModalComponent] = useState();
   const [visible, setVisible] = React.useState(false);
+  const [concatReports, setConcatReports] = useState();
 
-  const showModal = (id) =>{
-    getReportInfo(id)
+  const showModal = (id, reportType) =>{
+    getReportInfo(id, reportType)
     setVisible(true)
   };
 
-  const hideModal = () => setVisible(false);
+  const hideModal = () => {
+    setVisible(false);
+    setReportInfo({
+      id: null,
+      longitude: null,
+      latitude: null,
+      rainfall_rate: null,
+      flood_depth: null,
+      upvote: null,
+      downvote: null,
+      image: null
+    })
+  };
 
   const getReports = async() => {
     const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
@@ -46,35 +60,44 @@ const ReportHistory = (props) => {
       }
       }).then(response => {
         if(response.status == 200)
-          response.json().then( (data) => {setReportsList(data)});
+          response.json().then((data) => {
+            setReportsList(data)
+           // console.log("ACTIVE: ", data.active)
+            //console.log("ARCHIVE: ", data.archive)
+          });
         else{
-          Alert.alert(
-            'Error retrieving reports! (Code: ' + response.status + ')');
+          console.log(`Error retrieving reports! (Code: ${response.status})`);
         }
       })
   }
-
-  const getReportInfo = async(id) => {
+  const getReportInfo = async(id, reportType) => {
     const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
     RCTNetworking.clearCookies((result) => {
-    });
-
+    }); 
+    
     const userID = await AsyncStorage.getItem("userID")
     const token = await AsyncStorage.getItem("token")
+  
+    function  getUrl(reportType){
+      if (reportType == "archived"){
+        return `https://rainflow.live/api/report/history/${id}`
+      }else{
+        return `https://rainflow.live/api/report/${id}`
+      }
+    };
 
-    await fetch(`https://rainflow.live/api/report/${id}`, {
+    await fetch(getUrl(reportType), {
       method: 'GET',
       headers: {
           'Content-Type': 'application/json',
           'Accept' : 'application/json',
           'Authorization' :  `Bearer ${token}`
       }
-      }).then(response => {
+      }) .then(response => {
         if(response.status == 200)
           response.json().then( (data) => {setReportInfo(data)});
         else{
-          Alert.alert(
-            'Error retrieving reports! (Code: ' + response.status + ')');
+          console.log(`Error retrieving reports! (Code: ${response.status})`);
         }
       })
   }
@@ -103,10 +126,11 @@ const ReportHistory = (props) => {
             </View>
           )
       }else{
-        setHistoryBody(
-          reportsList.map(data =>{
+        setHistoryBodyArchived(
+         
+          reportsList.archive.map(data =>{
             return(
-              <TouchableOpacity key = {data.id} onPress = {()=>showModal(data.id)}>
+              <TouchableOpacity key = {data.id} onPress = {()=>showModal(data.id, "archived")}>
 
               <ReportCard 
                 key = {data.id}
@@ -120,6 +144,29 @@ const ReportHistory = (props) => {
                 />
                 </TouchableOpacity>
             )
+
+
+          })
+        )
+        setHistoryBodyActive(
+          reportsList.active.map(data =>{
+            return(
+              <TouchableOpacity key = {data.id} onPress = {()=>showModal(data.id, "active")}>
+
+              <ReportCard 
+                key = {data.id}
+                createdAt = {data.createdAt}
+                latitude = {data.latitude}
+                longitude = {data.longitude}
+                rain = {data.rainfall_rate}
+                flood = {data.flood_depth}
+                image = {data.image}
+                id = {data.id}
+                />
+                </TouchableOpacity>
+            )
+
+
           })
         )
         }
@@ -168,7 +215,14 @@ const ReportHistory = (props) => {
     </Appbar.Header>
       <View style={styles.contentContainer}>
         <ScrollView style = {{width: "100%"}} showsVerticalScrollIndicator = {false}>
-        {historyBody}
+        {historyBodyArchived ? (
+           <Text style ={{fontSize: 30, fontWeight: "bold", paddingBottom: 5}}>Archived</Text>
+        ): null}
+        {historyBodyArchived}
+        {historyBodyActive ? (
+           <Text style ={{fontSize: 30, fontWeight: "bold", paddingBottom: 5}}>Active</Text>
+        ): null}
+        {historyBodyActive}
         </ScrollView>
       </View>
     </View>

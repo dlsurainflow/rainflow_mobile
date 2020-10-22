@@ -44,13 +44,29 @@ const theme = {
     let email_add = await AsyncStorage.getItem("email")
     let badgeRank = await AsyncStorage.getItem("badge");
     let dateJoined = await AsyncStorage.getItem("dateCreated")
+    let badgeText = await AsyncStorage.getItem("badge");
+       switch(badgeText) {
+        case "1.png":
+          setBadge("Gold");
+          break;
+        case "2.png":
+          setBadge("Sapphire");
+          break;
+        case "3.png":
+          setBadge("Emerald");
+          break;
+        case "0.png":
+          setBadge("Ruby");
+          break;
+        default:
+          null;
+      }
     console.log(dateJoined)
     let convertedTime = moment(dateJoined).format("DD MMM YYYY")
 
     setUsername(un);
     setPoints(pts);
     setEmail(email_add)
-    setBadge("Silver Badge")
     setJoined(convertedTime)
   }
 
