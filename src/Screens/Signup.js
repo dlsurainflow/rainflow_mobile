@@ -7,33 +7,19 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  BackHandler
+  BackHandler,
 } from "react-native";
-
-import { WebView } from "react-native-webview";
+// import { WebView } from "react-native-webview";
 //import SHA256 from "react-native-crypto-js";
-import { sha256 } from "react-native-sha256";
+// import { sha256 } from "react-native-sha256";
+import * as Crypto from "expo-crypto";
 
 const Signup = (props) => {
   const [textInputHandler, setTextInputHandler] = useState({});
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordc, setPasswordC] = useState("");
   const [rpassword, setrPassword] = useState("");
   const [email, setEmail] = useState("");
-
-  const usernameHandler = (e) => {
-    setUsername(e);
-  };
-  const passwordHandler = (e) => {
-    setPassword(e);
-  };
-  const rpasswordHandler = (e) => {
-    setrPassword(e);
-  };
-  const emailHandler = (e) => {
-    setEmail(e);
-  };
 
   useEffect(() => {
     const backAction = () => {
@@ -47,53 +33,58 @@ const Signup = (props) => {
     return () => backHandler.remove();
   });
 
-  const convertSHA = async() => {
-    var passwordEncrypted = await sha256(password);
-    setPasswordC(passwordEncrypted);
-    //submitDeets();
-  }
-
-  const submitDeets = () => {
-    sha256(password).then( hash => {
-      console.log(hash);
-    })
-    fetch("https://dashboard.rainflow.live/api/v1/signup", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        companyAddress: "",
-        companySize: "",
-        contactPerson: "",
-        email: email,
-        password: passwordc,
-        password2: password,
-        phone: "",
-        tenantType: 1,
-        username: username,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.status);
-          //console.log("Error: " + response)
-        }
-        console.log(response.json().then((data) => console.log(data)));
-      })
-      .catch((error) => {
-        console.log("ERROR: " + error);
-      });
-  };
-
-
-  const checkSamePass = () => {
-    if (password == rpassword) {
-      console.log("Passwords matched!");
-      convertSHA();
-    } else {
+  const submitDeets = async () => {
+    if (password !== rpassword) {
       alert("Passwords do not match!");
+    } else {
+      console.log("Password: ", password);
+      // var hashedPassword;
+      // sha256(password).then((hash) => {
+      //   console.log(hash);
+      //   hashedPassword = hash;
+      //   // setPasswordC(hash);
+      // });
+      var hashedPassword = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        password
+      );
+      // await sha256("Test").then((hash) => {
+      //   console.log(hash);
+      // });
+      console.log("Email: ", email);
+      console.log("Password: ", hashedPassword);
+      console.log("Password2: ", password);
+      console.log("Username: ", username);
+      fetch("https://dashboard.rainflow.live/api/v1/signup", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          companyAddress: "",
+          companySize: "",
+          contactPerson: "",
+          email: email,
+          password: hashedPassword,
+          password2: password,
+          phone: "",
+          tenantType: 1,
+          username: username,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(response.status);
+            // alert("Passwords do not match!");
+          }
+          console.log(response.json().then((data) => console.log(data)));
+          alert("Signed up succesfully! Please sign in.");
+          props.navigation.navigate("Login");
+        })
+        .catch((error) => {
+          console.log("ERROR: " + error);
+        });
     }
   };
 
@@ -111,30 +102,30 @@ const Signup = (props) => {
           <TextInput
             placeholder="Email"
             style={styles.textInput}
-            onChangeText={emailHandler}
+            // onChangeText={emailHandler}
+            onChangeText={(e) => setEmail(e)}
           />
           <TextInput
             placeholder="Username"
             style={styles.textInput}
-            onChangeText={usernameHandler}
+            onChangeText={(e) => setUsername(e)}
           />
           <TextInput
             placeholder="Password"
             style={styles.textInput}
-            onChangeText={passwordHandler}
+            secureTextEntry={true}
+            onChangeText={(e) => setPassword(e)}
           />
           <TextInput
             placeholder="Repeat Password"
             style={styles.textInput}
-            onChangeText={rpasswordHandler}
+            secureTextEntry={true}
+            onChangeText={(e) => setrPassword(e)}
           />
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => checkSamePass()}
-          >
+          <TouchableOpacity style={styles.button} onPress={submitDeets}>
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
@@ -187,7 +178,6 @@ const styles = StyleSheet.create({
   },
 
   inputContainer: {
-    
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
