@@ -27,7 +27,20 @@ const ActiveReports = (props) => {
     setVisible(true)
   };
 
-  const hideModal = () => setVisible(false);
+  const hideModal = () => {
+    setVisible(false);
+    setReportInfo({
+      id: null,
+      longitude: null,
+      latitude: null,
+      rainfall_rate: null,
+      flood_depth: null,
+      upvote: null,
+      downvote: null,
+      image: null
+    })
+  };
+
 
   const getReports = async() => {
     const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");

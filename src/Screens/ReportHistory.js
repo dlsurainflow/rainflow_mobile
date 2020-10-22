@@ -24,12 +24,24 @@ const ReportHistory = (props) => {
   const [visible, setVisible] = React.useState(false);
   const [concatReports, setConcatReports] = useState();
 
-  const showModal = (id) =>{
-    getReportInfo(id)
+  const showModal = (id, reportType) =>{
+    getReportInfo(id, reportType)
     setVisible(true)
   };
 
-  const hideModal = () => setVisible(false);
+  const hideModal = () => {
+    setVisible(false);
+    setReportInfo({
+      id: null,
+      longitude: null,
+      latitude: null,
+      rainfall_rate: null,
+      flood_depth: null,
+      upvote: null,
+      downvote: null,
+      image: null
+    })
+  };
 
   const getReports = async() => {
     const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
@@ -58,16 +70,23 @@ const ReportHistory = (props) => {
         }
       })
   }
-  const getReportInfo = async(id) => {
+  const getReportInfo = async(id, reportType) => {
     const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
     RCTNetworking.clearCookies((result) => {
     }); 
     
     const userID = await AsyncStorage.getItem("userID")
     const token = await AsyncStorage.getItem("token")
-    
+  
+    function  getUrl(reportType){
+      if (reportType == "archived"){
+        return `https://rainflow.live/api/report/history/${id}`
+      }else{
+        return `https://rainflow.live/api/report/${id}`
+      }
+    };
 
-    await fetch(`https://rainflow.live/api/report/${id}`, {
+    await fetch(getUrl(reportType), {
       method: 'GET',
       headers: {
           'Content-Type': 'application/json',
@@ -111,7 +130,7 @@ const ReportHistory = (props) => {
          
           reportsList.archive.map(data =>{
             return(
-              <TouchableOpacity key = {data.id} onPress = {()=>showModal(data.id)}>
+              <TouchableOpacity key = {data.id} onPress = {()=>showModal(data.id, "archived")}>
 
               <ReportCard 
                 key = {data.id}
@@ -132,7 +151,7 @@ const ReportHistory = (props) => {
         setHistoryBodyActive(
           reportsList.active.map(data =>{
             return(
-              <TouchableOpacity key = {data.id} onPress = {()=>showModal(data.id)}>
+              <TouchableOpacity key = {data.id} onPress = {()=>showModal(data.id, "active")}>
 
               <ReportCard 
                 key = {data.id}
