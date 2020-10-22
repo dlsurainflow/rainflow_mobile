@@ -11,11 +11,14 @@ import {
 } from "react-native";
 
 import { WebView } from "react-native-webview";
+//import SHA256 from "react-native-crypto-js";
+import { sha256 } from "react-native-sha256";
 
 const Signup = (props) => {
   const [textInputHandler, setTextInputHandler] = useState({});
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordc, setPasswordC] = useState("");
   const [rpassword, setrPassword] = useState("");
   const [email, setEmail] = useState("");
 
@@ -44,11 +47,51 @@ const Signup = (props) => {
     return () => backHandler.remove();
   });
 
+  const convertSHA = async() => {
+    var passwordEncrypted = await sha256(password);
+    setPasswordC(passwordEncrypted);
+    //submitDeets();
+  }
+
+  const submitDeets = () => {
+    sha256(password).then( hash => {
+      console.log(hash);
+    })
+    fetch("https://dashboard.rainflow.live/api/v1/signup", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        companyAddress: "",
+        companySize: "",
+        contactPerson: "",
+        email: email,
+        password: passwordc,
+        password2: password,
+        phone: "",
+        tenantType: 1,
+        username: username,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.status);
+          //console.log("Error: " + response)
+        }
+        console.log(response.json().then((data) => console.log(data)));
+      })
+      .catch((error) => {
+        console.log("ERROR: " + error);
+      });
+  };
+
 
   const checkSamePass = () => {
     if (password == rpassword) {
       console.log("Passwords matched!");
-      props.navigation.navigate("Login");
+      convertSHA();
     } else {
       alert("Passwords do not match!");
     }
@@ -144,7 +187,7 @@ const styles = StyleSheet.create({
   },
 
   inputContainer: {
-    flex: 1,
+    
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
