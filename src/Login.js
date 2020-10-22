@@ -74,7 +74,7 @@ const Login = (props) => {
             await AsyncStorage.setItem("email", responseJson.data.email); // Save email
             await AsyncStorage.setItem("points", JSON.stringify(responseJson.data.points)); // Save points
             await AsyncStorage.setItem("userID", JSON.stringify(responseJson.data.userID)); // Save userID
-          //  await AsyncStorage.setItem("badge", responseJson.data.badge); // Saves user badge
+            await AsyncStorage.setItem("badge", responseJson.data.badge); // Saves user badge
             await AsyncStorage.setItem("dateCreated", responseJson.data.createdAt); // Saves date when user joined
             props.navigation.push("MainMenu", { screen: 'HomeMap' })
 
