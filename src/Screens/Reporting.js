@@ -5,24 +5,36 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Modal,
   Alert,
   Image,
+  ScrollView,
   AsyncStorage,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { ColorDotsLoader } from 'react-native-indicator';
+import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
+import sampleMarker from "../../assets/markers/1-1-01.png";
 
 const Reporting = (props) => {
-  const [rainIntensityVal, setRainIntensityVal] = useState(3);
+  const [rainIntensityVal, setRainIntensityVal] = useState(null);
   const [filename, setFileName] = useState(null);
-  const [floodLevelVal, setFloodLevelVal] = useState(3);
-  const [dispLat, setDispLat] = useState("Analyzing . . .");
-  const [dispLong, setDispLong] = useState("Analyzing . . .");
+  const [floodLevelVal, setFloodLevelVal] = useState(null);
+  const [rainIntensityText, setRainIntensityText] = useState("Not yet selected");
+  const [floodLevelText, setFloodLevelText] = useState("Not yet selected");
+  const [dispLat, setDispLat] = useState(0);
+  const [dispLong, setDispLong] = useState(0);
   const [accR, setAccR] = useState("Analyzing . . .");
-  const [showLoading, setShowLoading] = useState(false)
-
+  const [showLoading, setShowLoading] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+  const [showImage, setShowImage] = useState(false);
+  const [colorNR, setColorNR] = useState("white");
+  const [colorLR, setColorLR] = useState("white");
+  const [modalVisible, setModalVisible] = useState(false);
+ 
   navigator.geolocation.getCurrentPosition(success, error, options);
-
+  
   var options = {
     enableHighAccuracy: true,
     timeout: 5000,
@@ -35,6 +47,7 @@ const Reporting = (props) => {
     setDispLat(crd.latitude);
     setDispLong(crd.longitude);
     setAccR(crd.accuracy);
+    //setShowMap(true);
   }
 
   function error(err) {
@@ -55,51 +68,61 @@ const Reporting = (props) => {
 
   changeOne = () => {
     setRainIntensityVal(0);
+    setRainIntensityText("No Rain");
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeTwo = () => {
     setRainIntensityVal(1.25);
+    setRainIntensityText("Light Rain");
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeThree = () => {
     setRainIntensityVal(2.5);
+    setRainIntensityText("Medium Rain");
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeFour = () => {
     setRainIntensityVal(7.5);
+    setRainIntensityText("Heavy Rain");
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeFive = () => {
     setRainIntensityVal(10);
+    setRainIntensityText("Extremely Heavy Rain");
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
   changeOneF = () => {
     setFloodLevelVal(0);
+    setFloodLevelText("No Flood");
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeTwoF = () => {
     setFloodLevelVal(25);
+    setFloodLevelText("Ankle Deep");
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeThreeF = () => {
     setFloodLevelVal(50);
+    setFloodLevelText("Knee Deep");
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeFourF = () => {
     setFloodLevelVal(75);
+    setFloodLevelText("Waist Deep");
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
   changeFiveF = () => {
     setFloodLevelVal(100);
+    setFloodLevelText("Above Waist");
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
@@ -250,12 +273,41 @@ const Reporting = (props) => {
         },
         {
           text: "Report",
-          onPress: () => reportUserReport(),
+          onPress: () => isUserLogged(),
         },
       ],
       { cancelable: false }
     );
   };
+
+  const alertUserLogin = () => {
+    Alert.alert(
+      "You cannot report without an account!",
+      "Tap Login to continue. Tap Cancel if you want to cancel reporting." ,
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Login",
+          onPress: () => {props.navigation.navigate("Login")},
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const isUserLogged = async () => {
+    let token = await AsyncStorage.getItem("token");
+    if(token == null){
+      alertUserLogin();
+    }
+    else{
+      reportUserReport();
+    }
+  }
 
   const reportUserReport = async () => {
     setShowLoading(true);
@@ -303,8 +355,10 @@ const Reporting = (props) => {
       setTimeout(function(){
         setShowLoading(false);
         setImage(null);
+        setFloodLevelVal(null);
+        setRainIntensityVal(null);
         alert("Report submitted! Thank you");
-      }, 2000);
+      }, 1000);
     
     console.log("Fetch Done");
     
@@ -314,11 +368,11 @@ const Reporting = (props) => {
   };
 
   const checkIfNoReport = () => {
-    if (rainIntensityVal == 3 && floodLevelVal == 3) {
+    if (rainIntensityVal == null && floodLevelVal == null) {
       alert("Missing rain intensity and flood level data to be reported");
-    } else if (rainIntensityVal == 3) {
+    } else if (rainIntensityVal == null) {
       alert("Missing rain intensity data to be reported");
-    } else if (floodLevelVal == 3) {
+    } else if (floodLevelVal == null) {
       alert("Missing flood level data to be reported");
     } else {
       alertUserReport();
@@ -357,6 +411,7 @@ const Reporting = (props) => {
     // });
 
     console.log(result);
+    setShowImage(true);
 
     if (!result.cancelled) {
       setImage(result.uri);
@@ -369,11 +424,11 @@ const Reporting = (props) => {
       <View style={styles.contentContainer}>
         <Text
           style={{
-            textAlign: "left",
-            color: "#fff",
+            textAlign: "center",
+            color: "black",
             fontWeight: "bold",
             paddingBottom: 0,
-            fontSize: 40,
+            fontSize: 30,
           }}
         >
           REPORTING
@@ -382,40 +437,71 @@ const Reporting = (props) => {
         <Text
           style={{
             textAlign: "center",
-            color: "#fff",
+            color: "black",
             fontWeight: "bold",
-            paddingBottom: 10,
+            paddingBottom: 0,
           }}
         >
           ({dispLat}, {dispLong}){"\n"}
           {/* Accuracy: {accR} meters. {"\n"} */}
-          Image to upload:
+          
         </Text>
-        <Image
-          source={{
-            uri: image,
-          }}
-          style={{ width: 100, height: 100, paddingBottom: 0 }}
-        />
+        
+        {showMap ? (
+            <MapView
+            initialRegion={{
+            latitude: dispLat,
+            longitude: dispLong,
+            latitudeDelta: 0.000922,
+            longitudeDelta: 0.000421,
+            }}
+            style={{width: "100%", height: 150}}
+          >
+            <Marker 
+            coordinate={{
+              latitude: dispLat,
+              longitude: dispLong,
+            }}
+            >
+              
+            </Marker>
+            </MapView>
+          ) : null}
 
-        {/*Rain Intensity START*/}
+                     {/*Rain Intensity START*/}
         {showLoading ? (
             <View style = {styles.loadingContainer}>
             <ColorDotsLoader size = {30} color1 = {"#4FC69A"} color2 = {"#1EA78C"} color3 = {"#0E956A"} /> 
-            <Text style = {{fontWeight: "bold", color : "#FFFF"}}>Loading</Text>       
+            <Text style = {{fontWeight: "bold", color : "black"}}>Loading</Text>       
             </View>
           ) : null}
 
-        <Text
+
+      <View style={styles.sLine}>
+      <Text
           style={{
-            textAlign: "left",
-            color: "#fff",
+            textAlign: "center",
+            color: "black",
             fontWeight: "bold",
-            fontSize: 30,
+            fontSize: 20,
           }}
         >
-          RAIN INTENSITY
+          RAIN INTENSITY 
         </Text>
+
+        <Text
+          style={{
+            textAlign: "center",
+            color: "black",
+            fontWeight: "bold",
+            
+          }}
+        >
+          (Currently Selected: { rainIntensityText } )
+        </Text>
+      </View>
+        
+
         <View style={styles.overView}>
           <TouchableOpacity
             style={styles.choiceContainer}
@@ -441,7 +527,7 @@ const Reporting = (props) => {
             style={styles.choice3Container}
             onPress={() => MRainAlert()}
           >
-            <Text style={{ color: "yellow", fontWeight: "bold" }}>
+            <Text style={{ color: "gold", fontWeight: "bold" }}>
               Medium Rain
             </Text>
           </TouchableOpacity>
@@ -469,16 +555,29 @@ const Reporting = (props) => {
           </TouchableOpacity>
         </View>
 
+        <View style={styles.sLine}>
         <Text
           style={{
-            textAlign: "left",
-            color: "#fff",
+            textAlign: "center",
+            color: "black",
             fontWeight: "bold",
-            fontSize: 30,
+            fontSize: 20,
           }}
         >
-          FLOOD LEVEL
+          FLOOD LEVEL 
         </Text>
+        <Text
+          style={{
+            textAlign: "center",
+            color: "black",
+            fontWeight: "bold",
+            
+          }}
+        >
+          (Currently Selected: { floodLevelText } )
+        </Text>
+        </View>
+        
 
         <View style={styles.overView}>
           <TouchableOpacity
@@ -505,7 +604,7 @@ const Reporting = (props) => {
             style={styles.choice3Container}
             onPress={() => KDeepAlert()}
           >
-            <Text style={{ color: "yellow", fontWeight: "bold" }}>
+            <Text style={{ color: "gold", fontWeight: "bold" }}>
               Knee Deep
             </Text>
           </TouchableOpacity>
@@ -532,8 +631,9 @@ const Reporting = (props) => {
             </Text>
           </TouchableOpacity>
         </View>
-
-        <View style={styles.buttonContainer}>
+    
+    <View style={styles.pictureButtonContainer}>
+      <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={() => pickImage()}>
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
@@ -543,6 +643,17 @@ const Reporting = (props) => {
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={() => setModalVisible(!modalVisible)}>
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
+            >
+              View Photo
+            </Text>
+          </TouchableOpacity>
+        </View>
+    </View>
+        
+        <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={() => updateMyLoc()}>
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
@@ -551,18 +662,49 @@ const Reporting = (props) => {
             </Text>
           </TouchableOpacity>
         </View>
+      
         <View style={styles.buttonCancelContainer}>
           <TouchableOpacity
             style={styles.buttonCancel}
             onPress={() => checkIfNoReport()}
           >
             <Text
-              style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
+              style={{ textAlign: "center", color: "black", fontWeight: "bold" }}
             >
               R E P O R T
             </Text>
           </TouchableOpacity>
         </View>
+        
+        <Modal 
+          visible={modalVisible} 
+          animationType="slide"
+          transparent={false} 
+          >
+            <Text style={{textAlign: "center", alignItems: "center", justifyContent: "center", fontWeight: "bold", paddingTop: 55, paddingBottom: 20}}>
+              Image to upload:
+            </Text>
+            <View style={{ alignItems: "center"}}>
+        <Image
+          source={{
+            uri: image,
+          }}
+          style={{ height: 350, width: 350, alignItems: "center", paddingBottom: 20}}
+        />
+        </View>
+          
+          <View style={styles.buttonContainerModal}>
+          <TouchableOpacity style={styles.buttonModal} onPress={() => setModalVisible(!modalVisible)}>
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold", width: "50%"}}
+            >
+              Close Image Viewer
+            </Text>
+          </TouchableOpacity>
+        </View>
+            
+          
+        </Modal>
       </View>
     </View>
   );
@@ -572,20 +714,30 @@ const styles = StyleSheet.create({
   backgroundContainer: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     justifyContent: "center",
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
 
+  pictureButtonContainer: {
+    
+    width: "50%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    backgroundColor: "white",
+    paddingHorizontal: 10,
+  },
+
   loadingContainer: {
-    flex:1, 
+    flex: 1, 
     height: "100%", 
     width: "100%",
     flexDirection: "column", 
     alignItems: "center", 
     //justifyContent: "center", 
     position: "absolute",
-    paddingTop: 170,
+    paddingTop: 150,
    },
 
   contentContainer: {
@@ -594,7 +746,7 @@ const styles = StyleSheet.create({
 
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     paddingHorizontal: 30,
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
@@ -605,7 +757,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     paddingHorizontal: 30,
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
@@ -616,6 +768,7 @@ const styles = StyleSheet.create({
     paddingLeft: 3,
     paddingRight: 3,
   },
+
   choiceContainer: {
     width: "21%",
     height: 50,
@@ -623,7 +776,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     borderWidth: 2,
     borderColor: "green",
   },
@@ -635,7 +788,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     borderWidth: 2,
     borderColor: "yellowgreen",
     paddingLeft: 3,
@@ -649,9 +802,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "yellow",
+    borderColor: "gold",
     paddingLeft: 3,
   },
 
@@ -662,7 +815,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     borderWidth: 2,
     borderColor: "orange",
     paddingLeft: 3,
@@ -675,7 +828,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     borderWidth: 2,
     borderColor: "red",
     paddingLeft: 3,
@@ -707,7 +860,16 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: "100%",
+    width: "80%",
+    height: 35,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: "#1EA78C",
+  },
+
+  buttonModal: {
+    width: "70%",
     height: 35,
     justifyContent: "center",
     alignItems: "center",
@@ -716,35 +878,54 @@ const styles = StyleSheet.create({
   },
 
   buttonCancel: {
-    width: "100%",
+    width: "80%",
     height: 35,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
-    backgroundColor: "#434343",
+    backgroundColor: "white",
     borderWidth: 2,
     borderColor: "#1EA78C",
   },
 
   buttonContainer: {
     width: "100%",
-    justifyContent: "flex-start",
-    alignItems: "flex-end",
-    backgroundColor: "#434343",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    paddingHorizontal: 5,
+    paddingTop: 0,
+    paddingBottom: 10,
+  },
+
+  buttonContainerModal: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    paddingHorizontal: 5,
+    paddingTop: 200,
+    paddingBottom: 20,
+  },
+
+
+  buttonCancelContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
     paddingHorizontal: 5,
     paddingTop: 0,
     paddingBottom: 20,
   },
 
-  buttonCancelContainer: {
-    width: "100%",
-    justifyContent: "flex-start",
-    alignItems: "flex-end",
-    backgroundColor: "#434343",
-    paddingHorizontal: 5,
-    paddingTop: 0,
-    paddingBottom: 20,
+  sLine: {
+    borderBottomWidth: 0.5, 
+    borderBottomColor: "#bcbcbc", 
+    paddingVertical: 10,
+    paddingBottom: 5,
   },
+  
 });
 
 export default Reporting;
