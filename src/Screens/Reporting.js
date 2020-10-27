@@ -755,7 +755,7 @@ const Reporting = (props) => {
             style={styles.choice4Container2}
             onPress={() => WDeepAlert()}
           >
-            <Text style={{ color: "orange", fontWeight: "bold" }}>
+            <Text style={{ color: "orange", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>
               Waist Deep
             </Text>
           </TouchableOpacity>
@@ -1084,8 +1084,8 @@ const styles = StyleSheet.create({
   },
 
   choiceContainer2: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1096,8 +1096,8 @@ const styles = StyleSheet.create({
   },
 
   choice2Container2: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1110,8 +1110,8 @@ const styles = StyleSheet.create({
   },
 
   choice3Container2: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1119,12 +1119,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 2,
     borderColor: "gold",
-    paddingLeft: 3,
+    paddingLeft: 1,
   },
 
   choice4Container2: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1132,12 +1132,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 2,
     borderColor: "orange",
-    paddingLeft: 3,
+    paddingLeft: 0,
   },
 
   choice5Container2: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1145,12 +1145,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 2,
     borderColor: "red",
-    paddingLeft: 3,
+    paddingLeft: 1,
   },
 
   choice6Container2: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1162,8 +1162,8 @@ const styles = StyleSheet.create({
   },
 
   choice7Container2: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1175,8 +1175,8 @@ const styles = StyleSheet.create({
   },
 
   choice8Container2: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1188,8 +1188,8 @@ const styles = StyleSheet.create({
   },
 
   choice9Container2: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
