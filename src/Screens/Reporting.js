@@ -21,6 +21,7 @@ import { html_map } from "./html_map";
 const Reporting = (props) => {
   const [rainIntensityVal, setRainIntensityVal] = useState(null);
   const [filename, setFileName] = useState(null);
+  const [description, setDescription] = useState("");
   const [floodLevelVal, setFloodLevelVal] = useState(null);
   const [rainIntensityText, setRainIntensityText] = useState("Not yet selected");
   const [floodLevelText, setFloodLevelText] = useState("Not yet selected");
@@ -93,7 +94,13 @@ const Reporting = (props) => {
 
   changeFive = () => {
     setRainIntensityVal(10);
-    setRainIntensityText("Extremely Heavy Rain");
+    setRainIntensityText("Intense Rain");
+    console.log("Rain Intensity Set at: " + rainIntensityVal);
+  };
+
+  changeSix = () => {
+    setRainIntensityVal(15);
+    setRainIntensityText("Torrential Rain");
     console.log("Rain Intensity Set at: " + rainIntensityVal);
   };
 
@@ -123,7 +130,31 @@ const Reporting = (props) => {
 
   changeFiveF = () => {
     setFloodLevelVal(100);
-    setFloodLevelText("Above Waist");
+    setFloodLevelText("Neck Deep");
+    console.log("Flood Level Set at: " + floodLevelVal);
+  };
+
+  changeSixF = () => {
+    setFloodLevelVal(125);
+    setFloodLevelText("Above Head Deep");
+    console.log("Flood Level Set at: " + floodLevelVal);
+  };
+
+  changeSevenF = () => {
+    setFloodLevelVal(150);
+    setFloodLevelText("1 Storey High");
+    console.log("Flood Level Set at: " + floodLevelVal);
+  };
+
+  changeEightF = () => {
+    setFloodLevelVal(175);
+    setFloodLevelText("1.5 Storey High");
+    console.log("Flood Level Set at: " + floodLevelVal);
+  };
+
+  changeNineF = () => {
+    setFloodLevelVal(200);
+    setFloodLevelText("2 Storeys or Higher");
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
@@ -176,6 +207,21 @@ const Reporting = (props) => {
           style: "cancel",
         },
         { text: "Report", onPress: () => changeFour() },
+      ],
+      { cancelable: false }
+    );
+
+  const TRainAlert = () =>
+    Alert.alert(
+      "TORRENTIAL rain intensity selected!",
+      "Torrential rain: ",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        { text: "Report", onPress: () => changeSix() },
       ],
       { cancelable: false }
     );
@@ -242,8 +288,8 @@ const Reporting = (props) => {
 
   const AWDeepAlert = () =>
     Alert.alert(
-      "ABOVE WAIST DEEP flood level is selected!",
-      "Above waist: More than 30 mm of rain observed in an hour and expected to continue in the next two hours. Serious flooding expected in low lying areas. Response: evacuation. ",
+      "NECK DEEP flood level is selected!",
+      "Neck Deep: More than 30 mm of rain observed in an hour and expected to continue in the next two hours. Serious flooding expected in low lying areas. Response: evacuation. ",
       [
         {
           text: "Cancel",
@@ -254,6 +300,68 @@ const Reporting = (props) => {
       ],
       { cancelable: false }
     );
+
+    const ANDeepAlert = () =>
+    Alert.alert(
+      "ABOVE HEAD DEEP flood level is selected!",
+      "Above head deep: ",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        { text: "Report", onPress: () => changeSixF() },
+      ],
+      { cancelable: false }
+    );
+
+    const OSDeepAlert = () =>
+    Alert.alert(
+      "ONE STOREY HIGH flood level is selected!",
+      "One storey high: ",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        { text: "Report", onPress: () => changeSevenF() },
+      ],
+      { cancelable: false }
+    );
+
+    const OFSDeepAlert = () =>
+    Alert.alert(
+      "1.5 STOREY HIGH flood level is selected!",
+      "1.5 Storey High: ",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        { text: "Report", onPress: () => changeEightF() },
+      ],
+      { cancelable: false }
+    );
+
+    const TSDeepAlert = () =>
+    Alert.alert(
+      "TWO STOREYS OR HIGHER flood level is selected!",
+      "Two storeys or higher:",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        { text: "Report", onPress: () => changeNineF() },
+      ],
+      { cancelable: false }
+    );
+
+  
 
   const alertUserReport = () => {
     Alert.alert(
@@ -318,6 +426,7 @@ const Reporting = (props) => {
     formdata.append("longitude", dispLong);
     formdata.append("rainfall_rate", rainIntensityVal);
     formdata.append("flood_depth", floodLevelVal);
+    formdata.append("description", description);
     if (image !== null) {
       let match = /\.(\w+)$/.exec(filename);
       let type1 = match ? `image/${match[1]}` : `image`;
@@ -356,8 +465,11 @@ const Reporting = (props) => {
       setTimeout(function(){
         setShowLoading(false);
         setImage(null);
+        setDescription("");
         setFloodLevelVal(null);
+        setFloodLevelText("Not yet selected");
         setRainIntensityVal(null);
+        setRainIntensityText("Not yet selected");
         alert("Report submitted! Thank you");
       }, 1000);
     
@@ -421,7 +533,10 @@ const Reporting = (props) => {
   };
 
   return (
-    <View style={styles.backgroundContainer}>
+    <ScrollView style={{height: "100%"}} persistentScrollbar={true}>
+
+    
+    
       <View style={styles.contentContainer}>
         <Text
           style={{
@@ -504,8 +619,13 @@ const Reporting = (props) => {
         </Text>
       </View>
         
-
-        <View style={styles.overView}>
+      <View style = {{paddingBottom: 10, width: 325}}>
+        <ScrollView
+          horizontal = {true}
+          showsHorizontalScrollIndicator={true}
+          persistentScrollbar={true}
+        >
+          <View style={styles.overView}>
           <TouchableOpacity
             style={styles.choiceContainer}
             onPress={() => changeOne()}
@@ -553,10 +673,22 @@ const Reporting = (props) => {
             onPress={() => EHRainAlert()}
           >
             <Text style={{ color: "red", fontWeight: "bold" }}>
-              Extremely Heavy Rain
+              Intense Rain
             </Text>
           </TouchableOpacity>
+
+          <View style={styles.pads}></View>
+
+          <TouchableOpacity
+            style={styles.choice6Container}
+            onPress={() => TRainAlert()}
+          >
+            <Text style={{ color: "#C21700", fontWeight: "bold" }}>Torrential Rain</Text>
+          </TouchableOpacity>
         </View>
+
+        </ScrollView>
+      </View>
 
         <View style={styles.sLine}>
         <Text
@@ -581,10 +713,15 @@ const Reporting = (props) => {
         </Text>
         </View>
         
-
-        <View style={styles.overView}>
+        <View style = {{paddingBottom: 10, width: 325}}>
+        <ScrollView
+          horizontal = {true}
+          showsHorizontalScrollIndicator={true}
+          persistentScrollbar={true}
+        >
+          <View style={styles.overView2}>
           <TouchableOpacity
-            style={styles.choiceContainer}
+            style={styles.choiceContainer2}
             onPress={() => changeOneF()}
           >
             <Text style={{ color: "green", fontWeight: "bold" }}>No Flood</Text>
@@ -593,7 +730,7 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choice2Container}
+            style={styles.choice2Container2}
             onPress={() => ADeepAlert()}
           >
             <Text style={{ color: "yellowgreen", fontWeight: "bold" }}>
@@ -604,7 +741,7 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choice3Container}
+            style={styles.choice3Container2}
             onPress={() => KDeepAlert()}
           >
             <Text style={{ color: "gold", fontWeight: "bold" }}>
@@ -615,7 +752,7 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choice4Container}
+            style={styles.choice4Container2}
             onPress={() => WDeepAlert()}
           >
             <Text style={{ color: "orange", fontWeight: "bold" }}>
@@ -626,13 +763,69 @@ const Reporting = (props) => {
           <View style={styles.pads}></View>
 
           <TouchableOpacity
-            style={styles.choice5Container}
+            style={styles.choice5Container2}
             onPress={() => AWDeepAlert()}
           >
             <Text style={{ color: "red", fontWeight: "bold" }}>
-              Above Waist
+              Neck Deep
             </Text>
           </TouchableOpacity>
+
+          <View style={styles.pads}></View>
+
+          <TouchableOpacity
+            style={styles.choice6Container2}
+            onPress={() => ANDeepAlert()}
+          >
+            <Text style={{ color: "#C21700", fontWeight: "bold" }}>Above Head Deep</Text>
+          </TouchableOpacity>
+
+          <View style={styles.pads}></View>
+
+          <TouchableOpacity
+            style={styles.choice7Container2}
+            onPress={() => OSDeepAlert()}
+          >
+            <Text style={{ color: "#B10004", fontWeight: "bold" }}>
+              1 Storey High
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.pads}></View>
+
+          <TouchableOpacity
+            style={styles.choice8Container2}
+            onPress={() => OFSDeepAlert()}
+          >
+            <Text style={{ color: "#9B001C", fontWeight: "bold" }}>
+              1.5 Storey High
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.pads}></View>
+
+          <TouchableOpacity
+            style={styles.choice9Container2}
+            onPress={() => TSDeepAlert()}
+          >
+            <Text style={{ color: "#82002F", fontWeight: "bold" }}>
+              2 Storeys or Higher
+            </Text>
+          </TouchableOpacity>
+
+        </View>
+        </ScrollView>
+        </View>
+
+        
+
+        <View style={styles.descriptionContainer}>
+          <TextInput
+            placeholder="Add description here"
+            style={{color: "black"}}
+            // onChangeText={emailHandler}
+            onChangeText={(e) => setDescription(e)}
+          />
         </View>
     
     <View style={styles.pictureButtonContainer}>
@@ -709,7 +902,8 @@ const Reporting = (props) => {
           
         </Modal>
       </View>
-    </View>
+    
+    </ScrollView>
   );
 };
 
@@ -719,11 +913,11 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "white",
     justifyContent: "center",
-    paddingTop: Platform.OS === "android" ? 25 : 0,
+    paddingTop: Platform.OS === "android" ? 10 : 0,
   },
 
   pictureButtonContainer: {
-    
+    paddingTop: 20,
     width: "50%",
     flexDirection: "row",
     justifyContent: "center",
@@ -751,7 +945,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     paddingHorizontal: 30,
-    paddingTop: Platform.OS === "android" ? 25 : 0,
+    paddingTop: Platform.OS === "android" ? 70 : 0,
   },
 
   reportcontentContainer: {
@@ -773,7 +967,7 @@ const styles = StyleSheet.create({
   },
 
   choiceContainer: {
-    width: "21%",
+    width: 60,
     height: 50,
     textAlign: "center",
     justifyContent: "center",
@@ -785,7 +979,7 @@ const styles = StyleSheet.create({
   },
 
   choice2Container: {
-    width: "21%",
+    width: 60,
     height: 50,
     textAlign: "center",
     justifyContent: "center",
@@ -799,7 +993,7 @@ const styles = StyleSheet.create({
   },
 
   choice3Container: {
-    width: "21%",
+    width: 60,
     height: 50,
     textAlign: "center",
     justifyContent: "center",
@@ -812,7 +1006,7 @@ const styles = StyleSheet.create({
   },
 
   choice4Container: {
-    width: "21%",
+    width: 60,
     height: 50,
     textAlign: "center",
     justifyContent: "center",
@@ -825,7 +1019,7 @@ const styles = StyleSheet.create({
   },
 
   choice5Container: {
-    width: "21%",
+    width: 60,
     height: 50,
     textAlign: "center",
     justifyContent: "center",
@@ -834,6 +1028,175 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 2,
     borderColor: "red",
+    paddingLeft: 3,
+  },
+
+  choice6Container: {
+    width: 60,
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "#C21700",
+    paddingLeft: 3,
+  },
+
+  choice7Container: {
+    width: 60,
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "#B10004",
+    paddingLeft: 3,
+  },
+
+  choice8Container: {
+    width: 60,
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "#9B001C",
+    paddingLeft: 3,
+  },
+
+  choice9Container: {
+    width: 60,
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "#82002F",
+    paddingLeft: 3,
+  },
+
+  choiceContainer2: {
+    width: 60,
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "green",
+  },
+
+  choice2Container2: {
+    width: 60,
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "yellowgreen",
+    paddingLeft: 3,
+    paddingRight: 3,
+  },
+
+  choice3Container2: {
+    width: 60,
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "gold",
+    paddingLeft: 3,
+  },
+
+  choice4Container2: {
+    width: 60,
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "orange",
+    paddingLeft: 3,
+  },
+
+  choice5Container2: {
+    width: 60,
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "red",
+    paddingLeft: 3,
+  },
+
+  choice6Container2: {
+    width: 60,
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "#C21700",
+    paddingLeft: 3,
+  },
+
+  choice7Container2: {
+    width: 60,
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "#B10004",
+    paddingLeft: 3,
+  },
+
+  choice8Container2: {
+    width: 60,
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "#9B001C",
+    paddingLeft: 3,
+  },
+
+  choice9Container2: {
+    width: 60,
+    height: 50,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "#82002F",
     paddingLeft: 3,
   },
 
@@ -855,6 +1218,15 @@ const styles = StyleSheet.create({
 
   overView: {
     width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+
+  overView2: {
+    //width: "100%",
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
@@ -889,6 +1261,18 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 2,
     borderColor: "#1EA78C",
+  },
+  descriptionContainer: {
+    width: "100%",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    backgroundColor: "white",
+    borderColor: "gray",
+    borderRadius: 15,
+    borderWidth: 1,
+    paddingTop: 20,
+    paddingHorizontal: 5,
+    
   },
 
   buttonContainer: {
