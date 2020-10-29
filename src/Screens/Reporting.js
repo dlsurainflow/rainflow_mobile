@@ -169,7 +169,7 @@ const Reporting = (props) => {
   const LRainAlert = () =>
     Alert.alert(
       "LIGHT rain intensity selected!",
-      "Light rain: Scattered drops that do not completely wet an exposed surface regardless of duration.",
+      "Light rain: Scatte#ed1b39 drops that do not completely wet an exposed surface regardless of duration.",
       [
         {
           text: "Cancel",
@@ -630,7 +630,7 @@ const Reporting = (props) => {
             style={styles.choiceContainer}
             onPress={() => changeOne()}
           >
-            <Text style={{ color: "green", fontWeight: "bold" }}>No Rain</Text>
+            <Text style={{ color: "#00ae4d", fontWeight: "bold" }}>No Rain</Text>
           </TouchableOpacity>
 
           <View style={styles.pads}></View>
@@ -639,7 +639,7 @@ const Reporting = (props) => {
             style={styles.choice2Container}
             onPress={() => LRainAlert()}
           >
-            <Text style={{ color: "yellowgreen", fontWeight: "bold" }}>
+            <Text style={{ color: "#b2d235", fontWeight: "bold" }}>
               Light Rain
             </Text>
           </TouchableOpacity>
@@ -650,7 +650,7 @@ const Reporting = (props) => {
             style={styles.choice3Container}
             onPress={() => MRainAlert()}
           >
-            <Text style={{ color: "gold", fontWeight: "bold" }}>
+            <Text style={{ color: "#ffd100", fontWeight: "bold" }}>
               Medium Rain
             </Text>
           </TouchableOpacity>
@@ -661,7 +661,7 @@ const Reporting = (props) => {
             style={styles.choice4Container}
             onPress={() => HRainAlert()}
           >
-            <Text style={{ color: "orange", fontWeight: "bold" }}>
+            <Text style={{ color: "#f78d1e", fontWeight: "bold" }}>
               Heavy Rain
             </Text>
           </TouchableOpacity>
@@ -672,7 +672,7 @@ const Reporting = (props) => {
             style={styles.choice5Container}
             onPress={() => EHRainAlert()}
           >
-            <Text style={{ color: "red", fontWeight: "bold" }}>
+            <Text style={{ color: "#ed1b39", fontWeight: "bold" }}>
               Intense Rain
             </Text>
           </TouchableOpacity>
@@ -683,7 +683,7 @@ const Reporting = (props) => {
             style={styles.choice6Container}
             onPress={() => TRainAlert()}
           >
-            <Text style={{ color: "#C21700", fontWeight: "bold" }}>Torrential Rain</Text>
+            <Text style={{ color: "#c12026", fontWeight: "bold" }}>Torrential Rain</Text>
           </TouchableOpacity>
         </View>
 
@@ -724,7 +724,7 @@ const Reporting = (props) => {
             style={styles.choiceContainer2}
             onPress={() => changeOneF()}
           >
-            <Text style={{ color: "green", fontWeight: "bold" }}>No Flood</Text>
+            <Text style={{ color: "#00ae4d", fontWeight: "bold" }}>No Flood</Text>
           </TouchableOpacity>
 
           <View style={styles.pads}></View>
@@ -733,7 +733,7 @@ const Reporting = (props) => {
             style={styles.choice2Container2}
             onPress={() => ADeepAlert()}
           >
-            <Text style={{ color: "yellowgreen", fontWeight: "bold" }}>
+            <Text style={{ color: "#b2d235", fontWeight: "bold" }}>
               Ankle Deep
             </Text>
           </TouchableOpacity>
@@ -744,7 +744,7 @@ const Reporting = (props) => {
             style={styles.choice3Container2}
             onPress={() => KDeepAlert()}
           >
-            <Text style={{ color: "gold", fontWeight: "bold" }}>
+            <Text style={{ color: "#ffd100", fontWeight: "bold" }}>
               Knee Deep
             </Text>
           </TouchableOpacity>
@@ -755,7 +755,7 @@ const Reporting = (props) => {
             style={styles.choice4Container2}
             onPress={() => WDeepAlert()}
           >
-            <Text style={{ color: "orange", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>
+            <Text style={{ color: "#f78d1e", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>
               Waist Deep
             </Text>
           </TouchableOpacity>
@@ -766,7 +766,7 @@ const Reporting = (props) => {
             style={styles.choice5Container2}
             onPress={() => AWDeepAlert()}
           >
-            <Text style={{ color: "red", fontWeight: "bold" }}>
+            <Text style={{ color: "#ed1b39", fontWeight: "bold" }}>
               Neck Deep
             </Text>
           </TouchableOpacity>
@@ -777,7 +777,7 @@ const Reporting = (props) => {
             style={styles.choice6Container2}
             onPress={() => ANDeepAlert()}
           >
-            <Text style={{ color: "#C21700", fontWeight: "bold" }}>Above Head Deep</Text>
+            <Text style={{ color: "#c12026", fontWeight: "bold" }}>Above Head Deep</Text>
           </TouchableOpacity>
 
           <View style={styles.pads}></View>
@@ -786,7 +786,7 @@ const Reporting = (props) => {
             style={styles.choice7Container2}
             onPress={() => OSDeepAlert()}
           >
-            <Text style={{ color: "#B10004", fontWeight: "bold" }}>
+            <Text style={{ color: "#941619", fontWeight: "bold" }}>
               1 Storey High
             </Text>
           </TouchableOpacity>
@@ -797,7 +797,7 @@ const Reporting = (props) => {
             style={styles.choice8Container2}
             onPress={() => OFSDeepAlert()}
           >
-            <Text style={{ color: "#9B001C", fontWeight: "bold" }}>
+            <Text style={{ color: "#7c112f", fontWeight: "bold" }}>
               1.5 Storey High
             </Text>
           </TouchableOpacity>
@@ -808,7 +808,7 @@ const Reporting = (props) => {
             style={styles.choice9Container2}
             onPress={() => TSDeepAlert()}
           >
-            <Text style={{ color: "#82002F", fontWeight: "bold" }}>
+            <Text style={{ color: "#5f001e", fontWeight: "bold" }}>
               2 Storeys or Higher
             </Text>
           </TouchableOpacity>
@@ -967,81 +967,81 @@ const styles = StyleSheet.create({
   },
 
   choiceContainer: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "green",
+    borderColor: "#00ae4d",
   },
 
   choice2Container: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "yellowgreen",
+    borderColor: "#b2d235",
     paddingLeft: 3,
     paddingRight: 3,
   },
 
   choice3Container: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "gold",
-    paddingLeft: 3,
+    borderColor: "#ffd100",
+    paddingLeft: 2,
   },
 
   choice4Container: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "orange",
-    paddingLeft: 3,
+    borderColor: "#f78d1e",
+    paddingLeft: 0,
   },
 
   choice5Container: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "red",
-    paddingLeft: 3,
+    borderColor: "#ed1b39",
+    paddingLeft: 0,
   },
 
   choice6Container: {
-    width: 60,
-    height: 50,
+    width: 75,
+    height: 40,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "#C21700",
-    paddingLeft: 3,
+    borderColor: "#c12026",
+    paddingLeft: 1,
   },
 
   choice7Container: {
@@ -1053,7 +1053,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "#B10004",
+    borderColor: "#941619",
     paddingLeft: 3,
   },
 
@@ -1066,7 +1066,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "#9B001C",
+    borderColor: "#7c112f",
     paddingLeft: 3,
   },
 
@@ -1079,7 +1079,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "#82002F",
+    borderColor: "#5f001e",
     paddingLeft: 3,
   },
 
@@ -1092,7 +1092,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "green",
+    borderColor: "#00ae4d",
   },
 
   choice2Container2: {
@@ -1104,7 +1104,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "yellowgreen",
+    borderColor: "#b2d235",
     paddingLeft: 3,
     paddingRight: 3,
   },
@@ -1118,7 +1118,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "gold",
+    borderColor: "#ffd100",
     paddingLeft: 1,
   },
 
@@ -1131,8 +1131,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "orange",
-    paddingLeft: 0,
+    borderColor: "#f78d1e",
+    paddingLeft: 0  ,
   },
 
   choice5Container2: {
@@ -1144,7 +1144,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "red",
+    borderColor: "#ed1b39",
     paddingLeft: 1,
   },
 
@@ -1157,7 +1157,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "#C21700",
+    borderColor: "#c12026",
     paddingLeft: 3,
   },
 
@@ -1170,7 +1170,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "#B10004",
+    borderColor: "#941619",
     paddingLeft: 3,
   },
 
@@ -1183,7 +1183,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "#9B001C",
+    borderColor: "#7c112f",
     paddingLeft: 3,
   },
 
@@ -1196,7 +1196,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "#82002F",
+    borderColor: "#5f001e",
     paddingLeft: 3,
   },
 
