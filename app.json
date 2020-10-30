@@ -17,8 +17,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.example.RAFTApp"
+      "supportsTablet": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
