@@ -83,6 +83,11 @@ const Signup = (props) => {
           props.navigation.navigate("Login");
         })
         .catch((error) => {
+          if(error == "Error: 400")
+            alert("Already have an account. Please login.");
+          else if(error == "Error: 422")
+            alert("Invalid signup details.");
+          else
           console.log("ERROR: " + error);
         });
     }

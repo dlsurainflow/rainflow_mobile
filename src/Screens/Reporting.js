@@ -19,12 +19,12 @@ import sampleMarker from "../../assets/markers/1-1-01.png";
 import { html_map } from "./html_map";
 
 const Reporting = (props) => {
-  const [rainIntensityVal, setRainIntensityVal] = useState(null);
-  const [filename, setFileName] = useState(null);
+  const [rainIntensityVal, setRainIntensityVal] = useState(0);
+  const [filename, setFileName] = useState(0);
   const [description, setDescription] = useState("");
   const [floodLevelVal, setFloodLevelVal] = useState(null);
-  const [rainIntensityText, setRainIntensityText] = useState("Not yet selected");
-  const [floodLevelText, setFloodLevelText] = useState("Not yet selected");
+  const [rainIntensityText, setRainIntensityText] = useState("No Rain");
+  const [floodLevelText, setFloodLevelText] = useState("No Flood");
   const [dispLat, setDispLat] = useState(0);
   const [dispLong, setDispLong] = useState(0);
   const [accR, setAccR] = useState("Analyzing . . .");
@@ -466,12 +466,12 @@ const Reporting = (props) => {
         setShowLoading(false);
         setImage(null);
         setDescription("");
-        setFloodLevelVal(null);
-        setFloodLevelText("Not yet selected");
-        setRainIntensityVal(null);
-        setRainIntensityText("Not yet selected");
+        setFloodLevelVal(0);
+        setFloodLevelText("No Flood");
+        setRainIntensityVal(0);
+        setRainIntensityText("No Rain");
         alert("Report submitted! Thank you");
-      }, 1000);
+      }, 500);
     
     console.log("Fetch Done");
     
@@ -816,13 +816,23 @@ const Reporting = (props) => {
         </View>
         </ScrollView>
         </View>
-
         
-
+        <Text
+          style={{
+            textAlign: "center",
+            color: "black",
+            fontWeight: "bold",
+            fontSize: 20,
+          }}
+        >
+          FURTHER DETAILS 
+        </Text>
+        
         <View style={styles.descriptionContainer}>
           <TextInput
             placeholder="Add description here"
             style={{color: "black"}}
+            multiline={true}
             // onChangeText={emailHandler}
             onChangeText={(e) => setDescription(e)}
           />
@@ -968,7 +978,7 @@ const styles = StyleSheet.create({
 
   choiceContainer: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -980,7 +990,7 @@ const styles = StyleSheet.create({
 
   choice2Container: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -994,7 +1004,7 @@ const styles = StyleSheet.create({
 
   choice3Container: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1007,7 +1017,7 @@ const styles = StyleSheet.create({
 
   choice4Container: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1020,7 +1030,7 @@ const styles = StyleSheet.create({
 
   choice5Container: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1033,7 +1043,7 @@ const styles = StyleSheet.create({
 
   choice6Container: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1085,7 +1095,7 @@ const styles = StyleSheet.create({
 
   choiceContainer2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1097,7 +1107,7 @@ const styles = StyleSheet.create({
 
   choice2Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1111,7 +1121,7 @@ const styles = StyleSheet.create({
 
   choice3Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1124,7 +1134,7 @@ const styles = StyleSheet.create({
 
   choice4Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1137,7 +1147,7 @@ const styles = StyleSheet.create({
 
   choice5Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1150,7 +1160,7 @@ const styles = StyleSheet.create({
 
   choice6Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1163,7 +1173,7 @@ const styles = StyleSheet.create({
 
   choice7Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1176,7 +1186,7 @@ const styles = StyleSheet.create({
 
   choice8Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1189,7 +1199,7 @@ const styles = StyleSheet.create({
 
   choice9Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1270,7 +1280,8 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderRadius: 15,
     borderWidth: 1,
-    paddingTop: 20,
+    paddingTop: 0,
+    paddingBottom: 5,
     paddingHorizontal: 5,
     
   },
@@ -1312,6 +1323,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingBottom: 5,
   },
+  
   
 });
 

@@ -39,7 +39,7 @@ useEffect(() => {
           originWhitelist={['*']}
           style={{flex: 1, borderWidth: 1}}
        source={{
-        uri: `http://rainflow.live:8443/mobile/map/${params}`
+        uri: `http://rainflow.live/mobile/map/guest`
       }}  
           />
 
