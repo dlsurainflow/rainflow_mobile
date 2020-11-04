@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { ColorDotsLoader } from 'react-native-indicator';
-import * as nominatim from 'nominatim-geocode';
+//import * as nominatim from 'nominatim-geocode';
 
 const Reporting = (props) => {
   const [rainIntensityVal, setRainIntensityVal] = useState(0);
@@ -31,6 +31,7 @@ const Reporting = (props) => {
   const [colorNR, setColorNR] = useState("white");
   const [colorLR, setColorLR] = useState("white");
   const [modalVisible, setModalVisible] = useState(false);
+  const [locName, setLocName] = useState("");
  
   
   
@@ -47,6 +48,13 @@ const Reporting = (props) => {
     setDispLong(crd.longitude);
     setAccR(crd.accuracy);
     //setShowMap(true);
+    fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + crd.latitude + '&lon=' + crd.longitude + '&zoom=18&addressdetails=1')
+        .then((response) => response.json())
+        .then((responseJson) => {
+            console.log('Your Location => ' + JSON.stringify(responseJson.display_name));
+            var trial = JSON.stringify(responseJson.display_name);
+            setLocName(trial.replace(/['"]+/g, ''));
+    })
   }
 
   function error(err) {
@@ -164,17 +172,14 @@ const Reporting = (props) => {
   };
 
   const getLoc = () => {
-    nominatim.reverse({ lat: dispLat, lng: dispLong }, (err, result) => {
-      if(!err) console.log(result);
-      // {
-      //  address: {...},
-      //  display_name: "22, Golestan, Iran"
-      //  lat: "36.9631102"
-      //  lon: "54.9534786"
-      //  osm_id: "196174062"
-      //  ...
-      // }
-    });
+    fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + dispLat + '&lon=' + dispLong + '&zoom=18&addressdetails=1')
+        .then((response) => response.json())
+        .then((responseJson) => {
+            console.log('Your Location => ' + JSON.stringify(responseJson.display_name));
+            var trial = JSON.stringify(responseJson.display_name);
+            setLocName(trial.replace(/['"]+/g, ''));
+            console.log(trial.replace(/['"]+/g, ''));
+  })
   }  
 
   const LRainAlert = () =>
@@ -438,6 +443,7 @@ const Reporting = (props) => {
     formdata.append("rainfall_rate", rainIntensityVal);
     formdata.append("flood_depth", floodLevelVal);
     formdata.append("description", description);
+    formdata.append("address", locName);
     if (image !== null) {
       let match = /\.(\w+)$/.exec(filename);
       let type1 = match ? `image/${match[1]}` : `image`;
@@ -570,7 +576,7 @@ const Reporting = (props) => {
             paddingBottom: 0,
           }}
         >
-          ({dispLat}, {dispLong}){"\n"}
+          ({locName}){"\n"}
           {/* Accuracy: {accR} meters. {"\n"} */}
           
         </Text>
