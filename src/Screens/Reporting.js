@@ -13,10 +13,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { ColorDotsLoader } from 'react-native-indicator';
-import MapView from 'react-native-maps';
-import { Marker } from 'react-native-maps';
-import sampleMarker from "../../assets/markers/1-1-01.png";
-import { html_map } from "./html_map";
+import * as nominatim from 'nominatim-geocode';
 
 const Reporting = (props) => {
   const [rainIntensityVal, setRainIntensityVal] = useState(0);
@@ -35,7 +32,7 @@ const Reporting = (props) => {
   const [colorLR, setColorLR] = useState("white");
   const [modalVisible, setModalVisible] = useState(false);
  
-  navigator.geolocation.getCurrentPosition(success, error, options);
+  
   
   var options = {
     enableHighAccuracy: true,
@@ -165,6 +162,20 @@ const Reporting = (props) => {
     console.log("Rain Intensity Set at: " + rainIntensityVal);
     console.log("Flood Level Set at: " + floodLevelVal);
   };
+
+  const getLoc = () => {
+    nominatim.reverse({ lat: dispLat, lng: dispLong }, (err, result) => {
+      if(!err) console.log(result);
+      // {
+      //  address: {...},
+      //  display_name: "22, Golestan, Iran"
+      //  lat: "36.9631102"
+      //  lon: "54.9534786"
+      //  osm_id: "196174062"
+      //  ...
+      // }
+    });
+  }  
 
   const LRainAlert = () =>
     Alert.alert(
@@ -495,6 +506,7 @@ const Reporting = (props) => {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
+    navigator.geolocation.getCurrentPosition(success, error, options);
     (async () => {
       if (Platform.OS !== "web") {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -860,7 +872,7 @@ const Reporting = (props) => {
     </View>
         
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => updateMyLoc()}>
+          <TouchableOpacity style={styles.button} onPress={() => getLoc()}>
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
