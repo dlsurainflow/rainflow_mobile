@@ -11,6 +11,7 @@ import {
 
 import { WebView } from "react-native-webview";
 import AsyncStorage from "@react-native-community/async-storage";
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const HomeMap = (props) => {
@@ -20,15 +21,22 @@ const [params, setParams] = useState("guest")
 
 const getToken = async()=>{
   const token = await AsyncStorage.getItem("token");
-    
-  if(token != null) setParams(token)
-  else setParams("guest")
+  
+  if(token !== null){ 
+    setParams(token) //token not expired
+    //console.log("token not null ", token)
+  }else{
+    setParams("guest") //no token in asyncstorage
+    //console.log("token is null ", token)
+  }
 }
 
-useEffect(() => {
-  getToken()
-}, [])
-
+useFocusEffect(
+  React.useCallback(() => {
+    getToken()
+  }, [])
+);
+ 
 
 
   return (
@@ -39,7 +47,7 @@ useEffect(() => {
           originWhitelist={['*']}
           style={{flex: 1, borderWidth: 1}}
        source={{
-        uri: `http://rainflow.live:8443/mobile/map/${params}`
+        uri: `https://rainflow.live/mobile/map/${params}`
       }}  
           />
 
