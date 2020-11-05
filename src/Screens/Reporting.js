@@ -230,7 +230,7 @@ const Reporting = (props) => {
   const TRainAlert = () =>
     Alert.alert(
       "TORRENTIAL rain intensity selected!",
-      "Torrential rain: ",
+      "Torrential rain: Strongest downpour of rain. Torrential rain rate of rainfall is above 15 mm per hour and may persist for hours.",
       [
         {
           text: "Cancel",
@@ -320,7 +320,7 @@ const Reporting = (props) => {
     const ANDeepAlert = () =>
     Alert.alert(
       "ABOVE HEAD DEEP flood level is selected!",
-      "Above head deep: ",
+      "Above head deep: Flood level is above critical level. Flood Level is between 1.6 to 2 meters high. Response:  Force evacuation.",
       [
         {
           text: "Cancel",
@@ -335,7 +335,7 @@ const Reporting = (props) => {
     const OSDeepAlert = () =>
     Alert.alert(
       "ONE STOREY HIGH flood level is selected!",
-      "One storey high: ",
+      "One storey high: Flood level is between 2 to 3 meters high. Response: Force evacuation.",
       [
         {
           text: "Cancel",
@@ -350,7 +350,7 @@ const Reporting = (props) => {
     const OFSDeepAlert = () =>
     Alert.alert(
       "1.5 STOREY HIGH flood level is selected!",
-      "1.5 Storey High: ",
+      "1.5 Storey High: Flood level is between 3 to 4.5 meters high . Response:  Force evacuation.",
       [
         {
           text: "Cancel",
@@ -365,7 +365,7 @@ const Reporting = (props) => {
     const TSDeepAlert = () =>
     Alert.alert(
       "TWO STOREYS OR HIGHER flood level is selected!",
-      "Two storeys or higher:",
+      "Two storeys or higher: Flood level is 4.5 meters high. Response:  Force evacuation.",
       [
         {
           text: "Cancel",
@@ -377,6 +377,7 @@ const Reporting = (props) => {
       { cancelable: false }
     );
 
+  
   
 
   const alertUserReport = () => {
