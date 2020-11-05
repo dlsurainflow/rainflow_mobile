@@ -12,12 +12,15 @@ import {
 import { WebView } from "react-native-webview";
 import AsyncStorage from "@react-native-community/async-storage";
 import { useFocusEffect } from '@react-navigation/native';
+import useInterval from 'use-interval'
 
 
 const HomeMap = (props) => {
 
 const webViewRef = useRef();
 const [params, setParams] = useState("guest")
+const [lat, setLat] = useState()
+const [lng, setLng] = useState()
 
 const getToken = async()=>{
   const token = await AsyncStorage.getItem("token");
@@ -31,13 +34,43 @@ const getToken = async()=>{
   }
 }
 
+function success(pos) {
+  var crd = pos.coords;
+  console.log("current location: ", crd.latitude, crd.longitude)
+  setLat(crd.latitude);
+  setLng(crd.longitude);
+
+
+}
+
+function error(err) {
+  //console.warn(`ERROR(${err.code}): ${err.message}`);
+  setLat('null');
+  setLng('null');
+}
+
+
+var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0,
+};
+
 useFocusEffect(
   React.useCallback(() => {
-    getToken()
+    getToken();
   }, [])
 );
  
+/*
+useInterval(() => {
+  navigator.geolocation.getCurrentPosition(success, error, options);
+}, 10000); 
+*/
 
+useEffect(()=>{
+  navigator.geolocation.getCurrentPosition(success, error, options);
+},[])
 
   return (
     <View style = {styles.backgroundContainer}>
@@ -47,10 +80,7 @@ useFocusEffect(
           originWhitelist={['*']}
           style={{flex: 1, borderWidth: 1}}
        source={{
-
-        uri: `http://rainflow.live/`
-
-       
+        uri: `http://rainflow.live/mobile/map/${params}/${lat}/${lng}`
       }}  
           />
 
