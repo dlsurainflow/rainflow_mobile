@@ -12,9 +12,9 @@
     "@react-native-community/async-storage": "~1.12.0",
     "@react-native-community/geolocation": "^2.0.2",
     "@react-native-community/masked-view": "0.1.10",
-    "@react-navigation/material-bottom-tabs": "^5.2.18",
-    "@react-navigation/native": "^5.7.4",
-    "@react-navigation/stack": "^5.9.0",
+    "@react-navigation/material-bottom-tabs": "^5.3.4",
+    "@react-navigation/native": "^5.8.4",
+    "@react-navigation/stack": "^5.12.1",
     "bcrypt": "^5.0.0",
     "expo": "^39.0.0",
     "expo-crypto": "^8.3.0",
@@ -37,7 +37,7 @@
     "react-native-location": "^2.5.0",
     "react-native-maps": "^0.27.1",
     "react-native-material-bottom-navigation": "^1.0.5",
-    "react-native-paper": "^4.2.0",
+    "react-native-paper": "^4.3.0",
     "react-native-radio-button-group": "^1.0.3",
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.4",
@@ -46,15 +46,17 @@
     "react-native-simple-crypto": "^0.2.15",
     "react-native-vector-icons": "^7.1.0",
     "react-native-web": "~0.13.7",
+
     "react-native-webview": "^10.7.0",
     "react-native-webview-leaflet": "^5.0.2",
     "react-navigation": "^4.4.1",
     "react-navigation-material-bottom-tabs": "^2.3.2",
+
     "react-navigation-native": "0.0.0",
-    "react-navigation-stack": "^2.8.3"
+    "react-navigation-stack": "^2.10.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.6",
+    "@babel/core": "^7.12.3",
     "babel-preset-expo": "^8.3.0"
   },
   "private": true
