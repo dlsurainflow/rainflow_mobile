@@ -47,7 +47,10 @@ useFocusEffect(
           originWhitelist={['*']}
           style={{flex: 1, borderWidth: 1}}
        source={{
-        uri: `https://rainflow.live/mobile/map/${params}`
+
+        uri: `http://rainflow.live/`
+
+       
       }}  
           />
 

@@ -13,18 +13,15 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { ColorDotsLoader } from 'react-native-indicator';
-import MapView from 'react-native-maps';
-import { Marker } from 'react-native-maps';
-import sampleMarker from "../../assets/markers/1-1-01.png";
-import { html_map } from "./html_map";
+//import * as nominatim from 'nominatim-geocode';
 
 const Reporting = (props) => {
-  const [rainIntensityVal, setRainIntensityVal] = useState(null);
-  const [filename, setFileName] = useState(null);
+  const [rainIntensityVal, setRainIntensityVal] = useState(0);
+  const [filename, setFileName] = useState(0);
   const [description, setDescription] = useState("");
   const [floodLevelVal, setFloodLevelVal] = useState(null);
-  const [rainIntensityText, setRainIntensityText] = useState("Not yet selected");
-  const [floodLevelText, setFloodLevelText] = useState("Not yet selected");
+  const [rainIntensityText, setRainIntensityText] = useState("No Rain");
+  const [floodLevelText, setFloodLevelText] = useState("No Flood");
   const [dispLat, setDispLat] = useState(0);
   const [dispLong, setDispLong] = useState(0);
   const [accR, setAccR] = useState("Analyzing . . .");
@@ -34,8 +31,9 @@ const Reporting = (props) => {
   const [colorNR, setColorNR] = useState("white");
   const [colorLR, setColorLR] = useState("white");
   const [modalVisible, setModalVisible] = useState(false);
+  const [locName, setLocName] = useState("");
  
-  navigator.geolocation.getCurrentPosition(success, error, options);
+  
   
   var options = {
     enableHighAccuracy: true,
@@ -50,6 +48,13 @@ const Reporting = (props) => {
     setDispLong(crd.longitude);
     setAccR(crd.accuracy);
     //setShowMap(true);
+    fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + crd.latitude + '&lon=' + crd.longitude + '&zoom=18&addressdetails=1')
+        .then((response) => response.json())
+        .then((responseJson) => {
+            console.log('Your Location => ' + JSON.stringify(responseJson.display_name));
+            var trial = JSON.stringify(responseJson.display_name);
+            setLocName(trial.replace(/['"]+/g, ''));
+    })
   }
 
   function error(err) {
@@ -166,6 +171,17 @@ const Reporting = (props) => {
     console.log("Flood Level Set at: " + floodLevelVal);
   };
 
+  const getLoc = () => {
+    fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + dispLat + '&lon=' + dispLong + '&zoom=18&addressdetails=1')
+        .then((response) => response.json())
+        .then((responseJson) => {
+            console.log('Your Location => ' + JSON.stringify(responseJson.display_name));
+            var trial = JSON.stringify(responseJson.display_name);
+            setLocName(trial.replace(/['"]+/g, ''));
+            console.log(trial.replace(/['"]+/g, ''));
+  })
+  }  
+
   const LRainAlert = () =>
     Alert.alert(
       "LIGHT rain intensity selected!",
@@ -214,7 +230,7 @@ const Reporting = (props) => {
   const TRainAlert = () =>
     Alert.alert(
       "TORRENTIAL rain intensity selected!",
-      "Torrential rain: ",
+      "Torrential rain: Strongest downpour of rain. Torrential rain rate of rainfall is above 15 mm per hour and may persist for hours.",
       [
         {
           text: "Cancel",
@@ -304,7 +320,7 @@ const Reporting = (props) => {
     const ANDeepAlert = () =>
     Alert.alert(
       "ABOVE HEAD DEEP flood level is selected!",
-      "Above head deep: ",
+      "Above head deep: Flood level is above critical level. Flood Level is between 1.6 to 2 meters high. Response:  Force evacuation.",
       [
         {
           text: "Cancel",
@@ -319,7 +335,7 @@ const Reporting = (props) => {
     const OSDeepAlert = () =>
     Alert.alert(
       "ONE STOREY HIGH flood level is selected!",
-      "One storey high: ",
+      "One storey high: Flood level is between 2 to 3 meters high. Response: Force evacuation.",
       [
         {
           text: "Cancel",
@@ -334,7 +350,7 @@ const Reporting = (props) => {
     const OFSDeepAlert = () =>
     Alert.alert(
       "1.5 STOREY HIGH flood level is selected!",
-      "1.5 Storey High: ",
+      "1.5 Storey High: Flood level is between 3 to 4.5 meters high . Response:  Force evacuation.",
       [
         {
           text: "Cancel",
@@ -349,7 +365,7 @@ const Reporting = (props) => {
     const TSDeepAlert = () =>
     Alert.alert(
       "TWO STOREYS OR HIGHER flood level is selected!",
-      "Two storeys or higher:",
+      "Two storeys or higher: Flood level is 4.5 meters high. Response:  Force evacuation.",
       [
         {
           text: "Cancel",
@@ -361,6 +377,7 @@ const Reporting = (props) => {
       { cancelable: false }
     );
 
+  
   
 
   const alertUserReport = () => {
@@ -427,6 +444,7 @@ const Reporting = (props) => {
     formdata.append("rainfall_rate", rainIntensityVal);
     formdata.append("flood_depth", floodLevelVal);
     formdata.append("description", description);
+    formdata.append("address", locName);
     if (image !== null) {
       let match = /\.(\w+)$/.exec(filename);
       let type1 = match ? `image/${match[1]}` : `image`;
@@ -466,12 +484,12 @@ const Reporting = (props) => {
         setShowLoading(false);
         setImage(null);
         setDescription("");
-        setFloodLevelVal(null);
-        setFloodLevelText("Not yet selected");
-        setRainIntensityVal(null);
-        setRainIntensityText("Not yet selected");
+        setFloodLevelVal(0);
+        setFloodLevelText("No Flood");
+        setRainIntensityVal(0);
+        setRainIntensityText("No Rain");
         alert("Report submitted! Thank you");
-      }, 1000);
+      }, 500);
     
     console.log("Fetch Done");
     
@@ -495,6 +513,7 @@ const Reporting = (props) => {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
+    navigator.geolocation.getCurrentPosition(success, error, options);
     (async () => {
       if (Platform.OS !== "web") {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -558,7 +577,7 @@ const Reporting = (props) => {
             paddingBottom: 0,
           }}
         >
-          ({dispLat}, {dispLong}){"\n"}
+          ({locName}){"\n"}
           {/* Accuracy: {accR} meters. {"\n"} */}
           
         </Text>
@@ -816,13 +835,23 @@ const Reporting = (props) => {
         </View>
         </ScrollView>
         </View>
-
         
-
+        <Text
+          style={{
+            textAlign: "center",
+            color: "black",
+            fontWeight: "bold",
+            fontSize: 20,
+          }}
+        >
+          FURTHER DETAILS 
+        </Text>
+        
         <View style={styles.descriptionContainer}>
           <TextInput
             placeholder="Add description here"
             style={{color: "black"}}
+            multiline={true}
             // onChangeText={emailHandler}
             onChangeText={(e) => setDescription(e)}
           />
@@ -850,7 +879,7 @@ const Reporting = (props) => {
     </View>
         
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => updateMyLoc()}>
+          <TouchableOpacity style={styles.button} onPress={() => getLoc()}>
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
             >
@@ -968,7 +997,7 @@ const styles = StyleSheet.create({
 
   choiceContainer: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -980,7 +1009,7 @@ const styles = StyleSheet.create({
 
   choice2Container: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -994,7 +1023,7 @@ const styles = StyleSheet.create({
 
   choice3Container: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1007,7 +1036,7 @@ const styles = StyleSheet.create({
 
   choice4Container: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1020,7 +1049,7 @@ const styles = StyleSheet.create({
 
   choice5Container: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1033,7 +1062,7 @@ const styles = StyleSheet.create({
 
   choice6Container: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1085,7 +1114,7 @@ const styles = StyleSheet.create({
 
   choiceContainer2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1097,7 +1126,7 @@ const styles = StyleSheet.create({
 
   choice2Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1111,7 +1140,7 @@ const styles = StyleSheet.create({
 
   choice3Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1124,7 +1153,7 @@ const styles = StyleSheet.create({
 
   choice4Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1137,7 +1166,7 @@ const styles = StyleSheet.create({
 
   choice5Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1150,7 +1179,7 @@ const styles = StyleSheet.create({
 
   choice6Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1163,7 +1192,7 @@ const styles = StyleSheet.create({
 
   choice7Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1176,7 +1205,7 @@ const styles = StyleSheet.create({
 
   choice8Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1189,7 +1218,7 @@ const styles = StyleSheet.create({
 
   choice9Container2: {
     width: 75,
-    height: 40,
+    height: 55,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -1270,7 +1299,8 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderRadius: 15,
     borderWidth: 1,
-    paddingTop: 20,
+    paddingTop: 0,
+    paddingBottom: 5,
     paddingHorizontal: 5,
     
   },
@@ -1312,6 +1342,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingBottom: 5,
   },
+  
   
 });
 
