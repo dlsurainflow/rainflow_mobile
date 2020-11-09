@@ -14,6 +14,7 @@ import AboutUsScreen from "./src/Screens/AboutUs.js"
 import AccountInfoScreen from "./src/Screens/AccountInfo.js";
 import ActiveReportsScreen from "./src/Screens/ActiveReports.js";
 import DashboardScreen from "./src/Screens/Dashboard.js"
+import ForgetPasswordScreen from "./src/Screens/ForgetPassword.js";
 
 //SCREENS END
 
@@ -197,6 +198,7 @@ export default function App() {
       <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="MainMenu">
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
       <Stack.Screen name="MainMenu" component={Navbar} />
     </Stack.Navigator>
    </NavigationContainer>
