@@ -22,6 +22,7 @@ const Reporting = (props) => {
   const [floodLevelVal, setFloodLevelVal] = useState(null);
   const [rainIntensityText, setRainIntensityText] = useState("No Rain");
   const [floodLevelText, setFloodLevelText] = useState("No Flood");
+  const [textInputplaceholder, setTextInputplaceholder] = useState("Add description here");
   const [dispLat, setDispLat] = useState(0);
   const [dispLong, setDispLong] = useState(0);
   const [accR, setAccR] = useState("Analyzing . . .");
@@ -35,6 +36,7 @@ const Reporting = (props) => {
   const [modalAlertName, setModalAlertName] = useState("");
   const [modalAlertDescription, setModalAlertDescription] = useState("");
   const [locName, setLocName] = useState("");
+  const [modalAlertReportVisible, setModalAlertReportVisible] = useState(false);
  
   var options = {
     enableHighAccuracy: true,
@@ -444,22 +446,25 @@ const Reporting = (props) => {
       { cancelable: false }
     );*/
 
-  
+    const modalAlertReport = () => {
+      setModalAlertReportVisible(true);
+    }
   
 
   const alertUserReport = () => {
     Alert.alert(
       "Report Now",
-      "You are about to report this information \nLatitude: " +
-        dispLat +
-        "\nLongitude: " +
-        dispLong +
-        "\nRain Intensity: " +
-        rainIntensityVal +
-        "\nFlood Level: " +
-        floodLevelVal +
-        "\nAddress: " +
-        locName,
+      "You are about to report this information \nAddress: " +
+        locName +
+        "\n\n\n\nRain Intensity: " +
+        rainIntensityText +
+        "\n\nFlood Level: " +
+        floodLevelText +
+        "\n\nDescription: " + 
+        description + 
+        "\n\nImage: " + 
+        image,
+
       [
         {
           text: "Cancel",
@@ -557,6 +562,9 @@ const Reporting = (props) => {
         setFloodLevelText("No Flood");
         setRainIntensityVal(0);
         setRainIntensityText("No Rain");
+        setModalAlertReportVisible(false);
+        setTextInputplaceholder("Add description here");
+        
         alert("Report submitted! Thank you");
       }, 500);
     
@@ -575,7 +583,7 @@ const Reporting = (props) => {
     } else if (floodLevelVal == null) {
       alert("Missing flood level data to be reported");
     } else {
-      alertUserReport();
+      modalAlertReport();
     }
   };
 
@@ -918,10 +926,9 @@ const Reporting = (props) => {
         
         <View style={styles.descriptionContainer}>
           <TextInput
-            placeholder="Add description here"
+            placeholder={textInputplaceholder}
             style={{color: "black"}}
             multiline={true}
-            // onChangeText={emailHandler}
             onChangeText={(e) => setDescription(e)}
           />
         </View>
@@ -990,6 +997,90 @@ const Reporting = (props) => {
               CLOSE
             </Text>
           </TouchableOpacity>
+        </View>
+          </View>
+          
+          
+        </Modal>
+
+        <Modal //MODAL ALERT REPROT OI
+          visible={modalAlertReportVisible} 
+          animationType="fade"
+          transparent={true} > 
+          <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+          <Text style={{fontSize: 20, fontWeight: "bold", marginBottom: 10,}}>
+            Report Summary
+          </Text>
+          <Text style={{marginBottom: 10, textAlign: "justify", fontWeight: "bold"}}>
+            Address: 
+          </Text>
+          <Text style={{marginBottom: 0, textAlign: "justify"}}>
+            {locName} {"\n"} 
+          </Text>
+          <Text style={{marginBottom: 0, textAlign: "justify", fontWeight: "bold"}}>
+            Rain Intensity: 
+          </Text>
+          <Text style={{marginBottom: 0, textAlign: "justify"}}>
+            {rainIntensityText} {"\n"}
+          </Text>
+          <Text style={{marginBottom: 0, textAlign: "justify", fontWeight: "bold"}}>
+            Flood Level: 
+          </Text>
+          <Text style={{marginBottom: 0, textAlign: "justify"}}>
+            {floodLevelText} {"\n"}
+          </Text>
+          { description !== "" ? (
+            <View>
+              <Text style={{marginBottom: 0, textAlign: "justify", fontWeight: "bold"}}>
+                Description: 
+              </Text>
+              <Text style={{marginBottom: 0, textAlign: "justify"}}>
+                {description} {"\n"}
+              </Text>
+            </View>
+          ): null}
+          
+          {image !== null ? (
+            <View>
+            <Text style={{marginBottom: 0, textAlign: "justify", fontWeight: "bold"}}>
+              Image: 
+            </Text>
+            <View style={{marginBottom: 5}} />
+            <Image
+              source={{
+                uri: image,
+               }}
+              style={{ height: 100, width: 100, alignItems: "center", paddingBottom: 20}}
+            />
+            </View>
+          ): null}
+          
+         
+
+          
+         <View style={{marginBottom: 10}}>
+
+        </View>
+          <View style={{flexDirection: "row"}}>
+          <TouchableOpacity style={styles.buttonAlertModal} onPress={() => setModalAlertReportVisible(!modalAlertReportVisible)}>
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold", width: "50%"}}
+            >
+              CLOSE
+            </Text>
+          </TouchableOpacity>
+          <View style={{marginLeft: 10}}>
+
+        </View>
+          <TouchableOpacity style={styles.buttonAlertModal} onPress={() => isUserLogged()}>
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold", width: "50%"}}
+            >
+              REPORT
+            </Text>
+          </TouchableOpacity>
+          </View>
         </View>
           </View>
           

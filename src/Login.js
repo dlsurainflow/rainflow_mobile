@@ -82,7 +82,7 @@ const Login = (props) => {
               "Welcome, " + responseJson.data.username + "!",
               ToastAndroid.SHORT
             )
-            //props.navigation.navigate("Main Menu");
+            props.navigation.navigate("MainMenu", {screen: 'UserProfile'});
           })
           .catch((error) => {
             console.log(error);
