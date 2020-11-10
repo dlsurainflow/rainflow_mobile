@@ -53,7 +53,7 @@ const ForgetPassword = (props) => {
        
       }
     });
-
+    props.navigation.navigate("MainMenu", {screen: 'UserProfile'});
 
   };
 
