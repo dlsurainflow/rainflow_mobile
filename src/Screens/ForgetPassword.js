@@ -4,9 +4,11 @@ import {
   View,
   Text,
   TextInput,
+  ScrollView,
   ToastAndroid,
   TouchableOpacity,
   Image,
+  Modal,
   BackHandler
 } from "react-native";
 
@@ -14,6 +16,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 const ForgetPassword = (props) => {
   const [textInputHandler, setTextInputHandler] = useState({});
+  const [modalVisible, setModalVisble] = useState(false);
   const [email, setEmail] = useState("");
 
   const emailHandler = (e) => {
@@ -32,10 +35,19 @@ const ForgetPassword = (props) => {
     return () => backHandler.remove();
   });
 
+  const checkIfEmpty = () => {
+    if(email == ""){
+      alert("Please input your email address.");
+    }
+    else{
+      forgetPassHandler();
+    }
+  }
+
 
   const forgetPassHandler = () => {
 
-    fetch("https://rainflow.live/forgot-password", {
+    fetch("https://rainflow.live/api/users/forgot-password", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -53,11 +65,16 @@ const ForgetPassword = (props) => {
        
       }
     });
-    props.navigation.navigate("MainMenu", {screen: 'UserProfile'});
-
+    setModalVisble(true);
   };
 
+  const modalPress = () => {
+    setModalVisble(!modalVisible);
+    props.navigation.navigate("MainMenu", {screen: 'UserProfile'});
+  }
+
   return (
+    
     <View style={styles.backgroundContainer}>
       <View style={styles.contentContainer}>
          <View style={styles.logoContainer}>
@@ -79,7 +96,7 @@ const ForgetPassword = (props) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => forgetPassHandler()}
+            onPress={() => checkIfEmpty()}
           >
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
@@ -88,7 +105,44 @@ const ForgetPassword = (props) => {
             </Text>
           </TouchableOpacity>
           
+          <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => props.navigation.navigate("MainMenu", {screen: 'UserProfile'})}
+          >
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}
+            >
+              Go Back to Log in Screen
+            </Text>
+          </TouchableOpacity>
+          
         </View>
+        </View>
+        
+
+        <Modal 
+          visible={modalVisible} 
+          animationType="slide"
+          transparent={true}>
+             <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={{fontWeight: "bold"}}>
+                  Email sent! 
+                </Text>
+                <Text style={{marginBottom: 10, textAlign: "justify"}}>
+                  Instructions on how to reset your password has been sent to your inbox or spam.
+                </Text>
+                <TouchableOpacity style={styles.buttonAlertModal} onPress={() => modalPress()}>
+                  <Text
+                    style={{ textAlign: "center", color: "#fff", fontWeight: "bold", width: "50%"}}
+                  >
+                    Login
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+        </Modal>
       </View>
     </View>
   );
@@ -100,7 +154,38 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#3d3d3d",
     justifyContent: "center",
-    paddingTop: Platform.OS === "android" ? 25 : 0,
+    paddingTop: Platform.OS === "android" ? 0 : 0,
+  },
+  buttonAlertModal: {
+    width: 100,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: "#1EA78C",
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
   },
 
   contentContainer: {
@@ -109,7 +194,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#3d3d3d",
-    paddingHorizontal: 30,
+    paddingHorizontal: 0,
   },
 
   logoContainer: {
@@ -118,7 +203,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     backgroundColor: "#3d3d3d",
-    paddingBottom: 40,
+    paddingBottom: 0,
   },
 
   inputContainer: {

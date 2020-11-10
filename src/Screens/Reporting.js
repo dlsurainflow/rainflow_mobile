@@ -266,7 +266,7 @@ const Reporting = (props) => {
 
   const EHRainAlert = () => {
     setModalAlertName("Intense rain description:");
-    setModalAlertDescription("Rain seemingly falls in sheets; individual drops are not identifiable. Heavy spray to height of several inches is observed over hard surfaces.\n\nWiper must be fast and continuous to see the road.");
+    setModalAlertDescription("Rain seemingly falls in sheets. Individual drops are not identifiable. Heavy spray to height of several inches is observed over hard surfaces.\n\nWiper must be fast and continuous to see the road.");
     setModalAlertVisible(true);
     changeFive();
   }
@@ -286,7 +286,7 @@ const Reporting = (props) => {
 
   const ADeepAlert = () => {
     setModalAlertName("Ankle deep description:");
-    setModalAlertDescription("Flood is around 0.25 meters high. Passable to all types of vehicles.");
+    setModalAlertDescription("Flood is around 0.25 meters high. \n\nPassable to all types of vehicles.");
     setModalAlertVisible(true);
     changeTwoF();
   }
@@ -306,7 +306,7 @@ const Reporting = (props) => {
 
   const KDeepAlert = () => {
     setModalAlertName("Knee deep description:");
-    setModalAlertDescription("Flood is around 0.5 meters high. Not Passable to light vehicles.");
+    setModalAlertDescription("Flood is around 0.5 meters high. \n\nNot Passable to light vehicles.");
     setModalAlertVisible(true);
     changeThreeF();
   }
@@ -326,7 +326,7 @@ const Reporting = (props) => {
 
   const WDeepAlert = () => {
     setModalAlertName("Waist deep description:");
-    setModalAlertDescription("Flood is threatening, around 1 meter high. Not passable to all types of vehicles.");
+    setModalAlertDescription("Flood is threatening, around 1 meter high. \n\nNot passable to all types of vehicles.");
     setModalAlertVisible(true);
     changeFourF();
   }
@@ -346,7 +346,7 @@ const Reporting = (props) => {
 
   const AWDeepAlert = () => {
     setModalAlertName("Neck deep description:");
-    setModalAlertDescription("Serious flooding expected in low lying areas. Not passable to all types of vehicles.");
+    setModalAlertDescription("Serious flooding expected in low lying areas. \n\nNot passable to all types of vehicles.");
     setModalAlertVisible(true);
     changeFiveF();
   }
@@ -366,7 +366,7 @@ const Reporting = (props) => {
 
     const ANDeepAlert = () => {
       setModalAlertName("Above head deep description:");
-      setModalAlertDescription("Flood level is above critical level. Flood Level is between 1.6 to 2 meters high. Not passable to all types of vehicles.");
+      setModalAlertDescription("Flood level is above critical level. Flood Level is between 1.6 to 2 meters high. \n\nNot passable to all types of vehicles.");
       setModalAlertVisible(true);
       changeSixF();
     }
@@ -386,7 +386,7 @@ const Reporting = (props) => {
 
     const OSDeepAlert = () => {
       setModalAlertName("One storey high description:");
-      setModalAlertDescription("Flood level is between 2 to 3 meters high. Not passable to all types of vehicles.");
+      setModalAlertDescription("Flood level is between 2 to 3 meters high. \n\nNot passable to all types of vehicles.");
       setModalAlertVisible(true);
       changeSevenF();
     }
@@ -406,7 +406,7 @@ const Reporting = (props) => {
 
     const OFSDeepAlert = () => {
       setModalAlertName("1.5 Storey high description:");
-      setModalAlertDescription("Flood level is between 3 to 4.5 meters high . Not passable to all types of vehicles.");
+      setModalAlertDescription("Flood level is between 3 to 4.5 meters high. \n\nNot passable to all types of vehicles.");
       setModalAlertVisible(true);
       changeEightF();
     }
@@ -426,7 +426,7 @@ const Reporting = (props) => {
 
     const TSDeepAlert = () => {
       setModalAlertName("Two storeys high description:");
-      setModalAlertDescription("Flood level is 4.5 meters high. Not passable to all types of vehicles.");
+      setModalAlertDescription("Flood level is 4.5 meters high. \n\nNot passable to all types of vehicles.");
       setModalAlertVisible(true);
       changeNineF();
     }

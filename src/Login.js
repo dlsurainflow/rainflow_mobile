@@ -144,13 +144,19 @@ const Login = (props) => {
               </Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
+          <View style={{ flexDirection: "row" }}>
+            <Text style={{ color: "white", paddingTop: 15 }}>
+              Forgot password?{" "}
+            </Text>
+            <TouchableOpacity
               onPress={() => props.navigation.navigate("ForgetPassword")}
             >
               <Text style={{ color: "#27B296", paddingTop: 15 }}>
-                Forgot Password?
+                Click here!
               </Text>
             </TouchableOpacity>
+          </View>
+          
         </View>
       </View>
     </View>
