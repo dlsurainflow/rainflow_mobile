@@ -92,7 +92,7 @@ const Login = (props) => {
         ToastAndroid.show("Error: " + response.status, ToastAndroid.SHORT);
         console.log("Error: ", response.status);
       }
-      props.navigation.navigate("MainMenu", {screen: 'HomeMap'});
+      //props.navigation.navigate("MainMenu", {screen: 'HomeMap'});
     });
 
 
