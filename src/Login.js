@@ -82,7 +82,7 @@ const Login = (props) => {
               "Welcome, " + responseJson.data.username + "!",
               ToastAndroid.SHORT
             )
-            props.navigation.navigate("MainMenu", {screen: 'UserProfile'});
+            
           })
           .catch((error) => {
             console.log(error);
@@ -92,6 +92,7 @@ const Login = (props) => {
         ToastAndroid.show("Error: " + response.status, ToastAndroid.SHORT);
         console.log("Error: ", response.status);
       }
+      props.navigation.navigate("MainMenu", {screen: 'HomeMap'});
     });
 
 
