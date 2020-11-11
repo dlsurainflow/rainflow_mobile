@@ -68,7 +68,7 @@ const Login = (props) => {
         response
           .json()
           .then(async (responseJson) => {
-            console.log(responseJson);
+            console.log("Hello");
             await AsyncStorage.setItem("token", responseJson.data.token); // Save token to storage
             await AsyncStorage.setItem("username", responseJson.data.username); // Save username
             await AsyncStorage.setItem("email", responseJson.data.email); // Save email
@@ -76,13 +76,11 @@ const Login = (props) => {
             await AsyncStorage.setItem("userID", JSON.stringify(responseJson.data.userID)); // Save userID
             await AsyncStorage.setItem("badge", responseJson.data.badge); // Saves user badge
             await AsyncStorage.setItem("dateCreated", responseJson.data.createdAt); // Saves date when user joined
-            props.navigation.push("MainMenu", { screen: 'HomeMap' })
-
             ToastAndroid.show(
               "Welcome, " + responseJson.data.username + "!",
               ToastAndroid.SHORT
             )
-            
+            props.navigation.push("MainMenu", { screen: 'HomeMap' })
           })
           .catch((error) => {
             console.log(error);
