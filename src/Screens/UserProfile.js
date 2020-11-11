@@ -52,7 +52,15 @@ const UserProfile = (props) => {
          setHeaderComponent(
           <>
             <View style = {{borderRadius: 100, paddingVertical: 9, paddingHorizontal: 15, borderColor: "#fff", backgroundColor: "#fff"}}>
-            <Image style={{height: 60, width: 50, alignSelf: "center"}} source={{uri:`https://rainflow.live/api/images/badges/${badgeImage}`}} />
+            {badgeImage !== null ? (
+              <Image style={{height: 60, width: 50, alignSelf: "center"}} source={{uri:`https://rainflow.live/api/images/badges/${badgeImage}`}} />
+            ): (
+              <MaterialCommunityIcons
+                            name="shield-half-full"
+                            color="#0E956A"
+                            size={60}
+                          />
+            )}
             </View>
             <Text style = {styles.userText}>{un}</Text>
             <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>

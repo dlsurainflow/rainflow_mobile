@@ -68,13 +68,15 @@ const Login = (props) => {
         response
           .json()
           .then(async (responseJson) => {
-            console.log("Hello");
+            console.log(responseJson);
             await AsyncStorage.setItem("token", responseJson.data.token); // Save token to storage
             await AsyncStorage.setItem("username", responseJson.data.username); // Save username
             await AsyncStorage.setItem("email", responseJson.data.email); // Save email
             await AsyncStorage.setItem("points", JSON.stringify(responseJson.data.points)); // Save points
             await AsyncStorage.setItem("userID", JSON.stringify(responseJson.data.userID)); // Save userID
-            await AsyncStorage.setItem("badge", responseJson.data.badge); // Saves user badge
+            if(responseJson.data.badge !== null){
+              await AsyncStorage.setItem("badge", responseJson.data.badge); // Saves user badge
+            }   
             await AsyncStorage.setItem("dateCreated", responseJson.data.createdAt); // Saves date when user joined
             ToastAndroid.show(
               "Welcome, " + responseJson.data.username + "!",
