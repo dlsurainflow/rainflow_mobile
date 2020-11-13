@@ -15,6 +15,7 @@ import AccountInfoScreen from "./src/Screens/AccountInfo.js";
 import ActiveReportsScreen from "./src/Screens/ActiveReports.js";
 import DashboardScreen from "./src/Screens/Dashboard.js"
 import ForgetPasswordScreen from "./src/Screens/ForgetPassword.js";
+import EmergencyHotlinesScreen from "./src/Screens/EmergencyHotlines.js"
 
 //SCREENS END
 
@@ -67,6 +68,17 @@ export default function App() {
           name="HomeMap"
           component={HomeMap}
           options={{ title: "HomeMap" }}
+        />
+      </Stack.Navigator>
+    </>
+  );
+  const HotlineComp = (props) => (
+    <>
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="EmergencyHotlines">
+        <Stack.Screen
+          name="EmergencyHotlines"
+          component={EmergencyHotlinesScreen}
+          options={{ title: "EmergencyHotlines" }}
         />
       </Stack.Navigator>
     </>
@@ -137,6 +149,23 @@ export default function App() {
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons 
                 name="alert-octagon" 
+                color="#ffff" 
+                size={26} />
+            ),
+           
+          }}
+        />
+
+    <bottomTab.Screen
+          name="Emergency Hotlines"
+          children={HotlineComp}
+          options={{
+            tabBarColor: '#47b28a', 
+            tabBarLabel: "Hotlines",
+        
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons 
+                name="phone-alert" 
                 color="#ffff" 
                 size={26} />
             ),
