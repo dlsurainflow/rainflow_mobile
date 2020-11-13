@@ -481,6 +481,7 @@ const Reporting = (props) => {
   };
 
   const alertUserLogin = () => {
+    setModalAlertReportVisible(false);
     Alert.alert(
       "You cannot report without an account!",
       "Tap Login to continue. Tap Cancel if you want to cancel reporting." ,
