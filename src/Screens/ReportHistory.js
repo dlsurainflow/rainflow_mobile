@@ -22,6 +22,9 @@ const ReportHistory = (props) => {
   const [historyBodyArchived, setHistoryBodyArchived] = useState();
   const [modalComponent, setModalComponent] = useState();
   const [visible, setVisible] = React.useState(false);
+  const [upvoteArray, setUpvoteArray] = useState({})
+  const [downvoteArray, setDownvoteArray] = useState({})
+  const [type, setType] = useState()
   const [concatReports, setConcatReports] = useState();
 
   const showModal = (id, reportType) =>{
@@ -41,6 +44,9 @@ const ReportHistory = (props) => {
       downvote: null,
       image: null
     })
+    setUpvoteArray({})
+    setDownvoteArray({})
+    setType(null)
   };
 
   const getReports = async() => {
@@ -95,7 +101,16 @@ const ReportHistory = (props) => {
       }
       }) .then(response => {
         if(response.status == 200)
-          response.json().then( (data) => {setReportInfo(data)});
+          response.json().then( (data) => {
+            if(Array.isArray(data.upvote)){
+              setType("archived")
+              setDownvoteArray(data.downvote)
+              setUpvoteArray(data.upvote)
+            }else{
+              setType("active")
+            }
+            console.log(data)
+            setReportInfo(data)});
         else{
           console.log(`Error retrieving reports! (Code: ${response.status})`);
         }
@@ -188,8 +203,8 @@ const ReportHistory = (props) => {
                 <Text>Rain Intensity: {reportInfo.rainfall_rate} </Text>
                 <Text>Flood Level: {reportInfo.flood_depth} </Text>
                 <View style = {{borderColor: 1, width: "100%", flexDirection: "row", marginVertical: 8, justifyContent: "space-evenly"}}>
-                <Text style={styles.likesText}>{reportInfo.upvote} Like/s</Text>
-                <Text style={styles.dislikesText}>{reportInfo.downvote} Dislike/s</Text>
+                <Text style={styles.likesText}>{type == "archived" ? upvoteArray.length : reportInfo.upvote} Upvote/s</Text>
+                <Text style={styles.dislikesText}>{type == "archived" ? downvoteArray.length : reportInfo.downvote} Downvote/s</Text>
                 </View>
                 {reportInfo.image != null ? (
                   <>

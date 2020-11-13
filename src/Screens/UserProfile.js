@@ -29,23 +29,7 @@ const UserProfile = (props) => {
        let un = await AsyncStorage.getItem("username");
        let pts = await AsyncStorage.getItem("points");
        let badgeImage = await AsyncStorage.getItem("badge");
-       var badgeText;
-          switch(badgeImage) {
-            case "1.png":
-              badgeText = "Gold"
-              break;
-            case "2.png":
-              badgeText = "Sapphire"
-              break;
-            case "3.png":
-              badgeText= "Emerald"
-              break;
-            case "0.png":
-              badgeText = "Ruby"
-              break;
-            default: 
-              null;
-          }
+  
        if (un != null){
          setUsername(un)
          setButtonLabel("Logout")
@@ -65,7 +49,6 @@ const UserProfile = (props) => {
             <Text style = {styles.userText}>{un}</Text>
             <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>
               <Text style = {styles.pointsText}>{pts} pts</Text>
-              <Text style = {styles.pointsText}>{badgeText} Badge</Text> 
             </View>
           </>
          )
@@ -106,12 +89,21 @@ const UserProfile = (props) => {
             />
 
           <List.Item  
+            onPress = {()=> props.navigation.navigate("Badge Index")} 
+            titleStyle = {{fontSize: 15}} style = {styles.listItem} 
+            descriptionStyle = {{fontSize: 12}} 
+            title="Badge Index" 
+            description="A complete list of user badges and how to earn points"
+            />
+
+          <List.Item  
             onPress = {()=> props.navigation.navigate("About Us")} 
             titleStyle = {{fontSize: 15}} 
             descriptionStyle = {{fontSize: 12}} 
             title="About RainFLOW" 
             description="Learn more about user privileges and our team"
             />
+
 
         </ScrollView>
          )
@@ -130,7 +122,6 @@ const UserProfile = (props) => {
                 <Text style = {styles.userText}>Guest</Text>
                 <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>
                   <Text style = {styles.pointsText}>0 pts</Text>
-                  <Text style = {styles.pointsText}>No Badge</Text> 
                 </View>
             </>
            )
@@ -174,7 +165,6 @@ const UserProfile = (props) => {
             <Text style = {styles.userText}>Guest</Text>
             <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>
               <Text style = {styles.pointsText}>0 pts</Text>
-              <Text style = {styles.pointsText}>No Badge</Text> 
             </View>
           </>
          )
