@@ -35,7 +35,7 @@ const Reporting = (props) => {
   const [modalAlertVisible, setModalAlertVisible] = useState(false);
   const [modalAlertName, setModalAlertName] = useState("");
   const [modalAlertDescription, setModalAlertDescription] = useState("");
-  const [locName, setLocName] = useState("");
+  const [locName, setLocName] = useState(" Location is loading . . . ");
   const [modalAlertReportVisible, setModalAlertReportVisible] = useState(false);
  
   var options = {
@@ -632,25 +632,22 @@ const Reporting = (props) => {
   return (
     <ScrollView style={{height: "100%"}} persistentScrollbar={true}>
 
-    
-    
-      <View style={styles.contentContainer}>
-        <Text
+<View style={styles.userHeader}>
+<Text
           style={{
             textAlign: "center",
-            color: "black",
+            color: "white",
             fontWeight: "bold",
-            paddingBottom: 0,
+            paddingTop: 30,
             fontSize: 30,
           }}
         >
           REPORTING
         </Text>
-
         <Text
           style={{
             textAlign: "center",
-            color: "black",
+            color: "white",
             fontWeight: "bold",
             paddingBottom: 0,
           }}
@@ -659,6 +656,13 @@ const Reporting = (props) => {
           {/* Accuracy: {accR} meters. {"\n"} */}
           
         </Text>
+          </View>
+    
+      <View style={styles.contentContainer}>
+        
+        
+
+        
         
         {showMap ? (
             
@@ -1165,6 +1169,15 @@ const styles = StyleSheet.create({
     elevation: 5
   },
 
+  userHeader: {
+    flexDirection: "column", 
+    width: "100%", 
+    backgroundColor: "#47b28a", 
+    height: 190, 
+    justifyContent: "center", 
+    alignItems: "center", 
+  },
+
   loadingContainer: {
     flex: 1, 
     height: "100%", 
@@ -1184,7 +1197,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     paddingHorizontal: 30,
-    paddingTop: Platform.OS === "android" ? 70 : 0,
+    paddingTop: Platform.OS === "android" ? 0 : 0,
   },
 
   reportcontentContainer: {
