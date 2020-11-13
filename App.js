@@ -14,6 +14,9 @@ import AboutUsScreen from "./src/Screens/AboutUs.js"
 import AccountInfoScreen from "./src/Screens/AccountInfo.js";
 import ActiveReportsScreen from "./src/Screens/ActiveReports.js";
 import DashboardScreen from "./src/Screens/Dashboard.js"
+import ForgetPasswordScreen from "./src/Screens/ForgetPassword.js";
+import EmergencyHotlinesScreen from "./src/Screens/EmergencyHotlines.js"
+import BadgeIndexScreen from "./src/Screens/BadgeIndex.js"
 
 //SCREENS END
 
@@ -70,6 +73,17 @@ export default function App() {
       </Stack.Navigator>
     </>
   );
+  const HotlineComp = (props) => (
+    <>
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="EmergencyHotlines">
+        <Stack.Screen
+          name="EmergencyHotlines"
+          component={EmergencyHotlinesScreen}
+          options={{ title: "EmergencyHotlines" }}
+        />
+      </Stack.Navigator>
+    </>
+  );
 
 
   const ProfileComp = (props) => (
@@ -104,6 +118,11 @@ export default function App() {
           component={ActiveReportsScreen}
           options={{ title: "Active Reports" }}
         />
+      <Stack.Screen
+          name="Badge Index"
+          component={BadgeIndexScreen}
+          options={{ title: "Badge Index" }}
+        />
 
       <Stack.Screen
           name="Dashboard"
@@ -136,6 +155,23 @@ export default function App() {
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons 
                 name="alert-octagon" 
+                color="#ffff" 
+                size={26} />
+            ),
+           
+          }}
+        />
+
+    <bottomTab.Screen
+          name="Emergency Hotlines"
+          children={HotlineComp}
+          options={{
+            tabBarColor: '#47b28a', 
+            tabBarLabel: "Hotlines",
+        
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons 
+                name="phone-alert" 
                 color="#ffff" 
                 size={26} />
             ),
@@ -197,6 +233,7 @@ export default function App() {
       <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="MainMenu">
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
       <Stack.Screen name="MainMenu" component={Navbar} />
     </Stack.Navigator>
    </NavigationContainer>

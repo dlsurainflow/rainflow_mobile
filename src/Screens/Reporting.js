@@ -22,6 +22,7 @@ const Reporting = (props) => {
   const [floodLevelVal, setFloodLevelVal] = useState(null);
   const [rainIntensityText, setRainIntensityText] = useState("No Rain");
   const [floodLevelText, setFloodLevelText] = useState("No Flood");
+  const [textInputplaceholder, setTextInputplaceholder] = useState("Add description here");
   const [dispLat, setDispLat] = useState(0);
   const [dispLong, setDispLong] = useState(0);
   const [accR, setAccR] = useState("Analyzing . . .");
@@ -31,10 +32,12 @@ const Reporting = (props) => {
   const [colorNR, setColorNR] = useState("white");
   const [colorLR, setColorLR] = useState("white");
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalAlertVisible, setModalAlertVisible] = useState(false);
+  const [modalAlertName, setModalAlertName] = useState("");
+  const [modalAlertDescription, setModalAlertDescription] = useState("");
   const [locName, setLocName] = useState("");
+  const [modalAlertReportVisible, setModalAlertReportVisible] = useState(false);
  
-  
-  
   var options = {
     enableHighAccuracy: true,
     timeout: 5000,
@@ -182,10 +185,16 @@ const Reporting = (props) => {
   })
   }  
 
-  const LRainAlert = () =>
-    Alert.alert(
-      "LIGHT rain intensity selected!",
-      "Light rain: Scatte#ed1b39 drops that do not completely wet an exposed surface regardless of duration.",
+  const LRainAlert = () =>{
+    setModalAlertName("Light rain description:");
+    setModalAlertDescription("Individual drops easily identified and puddles form slowly. Small streams may flow in gutters. \n\nDriver doesn't need the wiper to be working to see the road.");
+    setModalAlertVisible(true);
+    changeTwo();
+  }
+    
+    /*Alert.alert(
+      "Light rain description:",
+      "Scattered drops that do not completely wet an exposed surface regardless of duration.",
       [
         {
           text: "Cancel",
@@ -195,12 +204,17 @@ const Reporting = (props) => {
         { text: "Report", onPress: () => changeTwo() },
       ],
       { cancelable: false }
-    );
+    );*/
 
-  const MRainAlert = () =>
-    Alert.alert(
-      "MEDIUM rain intensity selected!",
-      "Medium rain: The rate of fall is from trace to 2.5 mm per hour. Individual drops easily identified and puddles(small muddy pools) form slowly. Small streams may flow in gutters.",
+  const MRainAlert = () => {
+    setModalAlertName("Medium rain description:");
+    setModalAlertDescription("From scattered drops that, regardless of duration, do not completely wet an exposed surface up to a condition where individual drops are easily seen. \n\nWiper must be set at intermittent to see the road.");
+    setModalAlertVisible(true);
+    changeThree();
+  }
+    /*Alert.alert(
+      "Medium rain description",
+      "Individual drops easily identified and puddles(small muddy pools) form slowly. Small streams may flow in gutters.",
       [
         {
           text: "Cancel",
@@ -210,12 +224,17 @@ const Reporting = (props) => {
         { text: "Report", onPress: () => changeThree() },
       ],
       { cancelable: false }
-    );
+    );*/
 
-  const HRainAlert = () =>
-    Alert.alert(
-      "HEAVY rain intensity selected!",
-      "Heavy rain: The rate of fall is between 2.5 mm to 7.5 mm per hour. Puddles rapidly forming and down pipes flowing freely.",
+  const HRainAlert = () => {
+    setModalAlertName("Heavy rain description:");
+    setModalAlertDescription("Individual drops are not clearly identifiable. Spray is observable just above pavements and other hard surfaces. \n\nWiper must be slow and continuous to see the road.");
+    setModalAlertVisible(true);
+    changeFour();
+  }
+    /*Alert.alert(
+      "Heavy rain description",
+      "Puddles rapidly forming and down pipes flowing freely.",
       [
         {
           text: "Cancel",
@@ -225,12 +244,17 @@ const Reporting = (props) => {
         { text: "Report", onPress: () => changeFour() },
       ],
       { cancelable: false }
-    );
+    );*/
 
-  const TRainAlert = () =>
-    Alert.alert(
-      "TORRENTIAL rain intensity selected!",
-      "Torrential rain: Strongest downpour of rain. Torrential rain rate of rainfall is above 15 mm per hour and may persist for hours.",
+  const TRainAlert = () => {
+    setModalAlertName("Torrential rain description:");
+    setModalAlertDescription("Strongest downpour of rain and may persist for hours. \n\nEven with fast and continuous wiper speed, the driver will not be able to see the road.");
+    setModalAlertVisible(true);
+    changeSix();
+  }
+    /*Alert.alert(
+      "Torrential rain description",
+      "Strongest downpour of rain and may persist for hours.",
       [
         {
           text: "Cancel",
@@ -240,12 +264,17 @@ const Reporting = (props) => {
         { text: "Report", onPress: () => changeSix() },
       ],
       { cancelable: false }
-    );
+    );*/
 
-  const EHRainAlert = () =>
-    Alert.alert(
-      "EXTREMELY HEAVY rain intensity selected!",
-      "Extremely heavy rain: The rate of fall is greater than 7.5 mm per hour. The sky is overcast, there is a continuous precipitation. Falls in sheets, misty spray over hard surfaces. May cause roaring noise on roofs.",
+  const EHRainAlert = () => {
+    setModalAlertName("Intense rain description:");
+    setModalAlertDescription("Rain seemingly falls in sheets. Individual drops are not identifiable. Heavy spray to height of several inches is observed over hard surfaces.\n\nWiper must be fast and continuous to see the road.");
+    setModalAlertVisible(true);
+    changeFive();
+  }
+    /*Alert.alert(
+      "Extremely heavy rain description",
+      "The sky is overcast, there is a continuous precipitation. Falls in sheets, misty spray over hard surfaces.",
       [
         {
           text: "Cancel",
@@ -255,12 +284,17 @@ const Reporting = (props) => {
         { text: "Report", onPress: () => changeFive() },
       ],
       { cancelable: false }
-    );
+    );*/
 
-  const ADeepAlert = () =>
-    Alert.alert(
-      "ANKLE DEEP intensity selected!",
-      "Ankle deep: Flood is around 0.25 meters high",
+  const ADeepAlert = () => {
+    setModalAlertName("Ankle deep description:");
+    setModalAlertDescription("Flood is around 0.25 meters high. \n\nPassable to all types of vehicles.");
+    setModalAlertVisible(true);
+    changeTwoF();
+  }
+    /*Alert.alert(
+      "Ankle deep description",
+      "Flood is around 0.25 meters high. Passable to all types of vehicles.",
       [
         {
           text: "Cancel",
@@ -270,12 +304,17 @@ const Reporting = (props) => {
         { text: "Report", onPress: () => changeTwoF() },
       ],
       { cancelable: false }
-    );
+    );*/
 
-  const KDeepAlert = () =>
-    Alert.alert(
-      "KNEE DEEP flood level is selected!",
-      "Knee Deep: 7.5 - 15 mm of rain observed in the next two hours. Flood is around 0.5 meters high. Response: Monitor weather condition.",
+  const KDeepAlert = () => {
+    setModalAlertName("Knee deep description:");
+    setModalAlertDescription("Flood is around 0.5 meters high. \n\nNot Passable to light vehicles.");
+    setModalAlertVisible(true);
+    changeThreeF();
+  }
+    /*Alert.alert(
+      "Knee deep description",
+      "Flood is around 0.5 meters high. Not Passable to light vehicles. ",
       [
         {
           text: "Cancel",
@@ -285,12 +324,17 @@ const Reporting = (props) => {
         { text: "Report", onPress: () => changeThreeF() },
       ],
       { cancelable: false }
-    );
+    );*/
 
-  const WDeepAlert = () =>
-    Alert.alert(
-      "WAIST DEEP flood level is selected!",
-      "Waist deep: 15 - 30 mm of rain observed in an hour and expected to continue in the next two hours. Flood is threatening, around 1 meter high Response: Alert for possible evacuation.",
+  const WDeepAlert = () => {
+    setModalAlertName("Waist deep description:");
+    setModalAlertDescription("Flood is threatening, around 1 meter high. \n\nNot passable to all types of vehicles.");
+    setModalAlertVisible(true);
+    changeFourF();
+  }
+    /*Alert.alert(
+      "Waist deep description",
+      "Flood is threatening, around 1 meter high. Not passable to all types of vehicles. ",
       [
         {
           text: "Cancel",
@@ -300,12 +344,17 @@ const Reporting = (props) => {
         { text: "Report", onPress: () => changeFourF() },
       ],
       { cancelable: false }
-    );
+    );*/
 
-  const AWDeepAlert = () =>
-    Alert.alert(
-      "NECK DEEP flood level is selected!",
-      "Neck Deep: More than 30 mm of rain observed in an hour and expected to continue in the next two hours. Serious flooding expected in low lying areas. Response: evacuation. ",
+  const AWDeepAlert = () => {
+    setModalAlertName("Neck deep description:");
+    setModalAlertDescription("Serious flooding expected in low lying areas. \n\nNot passable to all types of vehicles.");
+    setModalAlertVisible(true);
+    changeFiveF();
+  }
+    /*Alert.alert(
+      "Neck deep description",
+      "Serious flooding expected in low lying areas. Not passable to all types of vehicles. ",
       [
         {
           text: "Cancel",
@@ -315,12 +364,17 @@ const Reporting = (props) => {
         { text: "Report", onPress: () => changeFiveF() },
       ],
       { cancelable: false }
-    );
+    );*/
 
-    const ANDeepAlert = () =>
-    Alert.alert(
-      "ABOVE HEAD DEEP flood level is selected!",
-      "Above head deep: Flood level is above critical level. Flood Level is between 1.6 to 2 meters high. Response:  Force evacuation.",
+    const ANDeepAlert = () => {
+      setModalAlertName("Above head deep description:");
+      setModalAlertDescription("Flood level is above critical level. Flood Level is between 1.6 to 2 meters high. \n\nNot passable to all types of vehicles.");
+      setModalAlertVisible(true);
+      changeSixF();
+    }
+    /*Alert.alert(
+      "Above head deep description",
+      "Flood level is above critical level. Flood Level is between 1.6 to 2 meters high. Not passable to all types of vehicles. ",
       [
         {
           text: "Cancel",
@@ -330,12 +384,17 @@ const Reporting = (props) => {
         { text: "Report", onPress: () => changeSixF() },
       ],
       { cancelable: false }
-    );
+    );*/
 
-    const OSDeepAlert = () =>
-    Alert.alert(
-      "ONE STOREY HIGH flood level is selected!",
-      "One storey high: Flood level is between 2 to 3 meters high. Response: Force evacuation.",
+    const OSDeepAlert = () => {
+      setModalAlertName("One storey high description:");
+      setModalAlertDescription("Flood level is between 2 to 3 meters high. \n\nNot passable to all types of vehicles.");
+      setModalAlertVisible(true);
+      changeSevenF();
+    }
+    /*Alert.alert(
+      "One storey high description",
+      "Flood level is between 2 to 3 meters high. Not passable to all types of vehicles. ",
       [
         {
           text: "Cancel",
@@ -345,12 +404,17 @@ const Reporting = (props) => {
         { text: "Report", onPress: () => changeSevenF() },
       ],
       { cancelable: false }
-    );
+    );*/
 
-    const OFSDeepAlert = () =>
-    Alert.alert(
-      "1.5 STOREY HIGH flood level is selected!",
-      "1.5 Storey High: Flood level is between 3 to 4.5 meters high . Response:  Force evacuation.",
+    const OFSDeepAlert = () => {
+      setModalAlertName("1.5 Storey high description:");
+      setModalAlertDescription("Flood level is between 3 to 4.5 meters high. \n\nNot passable to all types of vehicles.");
+      setModalAlertVisible(true);
+      changeEightF();
+    }
+    /*Alert.alert(
+      "1.5 Storey high description",
+      "Flood level is between 3 to 4.5 meters high . Not passable to all types of vehicles. ",
       [
         {
           text: "Cancel",
@@ -360,12 +424,17 @@ const Reporting = (props) => {
         { text: "Report", onPress: () => changeEightF() },
       ],
       { cancelable: false }
-    );
+    );*/
 
-    const TSDeepAlert = () =>
-    Alert.alert(
-      "TWO STOREYS OR HIGHER flood level is selected!",
-      "Two storeys or higher: Flood level is 4.5 meters high. Response:  Force evacuation.",
+    const TSDeepAlert = () => {
+      setModalAlertName("Two storeys high description:");
+      setModalAlertDescription("Flood level is 4.5 meters high. \n\nNot passable to all types of vehicles.");
+      setModalAlertVisible(true);
+      changeNineF();
+    }
+    /*Alert.alert(
+      "Two storeys high description",
+      "Flood level is 4.5 meters high. Not passable to all types of vehicles. ",
       [
         {
           text: "Cancel",
@@ -375,22 +444,27 @@ const Reporting = (props) => {
         { text: "Report", onPress: () => changeNineF() },
       ],
       { cancelable: false }
-    );
+    );*/
 
-  
+    const modalAlertReport = () => {
+      setModalAlertReportVisible(true);
+    }
   
 
   const alertUserReport = () => {
     Alert.alert(
       "Report Now",
-      "You are about to report this information \nLatitude: " +
-        dispLat +
-        "\nLongitude: " +
-        dispLong +
-        "\nRain Intensity: " +
-        rainIntensityVal +
-        "\nFlood Level: " +
-        floodLevelVal,
+      "You are about to report this information \nAddress: " +
+        locName +
+        "\n\n\n\nRain Intensity: " +
+        rainIntensityText +
+        "\n\nFlood Level: " +
+        floodLevelText +
+        "\n\nDescription: " + 
+        description + 
+        "\n\nImage: " + 
+        image,
+
       [
         {
           text: "Cancel",
@@ -488,6 +562,9 @@ const Reporting = (props) => {
         setFloodLevelText("No Flood");
         setRainIntensityVal(0);
         setRainIntensityText("No Rain");
+        setModalAlertReportVisible(false);
+        setTextInputplaceholder("Add description here");
+        
         alert("Report submitted! Thank you");
       }, 500);
     
@@ -506,7 +583,7 @@ const Reporting = (props) => {
     } else if (floodLevelVal == null) {
       alert("Missing flood level data to be reported");
     } else {
-      alertUserReport();
+      modalAlertReport();
     }
   };
 
@@ -849,10 +926,9 @@ const Reporting = (props) => {
         
         <View style={styles.descriptionContainer}>
           <TextInput
-            placeholder="Add description here"
+            placeholder={textInputplaceholder}
             style={{color: "black"}}
             multiline={true}
-            // onChangeText={emailHandler}
             onChangeText={(e) => setDescription(e)}
           />
         </View>
@@ -900,6 +976,116 @@ const Reporting = (props) => {
             </Text>
           </TouchableOpacity>
         </View>
+
+        <Modal //MODAL ALERT OI
+          visible={modalAlertVisible} 
+          animationType="slide"
+          transparent={true} > 
+          <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+          <Text style={{fontSize: 20, fontWeight: "bold", marginBottom: 10,}}>
+            {modalAlertName}
+          </Text>
+          <Text style={{marginBottom: 10, textAlign: "justify"}}>
+            {modalAlertDescription}
+          </Text>
+          
+          <TouchableOpacity style={styles.buttonAlertModal} onPress={() => setModalAlertVisible(!modalAlertVisible)}>
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold", width: "50%"}}
+            >
+              CLOSE
+            </Text>
+          </TouchableOpacity>
+        </View>
+          </View>
+          
+          
+        </Modal>
+
+        <Modal //MODAL ALERT REPROT OI
+          visible={modalAlertReportVisible} 
+          animationType="fade"
+          transparent={true} > 
+          <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+          <Text style={{fontSize: 20, fontWeight: "bold", marginBottom: 10,}}>
+            Report Summary
+          </Text>
+          <Text style={{marginBottom: 10, textAlign: "justify", fontWeight: "bold"}}>
+            Address: 
+          </Text>
+          <Text style={{marginBottom: 0, textAlign: "justify"}}>
+            {locName} {"\n"} 
+          </Text>
+          <Text style={{marginBottom: 0, textAlign: "justify", fontWeight: "bold"}}>
+            Rain Intensity: 
+          </Text>
+          <Text style={{marginBottom: 0, textAlign: "justify"}}>
+            {rainIntensityText} {"\n"}
+          </Text>
+          <Text style={{marginBottom: 0, textAlign: "justify", fontWeight: "bold"}}>
+            Flood Level: 
+          </Text>
+          <Text style={{marginBottom: 0, textAlign: "justify"}}>
+            {floodLevelText} {"\n"}
+          </Text>
+          { description !== "" ? (
+            <View>
+              <Text style={{marginBottom: 0, textAlign: "justify", fontWeight: "bold"}}>
+                Description: 
+              </Text>
+              <Text style={{marginBottom: 0, textAlign: "justify"}}>
+                {description} {"\n"}
+              </Text>
+            </View>
+          ): null}
+          
+          {image !== null ? (
+            <View>
+            <Text style={{marginBottom: 0, textAlign: "justify", fontWeight: "bold"}}>
+              Image: 
+            </Text>
+            <View style={{marginBottom: 5}} />
+            <Image
+              source={{
+                uri: image,
+               }}
+              style={{ height: 100, width: 100, alignItems: "center", paddingBottom: 20}}
+            />
+            </View>
+          ): null}
+          
+         
+
+          
+         <View style={{marginBottom: 10}}>
+
+        </View>
+          <View style={{flexDirection: "row"}}>
+          <TouchableOpacity style={styles.buttonAlertModal} onPress={() => setModalAlertReportVisible(!modalAlertReportVisible)}>
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold", width: "50%"}}
+            >
+              CLOSE
+            </Text>
+          </TouchableOpacity>
+          <View style={{marginLeft: 10}}>
+
+        </View>
+          <TouchableOpacity style={styles.buttonAlertModal} onPress={() => isUserLogged()}>
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold", width: "50%"}}
+            >
+              REPORT
+            </Text>
+          </TouchableOpacity>
+          </View>
+        </View>
+          </View>
+          
+          
+        </Modal>
         
         <Modal 
           visible={modalVisible} 
@@ -953,6 +1139,29 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     backgroundColor: "white",
     paddingHorizontal: 10,
+  },
+  
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
   },
 
   loadingContainer: {
@@ -1275,6 +1484,15 @@ const styles = StyleSheet.create({
   buttonModal: {
     width: "70%",
     height: 35,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: "#1EA78C",
+  },
+
+  buttonAlertModal: {
+    width: 100,
+    height: 30,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,

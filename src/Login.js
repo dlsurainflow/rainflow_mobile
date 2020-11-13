@@ -74,15 +74,15 @@ const Login = (props) => {
             await AsyncStorage.setItem("email", responseJson.data.email); // Save email
             await AsyncStorage.setItem("points", JSON.stringify(responseJson.data.points)); // Save points
             await AsyncStorage.setItem("userID", JSON.stringify(responseJson.data.userID)); // Save userID
-            await AsyncStorage.setItem("badge", responseJson.data.badge); // Saves user badge
+            if(responseJson.data.badge !== null){
+              await AsyncStorage.setItem("badge", responseJson.data.badge); // Saves user badge
+            }   
             await AsyncStorage.setItem("dateCreated", responseJson.data.createdAt); // Saves date when user joined
-            props.navigation.push("MainMenu", { screen: 'HomeMap' })
-
             ToastAndroid.show(
               "Welcome, " + responseJson.data.username + "!",
               ToastAndroid.SHORT
             )
-            //props.navigation.navigate("Main Menu");
+            props.navigation.push("MainMenu", { screen: 'HomeMap' })
           })
           .catch((error) => {
             console.log(error);
@@ -92,6 +92,7 @@ const Login = (props) => {
         ToastAndroid.show("Error: " + response.status, ToastAndroid.SHORT);
         console.log("Error: ", response.status);
       }
+      //props.navigation.navigate("MainMenu", {screen: 'HomeMap'});
     });
 
 
@@ -144,6 +145,19 @@ const Login = (props) => {
               </Text>
             </TouchableOpacity>
           </View>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={{ color: "white", paddingTop: 15 }}>
+              Forgot password?{" "}
+            </Text>
+            <TouchableOpacity
+              onPress={() => props.navigation.navigate("ForgetPassword")}
+            >
+              <Text style={{ color: "#27B296", paddingTop: 15 }}>
+                Click here!
+              </Text>
+            </TouchableOpacity>
+          </View>
+          
         </View>
       </View>
     </View>
