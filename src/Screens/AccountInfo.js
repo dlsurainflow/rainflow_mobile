@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  Image,
   BackHandler,
   ScrollView,
 } from "react-native";
@@ -44,27 +45,12 @@ const theme = {
     let email_add = await AsyncStorage.getItem("email")
     let badgeRank = await AsyncStorage.getItem("badge");
     let dateJoined = await AsyncStorage.getItem("dateCreated")
-    let badgeText = await AsyncStorage.getItem("badge");
-       switch(badgeText) {
-        case "1.png":
-          setBadge("Gold");
-          break;
-        case "2.png":
-          setBadge("Sapphire");
-          break;
-        case "3.png":
-          setBadge("Emerald");
-          break;
-        case "0.png":
-          setBadge("Ruby");
-          break;
-        default:
-          null;
-      }
+
     console.log(dateJoined)
     let convertedTime = moment(dateJoined).format("DD MMM YYYY")
 
     setUsername(un);
+    setBadge(badgeRank)
     setPoints(pts);
     setEmail(email_add)
     setJoined(convertedTime)
@@ -191,7 +177,15 @@ const theme = {
         </View>
         <View style = {styles.infoContainer}>
             <Text style = {styles.boldText}>Badge</Text>
-            <Text style = {styles.fixedRightText}>{badge}</Text>
+            <Text style = {styles.fixedRightText}> {badge !== null ? (
+              <Image style={{height: 20, width: 16, alignSelf: "center"}} source={{uri:`https://rainflow.live/api/images/badges/${badge}`}} />
+            ): (
+              <MaterialCommunityIcons
+                            name="shield-half-full"
+                            color="#0E956A"
+                            size={20}
+                          />
+            )}</Text>
         </View>
         <View style = {styles.infoContainer}>
             <Text style = {styles.boldText}>Points</Text>

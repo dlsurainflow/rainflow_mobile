@@ -29,23 +29,7 @@ const UserProfile = (props) => {
        let un = await AsyncStorage.getItem("username");
        let pts = await AsyncStorage.getItem("points");
        let badgeImage = await AsyncStorage.getItem("badge");
-       var badgeText;
-          switch(badgeImage) {
-            case "1.png":
-              badgeText = "Gold"
-              break;
-            case "2.png":
-              badgeText = "Sapphire"
-              break;
-            case "3.png":
-              badgeText= "Emerald"
-              break;
-            case "0.png":
-              badgeText = "Ruby"
-              break;
-            default: 
-              null;
-          }
+  
        if (un != null){
          setUsername(un)
          setButtonLabel("Logout")
@@ -65,7 +49,6 @@ const UserProfile = (props) => {
             <Text style = {styles.userText}>{un}</Text>
             <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>
               <Text style = {styles.pointsText}>{pts} pts</Text>
-              <Text style = {styles.pointsText}>{badgeText} Badge</Text> 
             </View>
           </>
          )
@@ -130,7 +113,6 @@ const UserProfile = (props) => {
                 <Text style = {styles.userText}>Guest</Text>
                 <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>
                   <Text style = {styles.pointsText}>0 pts</Text>
-                  <Text style = {styles.pointsText}>No Badge</Text> 
                 </View>
             </>
            )
@@ -174,7 +156,6 @@ const UserProfile = (props) => {
             <Text style = {styles.userText}>Guest</Text>
             <View style = {{paddingTop: 10, width: "100%", flexDirection: "row",}}>
               <Text style = {styles.pointsText}>0 pts</Text>
-              <Text style = {styles.pointsText}>No Badge</Text> 
             </View>
           </>
          )
