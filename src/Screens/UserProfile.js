@@ -258,6 +258,9 @@ const logoutHandler = () =>{
             <Text style = {{fontWeight: "bold", color : "#434343"}}>Loading</Text>       
             </View>
           ) : null}
+        <Text style={{textAlign:"right", fontSize: 10, marginRight: 5}}>
+          V 1.0.0.6
+        </Text>
           
     </View>
   );
