@@ -16,6 +16,7 @@ import ActiveReportsScreen from "./src/Screens/ActiveReports.js";
 import DashboardScreen from "./src/Screens/Dashboard.js"
 import ForgetPasswordScreen from "./src/Screens/ForgetPassword.js";
 import EmergencyHotlinesScreen from "./src/Screens/EmergencyHotlines.js"
+import BadgeIndexScreen from "./src/Screens/BadgeIndex.js"
 
 //SCREENS END
 
@@ -116,6 +117,11 @@ export default function App() {
           name="Active Reports"
           component={ActiveReportsScreen}
           options={{ title: "Active Reports" }}
+        />
+      <Stack.Screen
+          name="Badge Index"
+          component={BadgeIndexScreen}
+          options={{ title: "Badge Index" }}
         />
 
       <Stack.Screen

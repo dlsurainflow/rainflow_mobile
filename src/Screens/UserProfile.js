@@ -89,12 +89,21 @@ const UserProfile = (props) => {
             />
 
           <List.Item  
+            onPress = {()=> props.navigation.navigate("Badge Index")} 
+            titleStyle = {{fontSize: 15}} style = {styles.listItem} 
+            descriptionStyle = {{fontSize: 12}} 
+            title="Badge Index" 
+            description="A complete list of user badges and how to earn points"
+            />
+
+          <List.Item  
             onPress = {()=> props.navigation.navigate("About Us")} 
             titleStyle = {{fontSize: 15}} 
             descriptionStyle = {{fontSize: 12}} 
             title="About RainFLOW" 
             description="Learn more about user privileges and our team"
             />
+
 
         </ScrollView>
          )
