@@ -6,8 +6,15 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  Alert
+  Alert,
+  Button
 } from "react-native";
+
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+import * as BackgroundFetch from 'expo-background-fetch';
+import * as TaskManager from 'expo-task-manager';
 
 import { WebView } from "react-native-webview";
 import AsyncStorage from "@react-native-community/async-storage";
@@ -15,12 +22,155 @@ import { useFocusEffect } from '@react-navigation/native';
 import useInterval from 'use-interval'
 
 
-const HomeMap = (props) => {
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
+
+
+const HomeMap = (props) => {
+const TASK_NAME = "BACKGROUND_TASK"
+
+TaskManager.defineTask(TASK_NAME,async() => {
+  let tempLat = lat;
+  let tempLng = lng;
+  try {
+  if(lat != null && lng != null && expoPushToken != null){
+  let received = await fetch(`https://rainflow.live/api/map/push`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept' : 'application/json',
+                },
+                body :JSON.stringify({ 
+                    longitude: 		120.9946297,
+                    latitude: 	14.423968
+                })
+                }).then(response => {
+                  console.log(response)
+                  if(response.status == 200){
+                     return response.json()
+                  }
+                  else{
+                    Alert.alert(
+                      'Error! (Code: ' + response.status + ')');
+                  }
+                })
+
+    //const receivedNewData = "Simulated fetch " + Math.random()
+    if((received.mobile).length > 0 || (received.raft).length > 0){
+    //console.log("Nearby nodes found!", received)
+     await sendPushNotification(expoPushToken);
+    }else{
+      console.log("No nearby nodes!")
+    }
+    return receivedNewData
+      ? BackgroundFetch.Result.NewData
+      : BackgroundFetch.Result.NoData
+  }
+  
+  } catch (err) {
+    return BackgroundFetch.Result.Failed
+  }
+})
+
+
+ const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 const webViewRef = useRef();
 const [params, setParams] = useState("guest")
 const [lat, setLat] = useState()
 const [lng, setLng] = useState()
+
+useEffect(() => {
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+ 
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener);
+      Notifications.removeNotificationSubscription(responseListener);
+    };
+  }, []);
+
+const sendPushNotification = async(expoPushToken) =>{
+  //console.log("expo push token", expoPushToken)
+  const message = {
+    to: expoPushToken,
+    sound: 'default',
+    title: 'Flood Warning!',
+    body: 'There is a flooded area near your location!',
+    data: { data: 'goes here' },
+  };
+
+  await fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Accept-encoding': 'gzip, deflate',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(message),
+  });
+}
+
+RegisterBackgroundTask = async () => {
+  try {
+    await BackgroundFetch.registerTaskAsync(TASK_NAME, {
+      minimumInterval: 2, // seconds,
+    })
+    console.log("Task registered")
+  } catch (err) {
+    console.log("Task Register failed:", err)
+  }
+}
+
+const registerForPushNotificationsAsync = async() => {
+  let token;
+  if (Constants.isDevice) {
+    const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    let finalStatus = existingStatus;
+    //console.log("existing status: ", existingStatus)
+    if (existingStatus !== 'granted') {
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+  //  console.log("token", token);
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  return token;
+}
+
+
 
 const getToken = async()=>{
   const token = await AsyncStorage.getItem("token");
@@ -62,14 +212,15 @@ useFocusEffect(
   }, [])
 );
  
-/*
-useInterval(() => {
-  navigator.geolocation.getCurrentPosition(success, error, options);
-}, 10000); 
-*/
+
+// useInterval(() => {
+//   console.log("test test test")
+// }, 10000); 
+
 
 useEffect(()=>{
   navigator.geolocation.getCurrentPosition(success, error, options);
+  RegisterBackgroundTask();
 },[])
 
   return (
