@@ -36,10 +36,9 @@ const HomeMap = (props) => {
 const TASK_NAME = "BACKGROUND_TASK"
 
 TaskManager.defineTask(TASK_NAME,async() => {
-  let tempLat = lat;
-  let tempLng = lng;
   try {
   if(lat != null && lng != null && expoPushToken != null){
+ // console.log(lat, lng)
   let received = await fetch(`https://rainflow.live/api/map/push`, {
                 method: 'POST',
                 headers: {
@@ -47,7 +46,7 @@ TaskManager.defineTask(TASK_NAME,async() => {
                     'Accept' : 'application/json',
                 },
                 body :JSON.stringify({ 
-                    longitude: 		120.9946297,
+                    longitude: 			120.9946297,
                     latitude: 	14.423968
                 })
                 }).then(response => {
@@ -62,12 +61,15 @@ TaskManager.defineTask(TASK_NAME,async() => {
                 })
 
     //const receivedNewData = "Simulated fetch " + Math.random()
-    if((received.mobile).length > 0 || (received.raft).length > 0){
-    //console.log("Nearby nodes found!", received)
-     await sendPushNotification(expoPushToken);
+    //console.log(JSON.stringify(received))
+    if(received.length > 0){
+    console.log("Nearby nodes found!")
+    //console.log(received[0].flood_depth_title, received[0].address)
+     await sendPushNotification(expoPushToken, received[0].flood_depth_title, received[0].address);
     }else{
       console.log("No nearby nodes!")
     }
+
     return receivedNewData
       ? BackgroundFetch.Result.NewData
       : BackgroundFetch.Result.NoData
@@ -108,13 +110,13 @@ useEffect(() => {
     };
   }, []);
 
-const sendPushNotification = async(expoPushToken) =>{
+const sendPushNotification = async(expoPushToken, floodLevel, address) =>{
   //console.log("expo push token", expoPushToken)
   const message = {
     to: expoPushToken,
     sound: 'default',
-    title: 'Flood Warning!',
-    body: 'There is a flooded area near your location!',
+    title: 'Flooded area near you!',
+    body: `There is a report of ${floodLevel} flooding at ${address}`,
     data: { data: 'goes here' },
   };
 
