@@ -25,7 +25,7 @@
     "moment": "^2.29.1",
     "nominatim-geocode": "^1.1.0",
     "react": "16.14.0",
-    "react-dom": "16.13.1",
+    "react-dom": "16.14.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
     "react-native-animated-splash-screen": "^2.0.5",
     "react-native-camera": "^3.40.0",
