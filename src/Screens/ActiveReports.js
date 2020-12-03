@@ -152,8 +152,8 @@ const ActiveReports = (props) => {
                 <Text>Rain Intensity: {reportInfo.rainfall_rate} </Text>
                 <Text>Flood Level: {reportInfo.flood_depth} </Text>
                 <View style = {{borderColor: 1, width: "100%", flexDirection: "row", marginVertical: 8, justifyContent: "space-evenly"}}>
-                <Text style={styles.likesText}>{reportInfo.upvote} Upvote/s</Text>
-                <Text style={styles.dislikesText}>{reportInfo.downvote} Downvote/s</Text>
+                <Text style={styles.likesText}>{reportInfo.upvote} Like/s</Text>
+                <Text style={styles.dislikesText}>{reportInfo.downvote} Dislike/s</Text>
                 </View>
                 {reportInfo.image != null ? (
                   <>

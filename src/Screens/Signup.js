@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  Alert,
+  ScrollView,
   BackHandler,
 } from "react-native";
 // import { WebView } from "react-native-webview";
@@ -97,9 +97,11 @@ const Signup = (props) => {
     <View style={styles.backgroundContainer}>
       <View style={styles.contentContainer}>
         <View style={styles.logoContainer}>
+          
           <Image
             source={require("../../assets/Logo.png")}
             style={{ height: "38%", width: "90%" }}
+            visible={false}
           />
         </View>
 
@@ -178,6 +180,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-end",
     alignItems: "center",
+    position: "relative",
     backgroundColor: "#3d3d3d",
     paddingBottom: 40,
   },
