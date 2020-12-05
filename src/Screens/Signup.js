@@ -100,7 +100,7 @@ const Signup = (props) => {
           
           <Image
             source={require("../../assets/Logo.png")}
-            style={{ height: "38%", width: "90%" }}
+            style={{ height: "38%", width: "90%",resizeMode: "contain"}}
             visible={false}
           />
         </View>

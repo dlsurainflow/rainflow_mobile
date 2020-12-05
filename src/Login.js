@@ -105,7 +105,7 @@ const Login = (props) => {
         <View style={styles.logoContainer}>
           <Image
             source={require("../assets/Logo.png")}
-            style={{ height: "38%", width: "100%" }}
+            style={{ height: "38%", width: "100%" ,resizeMode: "contain"}}
           />
         </View>
 
