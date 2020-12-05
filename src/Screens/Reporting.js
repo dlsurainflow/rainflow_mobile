@@ -33,10 +33,12 @@ const Reporting = (props) => {
   const [colorLR, setColorLR] = useState("white");
   const [modalVisible, setModalVisible] = useState(false);
   const [modalAlertVisible, setModalAlertVisible] = useState(false);
+  const [modalGraphicDescriptionVisible, setModalGraphicDescriptionVisible] = useState(false);
   const [modalAlertName, setModalAlertName] = useState("");
   const [modalAlertDescription, setModalAlertDescription] = useState("");
   const [locName, setLocName] = useState(" Location is loading . . . ");
   const [modalAlertReportVisible, setModalAlertReportVisible] = useState(false);
+  const [imageDescription, setImageDescription] = useState("");
  
   var options = {
     enableHighAccuracy: true,
@@ -1002,10 +1004,37 @@ const Reporting = (props) => {
               CLOSE
             </Text>
           </TouchableOpacity>
+          <View style={{marginBottom:10}}/>
+          <TouchableOpacity style={styles.buttonAlertModal} onPress={() => setModalGraphicDescriptionVisible(!modalGraphicDescriptionVisible)}>
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold", width: "50%"}}
+            >
+              View Image Description
+            </Text>
+          </TouchableOpacity>
         </View>
           </View>
-          
-          
+        </Modal>
+
+        <Modal //MODAL NA PICTURE
+          visible={modalGraphicDescriptionVisible} 
+          animationType="slide"
+          transparent={true} >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+              <Text style={{fontSize: 20, fontWeight: "bold", marginBottom: 10,}}>
+                {modalAlertName}
+              </Text>
+              <Image source={require("../../assets/RainIntensity-1.gif")} style={{height:100, width:100}}/>
+                <TouchableOpacity style={styles.buttonAlertModal} onPress={() => setModalGraphicDescriptionVisible(!modalGraphicDescriptionVisible)}>
+                  <Text
+                    style={{ textAlign: "center", color: "#fff", fontWeight: "bold", width: "50%"}}
+                  >
+                    CLOSE
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
         </Modal>
 
         <Modal //MODAL ALERT REPROT OI
@@ -1505,7 +1534,7 @@ const styles = StyleSheet.create({
   },
 
   buttonAlertModal: {
-    width: 100,
+    width: 200,
     height: 30,
     justifyContent: "center",
     alignItems: "center",
