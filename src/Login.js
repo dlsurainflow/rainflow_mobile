@@ -6,6 +6,7 @@ import {
   TextInput,
   ToastAndroid,
   TouchableOpacity,
+  KeyboardAvoidingView,
   Image,
   BackHandler
 } from "react-native";
@@ -99,12 +100,12 @@ const Login = (props) => {
   };
 
   return (
-    <View style={styles.backgroundContainer}>
+    <KeyboardAvoidingView style={styles.backgroundContainer}>
       <View style={styles.contentContainer}>
         <View style={styles.logoContainer}>
           <Image
             source={require("../assets/Logo.png")}
-            style={{ height: "38%", width: "90%" }}
+            style={{ height: "38%", width: "100%" ,resizeMode: "contain"}}
           />
         </View>
 
@@ -160,7 +161,7 @@ const Login = (props) => {
           
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

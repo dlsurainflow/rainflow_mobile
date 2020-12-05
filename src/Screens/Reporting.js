@@ -33,10 +33,12 @@ const Reporting = (props) => {
   const [colorLR, setColorLR] = useState("white");
   const [modalVisible, setModalVisible] = useState(false);
   const [modalAlertVisible, setModalAlertVisible] = useState(false);
+  const [modalGraphicDescriptionVisible, setModalGraphicDescriptionVisible] = useState(false);
   const [modalAlertName, setModalAlertName] = useState("");
   const [modalAlertDescription, setModalAlertDescription] = useState("");
   const [locName, setLocName] = useState(" Location is loading . . . ");
   const [modalAlertReportVisible, setModalAlertReportVisible] = useState(false);
+  const [imageDescription, setImageDescription] = useState("");
  
   var options = {
     enableHighAccuracy: true,
@@ -188,6 +190,7 @@ const Reporting = (props) => {
   const LRainAlert = () =>{
     setModalAlertName("Light rain description:");
     setModalAlertDescription("Individual drops easily identified and puddles form slowly. Small streams may flow in gutters. \n\nDriver doesn't need the wiper to be working to see the road.");
+    setImageDescription("LRain");
     setModalAlertVisible(true);
     changeTwo();
   }
@@ -209,6 +212,7 @@ const Reporting = (props) => {
   const MRainAlert = () => {
     setModalAlertName("Medium rain description:");
     setModalAlertDescription("From scattered drops that, regardless of duration, do not completely wet an exposed surface up to a condition where individual drops are easily seen. \n\nWiper must be set at intermittent to see the road.");
+    setImageDescription("MRain");
     setModalAlertVisible(true);
     changeThree();
   }
@@ -229,6 +233,7 @@ const Reporting = (props) => {
   const HRainAlert = () => {
     setModalAlertName("Heavy rain description:");
     setModalAlertDescription("Individual drops are not clearly identifiable. Spray is observable just above pavements and other hard surfaces. \n\nWiper must be slow and continuous to see the road.");
+    setImageDescription("HRain");
     setModalAlertVisible(true);
     changeFour();
   }
@@ -249,6 +254,7 @@ const Reporting = (props) => {
   const TRainAlert = () => {
     setModalAlertName("Torrential rain description:");
     setModalAlertDescription("Strongest downpour of rain and may persist for hours. \n\nEven with fast and continuous wiper speed, the driver will not be able to see the road.");
+    setImageDescription("TRain");
     setModalAlertVisible(true);
     changeSix();
   }
@@ -269,6 +275,7 @@ const Reporting = (props) => {
   const EHRainAlert = () => {
     setModalAlertName("Intense rain description:");
     setModalAlertDescription("Rain seemingly falls in sheets. Individual drops are not identifiable. Heavy spray to height of several inches is observed over hard surfaces.\n\nWiper must be fast and continuous to see the road.");
+    setImageDescription("IRain");
     setModalAlertVisible(true);
     changeFive();
   }
@@ -289,6 +296,7 @@ const Reporting = (props) => {
   const ADeepAlert = () => {
     setModalAlertName("Ankle deep description:");
     setModalAlertDescription("Flood is around 0.25 meters high. \n\nPassable to all types of vehicles.");
+    setImageDescription("floodLevel");
     setModalAlertVisible(true);
     changeTwoF();
   }
@@ -309,6 +317,7 @@ const Reporting = (props) => {
   const KDeepAlert = () => {
     setModalAlertName("Knee deep description:");
     setModalAlertDescription("Flood is around 0.5 meters high. \n\nNot Passable to light vehicles.");
+    setImageDescription("floodLevel");
     setModalAlertVisible(true);
     changeThreeF();
   }
@@ -329,6 +338,7 @@ const Reporting = (props) => {
   const WDeepAlert = () => {
     setModalAlertName("Waist deep description:");
     setModalAlertDescription("Flood is threatening, around 1 meter high. \n\nNot passable to all types of vehicles.");
+    setImageDescription("floodLevel");
     setModalAlertVisible(true);
     changeFourF();
   }
@@ -349,6 +359,7 @@ const Reporting = (props) => {
   const AWDeepAlert = () => {
     setModalAlertName("Neck deep description:");
     setModalAlertDescription("Serious flooding expected in low lying areas. \n\nNot passable to all types of vehicles.");
+    setImageDescription("floodLevel");
     setModalAlertVisible(true);
     changeFiveF();
   }
@@ -369,6 +380,7 @@ const Reporting = (props) => {
     const ANDeepAlert = () => {
       setModalAlertName("Above head deep description:");
       setModalAlertDescription("Flood level is above critical level. Flood Level is between 1.6 to 2 meters high. \n\nNot passable to all types of vehicles.");
+      setImageDescription("floodLevel");
       setModalAlertVisible(true);
       changeSixF();
     }
@@ -389,6 +401,7 @@ const Reporting = (props) => {
     const OSDeepAlert = () => {
       setModalAlertName("One storey high description:");
       setModalAlertDescription("Flood level is between 2 to 3 meters high. \n\nNot passable to all types of vehicles.");
+      setImageDescription("floodLevel");
       setModalAlertVisible(true);
       changeSevenF();
     }
@@ -409,6 +422,7 @@ const Reporting = (props) => {
     const OFSDeepAlert = () => {
       setModalAlertName("1.5 Storey high description:");
       setModalAlertDescription("Flood level is between 3 to 4.5 meters high. \n\nNot passable to all types of vehicles.");
+      setImageDescription("floodLevel");
       setModalAlertVisible(true);
       changeEightF();
     }
@@ -429,6 +443,7 @@ const Reporting = (props) => {
     const TSDeepAlert = () => {
       setModalAlertName("Two storeys high description:");
       setModalAlertDescription("Flood level is 4.5 meters high. \n\nNot passable to all types of vehicles.");
+      setImageDescription("floodLevel");
       setModalAlertVisible(true);
       changeNineF();
     }
@@ -627,6 +642,12 @@ const Reporting = (props) => {
       setImage(result.uri);
       setFileName(result.uri.split("/").pop());
     }
+  };
+
+  const closeImageViewer = () => {
+    setModalGraphicDescriptionVisible(!modalGraphicDescriptionVisible);
+    setModalAlertVisible(!modalAlertVisible)
+    setImageDescription("");
   };
 
   return (
@@ -995,17 +1016,61 @@ const Reporting = (props) => {
             {modalAlertDescription}
           </Text>
           
-          <TouchableOpacity style={styles.buttonAlertModal} onPress={() => setModalAlertVisible(!modalAlertVisible)}>
+          <TouchableOpacity style={styles.buttonDescriptionModal} onPress={() => setModalAlertVisible(!modalAlertVisible)}>
             <Text
               style={{ textAlign: "center", color: "#fff", fontWeight: "bold", width: "50%"}}
             >
               CLOSE
             </Text>
           </TouchableOpacity>
+          <View style={{marginBottom:10}}/>
+          <TouchableOpacity style={styles.buttonDescriptionModal} onPress={() => setModalGraphicDescriptionVisible(!modalGraphicDescriptionVisible)}>
+            <Text
+              style={{ textAlign: "center", color: "#fff", fontWeight: "bold", width: "50%"}}
+            >
+              Image Description
+            </Text>
+          </TouchableOpacity>
         </View>
           </View>
-          
-          
+        </Modal>
+
+        <Modal //MODAL NA PICTURE
+          visible={modalGraphicDescriptionVisible} 
+          animationType="slide"
+          transparent={true} >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+              <Text style={{fontSize: 20, fontWeight: "bold", marginBottom: 10,}}>
+                {modalAlertName}
+              </Text>
+              <Text style={{fontSize: 15, marginBottom: 10,}}>
+                Give about 15 seconds for the video/image to load. 
+              </Text>
+              { imageDescription == "floodLevel" ? (
+                
+                  <Image source={require("../../assets/FloodLevels.png")} style={{height:350, width:350, resizeMode: "center"}}/>
+                
+                ): imageDescription == "LRain"? (
+                  <Image source={require("../../assets/RainIntensity-1.gif")} style={{width:350, resizeMode: "contain"}}/>
+                ): imageDescription == "MRain"? (
+                  <Image source={require("../../assets/RainIntensity-2.gif")} style={{width:350, resizeMode: "contain"}}/>
+                ): imageDescription == "HRain"? (
+                  <Image source={require("../../assets/RainIntensity-3.gif")} style={{width:350, resizeMode: "contain"}}/>
+                ): imageDescription == "IRain"? (
+                  <Image source={require("../../assets/RainIntensity-4.gif")} style={{width:350, resizeMode: "contain"}}/>
+                ): imageDescription == "TRain"? (
+                  <Image source={require("../../assets/RainIntensity-5.gif")} style={{width:350, resizeMode: "contain"}}/>
+                ): null}
+                <TouchableOpacity style={styles.buttonAlertModal} onPress={() => closeImageViewer() } >
+                  <Text
+                    style={{ textAlign: "center", color: "#fff", fontWeight: "bold", width: "50%"}}
+                  >
+                    CLOSE
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
         </Modal>
 
         <Modal //MODAL ALERT REPROT OI
@@ -1506,6 +1571,15 @@ const styles = StyleSheet.create({
 
   buttonAlertModal: {
     width: 100,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: "#1EA78C",
+  },
+
+  buttonDescriptionModal: {
+    width: 200,
     height: 30,
     justifyContent: "center",
     alignItems: "center",

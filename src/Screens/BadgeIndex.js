@@ -51,9 +51,9 @@ const BadgeIndex = (props) => {
        </View>   
       <View style = {styles.cardContent}>
           <View style = {{flexDirection: "column", marginTop: 5}}>
-          <Text style = {{marginVertical: 5, textAlign: "justify"}}>- Submit reports through the mobile app.</Text>
-          <Text style = {{marginVertical: 5,  textAlign: "justify"}}>- Receive upvotes from other users on your reports. (The higher your badge level is, the more trustworthy your reports are!)</Text>
-          <Text style = {{marginVertical: 5,  textAlign: "justify"}}>- Setup your own RAFT device.</Text>
+          <Text style = {{marginVertical: 5, textAlign: "justify"}}>- Registered users gain a point for every upvote on their flood reports.</Text>
+          <Text style = {{marginVertical: 5,  textAlign: "justify"}}>- Likewise, they lose a point for every downvote.</Text>
+          <Text style = {{marginVertical: 5,  textAlign: "justify"}}>- Points are added once a report has been archived.</Text>
           </View>
       </View>
       </View>
