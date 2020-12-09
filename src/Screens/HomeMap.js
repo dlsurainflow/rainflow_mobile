@@ -1,4 +1,6 @@
 import React, { Component, useState, useEffect, useRef } from "react";
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
 import {
   StyleSheet,
   View,
@@ -10,11 +12,8 @@ import {
   Button
 } from "react-native";
 
-import Constants from 'expo-constants';
+
 import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
-import * as BackgroundFetch from 'expo-background-fetch';
-import * as TaskManager from 'expo-task-manager';
 
 import { WebView } from "react-native-webview";
 import AsyncStorage from "@react-native-community/async-storage";
@@ -22,156 +21,74 @@ import { useFocusEffect } from '@react-navigation/native';
 import useInterval from 'use-interval'
 
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
-
-
-
 const HomeMap = (props) => {
-const TASK_NAME = "BACKGROUND_TASK"
-
-TaskManager.defineTask(TASK_NAME,async() => {
-  try {
-  if(lat != null && lng != null && expoPushToken != null){
- // console.log(lat, lng)
-  let received = await fetch(`https://rainflow.live/api/map/push`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept' : 'application/json',
-                },
-                body :JSON.stringify({ 
-                    longitude: 			120.9946297,
-                    latitude: 	14.423968
-                })
-                }).then(response => {
-                  console.log(response)
-                  if(response.status == 200){
-                     return response.json()
-                  }
-                  else{
-                    Alert.alert(
-                      'Error! (Code: ' + response.status + ')');
-                  }
-                })
-
-    //const receivedNewData = "Simulated fetch " + Math.random()
-    //console.log(JSON.stringify(received))
-    if(received.length > 0){
-    console.log("Nearby nodes found!")
-    //console.log(received[0].flood_depth_title, received[0].address)
-     await sendPushNotification(expoPushToken, received[0].flood_depth_title, received[0].address);
-    }else{
-      console.log("No nearby nodes!")
-    }
-
-    return receivedNewData
-      ? BackgroundFetch.Result.NewData
-      : BackgroundFetch.Result.NoData
-  }
-  
-  } catch (err) {
-    return BackgroundFetch.Result.Failed
-  }
-})
-
 
  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
 const webViewRef = useRef();
 const [params, setParams] = useState("guest")
 const [lat, setLat] = useState()
 const [lng, setLng] = useState()
+const [latestNearFlood, setLatestNearFlood] = useState(null);
+const [latestNearAddress, setLatestNearAddress] = useState(null);
+const [newLat, setNewLat] = useState();
+const [newLng, setNewLng] = useState()
 
-useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
-
-    // This listener is fired whenever a notification is received while the app is foregrounded
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
-
-    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
- 
-    return () => {
-      Notifications.removeNotificationSubscription(notificationListener);
-      Notifications.removeNotificationSubscription(responseListener);
-    };
-  }, []);
-
-const sendPushNotification = async(expoPushToken, floodLevel, address) =>{
-  //console.log("expo push token", expoPushToken)
-  const message = {
-    to: expoPushToken,
-    sound: 'default',
-    title: 'Flooded area near you!',
-    body: `There is a report of ${floodLevel} flooding at ${address}`,
-    data: { data: 'goes here' },
-  };
-
-  await fetch('https://exp.host/--/api/v2/push/send', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Accept-encoding': 'gzip, deflate',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(message),
+const sendPushNotification = (floodLevel, address) =>{
+  setLatestNearFlood(floodLevel)
+  setLatestNearAddress(address)
+  showMessage({
+    message: "Flooded area near you!",
+    description: `${floodLevel} flooding at ${address}`,
+    type: "danger",
+    animationDuration: 500,
+    duration: 7000,
+    hideOnPress: true,
+    onLongPress:()=> {pressHandler()},
+    icon: { icon: "warning", position: "left" },
+    titleStyle: {fontWeight: "bold"}
   });
 }
 
-RegisterBackgroundTask = async () => {
-  try {
-    await BackgroundFetch.registerTaskAsync(TASK_NAME, {
-      minimumInterval: 2, // seconds,
-    })
-    console.log("Task registered")
-  } catch (err) {
-    console.log("Task Register failed:", err)
-  }
+const pressHandler = () =>{
+  setLat(newLat);
+  setLng(newLng);
 }
 
-const registerForPushNotificationsAsync = async() => {
-  let token;
-  if (Constants.isDevice) {
-    const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-    let finalStatus = existingStatus;
-    //console.log("existing status: ", existingStatus)
-    if (existingStatus !== 'granted') {
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      finalStatus = status;
-    }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
-      return;
-    }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-  //  console.log("token", token);
-  }
+const getNearbyFlood = async() =>{
+  if(lat != null && lng != null && expoPushToken != null){
+     let received = await fetch(`https://rainflow.live/api/map/push`, {
+                   method: 'POST',
+                   headers: {
+                       'Content-Type': 'application/json',
+                       'Accept' : 'application/json',
+                   },
+                   body :JSON.stringify({ 
+                       longitude: newLng,
+                       latitude: 	newLat
+                   })
+                   }).then(response => {
+                   //  console.log(response)
+                     if(response.status == 200){
+                        return response.json()
+                     }
+                     else{
+                       Alert.alert(
+                         'Error! (Code: ' + response.status + ')');
+                     }
+                   })
+   
 
-  if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    });
+       if(received.length > 0){
+         if(received[0].flood_depth_title !== latestNearFlood && received[0].address !== latestNearAddress){
+           console.log("New nearby nodes found!")
+          await sendPushNotification(received[0].flood_depth_title, received[0].address);
+         }
+       }else{
+         console.log("No nearby nodes!")
+       }
   }
-
-  return token;
 }
-
 
 
 const getToken = async()=>{
@@ -186,13 +103,29 @@ const getToken = async()=>{
   }
 }
 
-function success(pos) {
+function initialsuccess(pos) {
   var crd = pos.coords;
-  console.log("current location: ", crd.latitude, crd.longitude)
+  //console.log("current location: ", crd.latitude, crd.longitude)
   setLat(crd.latitude);
   setLng(crd.longitude);
+  setNewLat(crd.latitude);
+  setNewLng(crd.longitude);
 
 
+}
+
+function initialerror(err) {
+  //console.warn(`ERROR(${err.code}): ${err.message}`);
+  setLat('null');
+  setLng('null');
+  setNewLat(null);
+  setNewLng(null);
+}
+function success(pos) {
+  var crd = pos.coords;
+  //console.log("current location: ", crd.latitude, crd.longitude)
+  setNewLat(crd.latitude);
+  setNewLng(crd.longitude);
 }
 
 function error(err) {
@@ -214,15 +147,13 @@ useFocusEffect(
   }, [])
 );
  
-
-// useInterval(() => {
-//   console.log("test test test")
-// }, 10000); 
-
+useInterval(() => {
+  navigator.geolocation.getCurrentPosition(success, error, options);
+  getNearbyFlood()
+ }, 5000)
 
 useEffect(()=>{
-  navigator.geolocation.getCurrentPosition(success, error, options);
-  RegisterBackgroundTask();
+  navigator.geolocation.getCurrentPosition(initialsuccess, initialerror, options);
 },[])
 
   return (
@@ -236,7 +167,7 @@ useEffect(()=>{
         uri: `http://rainflow.live/mobile/map/${params}/${lat}/${lng}`
       }}  
           />
-
+           <FlashMessage position="top" />
 </View>
 
     
